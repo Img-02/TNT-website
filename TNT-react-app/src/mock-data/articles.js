@@ -1,11 +1,10 @@
 import { genres } from "./genres"
 import { status } from "./status"
 
-
 export const articles = [
     {
       id: 1,
-      title: "Instructor astonished as students perfomr beyond expectations",
+      title: "Instructor astonished as students perform beyond expectations",
       publishedAt: "2026-02-02T14:35:12.345Z",
       genre: [genres[0], genres[1]],
       summary: "Tech instructor ventures into uncharted territory with excelling pupils",
@@ -76,3 +75,15 @@ export const articles = [
       image: "article-images/harry.png"
     }
 ]
+
+
+
+        {/* <Routes>
+          <Route path="/" element={<Home />} />
+
+          <Route path="/blog/:id" element={<BlogPost />} />
+
+          <Route path="/about" element={<About />} />
+
+          <Route path="*" element={<NotFound />} />
+        </Routes> */}
