@@ -3,7 +3,11 @@ DROP TABLE IF EXISTS articles;
 DROP TABLE IF EXISTS genres;
 DROP TABLE IF EXISTS articleGenres;
 DROP TABLE IF EXISTS statuses;
-DROP TABLES IF EXISTS users;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS userGenres;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS comments;
+
 
 CREATE TABLE genres(
   genre_id INTEGER GENERATED ALWAYS AS IDENTITY,
@@ -15,6 +19,27 @@ CREATE TABLE statuses(
   status_id INTEGER GENERATED ALWAYS AS IDENTITY,
   status_name VARCHAR(100) NOT NULL,
   PRIMARY KEY (status_id)
+);
+
+CREATE TABLE roles(
+  role_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  role_name VARCHAR(64)
+);
+
+CREATE TABLE users(
+  user_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  user_first_name VARCHAR(64) NOT NULL,
+  user_surname VARCHAR(64) NOT NULL,
+  user_username VARCHAR(64) NOT NULL,
+  user_password VARCHAR(64) NOT NULL,
+  user_age INTEGER,
+  user_email VARCHAR(100) NOT NULL,
+  user_profile_pic VARCHAR(500),
+  user_role_id INTEGER NOT NULL,
+  PRIMARY KEY (user_id),
+  CONSTRAINT fk_role
+    FOREIGN KEY (user_role_id)
+    REFERENCES roles(role_id)
 );
 
 CREATE TABLE articles(
@@ -29,10 +54,18 @@ CREATE TABLE articles(
   article_status_id INTEGER NOT NULL,
   article_rating INTEGER NOT NULL,
   article_image_path VARCHAR(500) NOT NULL,
+  article_journalist_id INTEGER NOT NULL,
+  article_editor_id INTEGER NOT NULL,
   PRIMARY KEY (article_id),
   CONSTRAINT fk_status
     FOREIGN KEY (article_status_id)
-    REFERENCES statuses(status_id)
+    REFERENCES statuses(status_id),
+  CONSTRAINT fk_journalist
+    FOREIGN KEY (article_journalist_id)
+    REFERENCES user(user_id),
+  CONSTRAINT fk_editor
+    FOREIGN KEY (article_editor_id)
+    REFERENCES user(user_id),
 );
 
 CREATE TABLE articleGenres(
@@ -48,18 +81,6 @@ CREATE TABLE articleGenres(
     REFERENCES genres(genre_id)
 );
 
-CREATE TABLE users(
-  user_id INTEGER GENERATED ALWAYS AS IDENTITY,
-  user_first_name VARCHAR(64) NOT NULL,
-  user_surname VARCHAR(64) NOT NULL,
-  user_username VARCHAR(64) NOT NULL,
-  user_password VARCHAR(64) NOT NULL,
-  user_age INTEGER,
-  user_email VARCHAR(100) NOT NULL,
-  user_profile_pic VARCHAR(500),
-  PRIMARY KEY (user_id)
-);
-
 CREATE TABLE userGenres(
   userGenre_id INTEGER GENERATED ALWAYS AS IDENTITY,
   user_id INTEGER NOT NULL,
@@ -71,6 +92,21 @@ CREATE TABLE userGenres(
   CONSTRAINT fk_genre_user
     FOREIGN KEY (genre_id)
     REFERENCES genres(genre_id)
+);
+
+CREATE TABLE comments(
+  comment_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  comment_user_id INTEGER NOT NULL,
+  comment_article_id INTEGER NOT NULL,
+  comment_text VARCHAR(1000) NOT NULL,
+  comment_date_posted VARCHAR(64) NOT NULL,
+  PRIMARY KEY (comment_id),
+  CONSTRAINT fk_comment_user
+    FOREIGN KEY (comment_user_id)
+    REFERENCES users(user_id),
+  CONSTRAINT fk_comment_article
+    FOREIGN KEY (comment_article_id)
+    REFERENCES articles(article_id)
 );
 
 INSERT INTO statuses (status_name) VALUES
