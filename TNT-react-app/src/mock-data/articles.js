@@ -16,10 +16,10 @@ export const articles = [
     },
 {
       id: 2,
-      title: "Gooning: is your child at risk?",
+      title: "Planking: is your child at risk?",
       publishedAt: "2026-02-02T14:35:12.345Z",
       genre: [genres[2], genres[3]],
-      summary: "Explore the risks of todays latest tiktok trends",
+      summary: "Explore the risks of todays latest youth trends and are hand phones the beginning of the end",
       text: "More text about our very interesting second article",
       isBreaking: true,
       status: status[3],
@@ -48,7 +48,7 @@ export const articles = [
       isBreaking: false,
       status: status[3],
       rating: 6,
-      image: "image"
+      image: "/article-images/colin.png"
     },
 {
       id: 5,

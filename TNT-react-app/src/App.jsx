@@ -10,6 +10,7 @@ import "./App.css"
 // import Image from 'react-bootstrap'
 import { Container } from "react-bootstrap";
 import { ArticleCard } from "./components/ArticleCard.jsx";
+import { BreakingNewsCard } from "./components/BreakingNewsCard.jsx"
 
 import {Col} from "react-bootstrap"
 import {Row} from "react-bootstrap"
@@ -21,27 +22,39 @@ import { Button } from "react-bootstrap"
 
 export default function App() {
 
+  const breakingArticles = articles.filter(article => article.isBreaking)
+  const otherArticles = articles.filter(article => !article.isBreaking)
+
   return (
     <div className="App">
       <header>
         <nav>    
           <div>
-            <img className="img-fluid rounded" decoding="async" src="/image.png" alt="Site logo" width={100} height={100} align="start"/> 
+            <img className="img-fluid rounded" decoding="async" src="/image.png" alt="Site logo" width={100} height={100} align="start"/>
             <NavLink to="/" end>Home</NavLink>
             <NavLink to='*' end>Random</NavLink>
+            <h1 className="fw-bolc text-center">T.N.T</h1>
           </div>
         </nav>   
       </header>
-
         <Container>
+          {/* hold the breaking news articles */}
+          <div>
+            <Row xs={1} md={2} className="g-4 mb-5">
+              {breakingArticles.map(article => (
+              <Col><BreakingNewsCard key={article.id} article={article}/></Col>
+              ))}
+            </Row>
+        </div>
         <div>
-          <Row xs={1} md={3} className="g-4">
-            {articles.map((article)=> (
-              <ArticleCard article={article}/>
-        ))}
-        </Row>
+          <Row xs={2} md={4} className="gx-4">
+            {otherArticles.map((article) => (
+              <Col>
+                <ArticleCard key={article.id} article={article}/>
+              </Col>
+          ))}
+          </Row>
         </div>
         </Container>
       </div>
-)}
-// export default App;
+  )}
