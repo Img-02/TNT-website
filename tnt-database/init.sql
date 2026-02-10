@@ -30,10 +30,10 @@ CREATE TABLE users(
   user_id INTEGER GENERATED ALWAYS AS IDENTITY,
   user_first_name VARCHAR(64) NOT NULL,
   user_surname VARCHAR(64) NOT NULL,
-  user_username VARCHAR(64) NOT NULL,
-  user_password VARCHAR(64) NOT NULL,
+  user_username VARCHAR(64) UNIQUE NOT NULL,
+  user_password VARCHAR(255) NOT NULL,
   user_age INTEGER,
-  user_email VARCHAR(100) NOT NULL,
+  user_email VARCHAR(100) UNIQUE NOT NULL,
   user_profile_pic VARCHAR(500),
   user_role_id INTEGER NOT NULL,
   PRIMARY KEY (user_id),
@@ -47,9 +47,9 @@ CREATE TABLE articles(
   article_title VARCHAR(255) NOT NULL,
   article_summary VARCHAR(1000) NOT NULL,
   article_text VARCHAR(10000) NOT NULL,
-  artcile_created_at VARCHAR(64) NOT NULL,
+  article_created_at VARCHAR(64) NOT NULL,
   article_published_at VARCHAR(64),
-  artcile_time_period INTEGER NOT NULL,
+  article_time_period INTEGER NOT NULL,
   article_is_breaking BOOLEAN,
   article_status_id INTEGER NOT NULL,
   article_rating INTEGER NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE articleGenres(
   PRIMARY KEY (articleGenre_id),
   CONSTRAINT fk_article
     FOREIGN KEY (article_id)
-    REFERENCES article(article_id),
+    REFERENCES articles(article_id),
   CONSTRAINT fk_genre
     FOREIGN KEY (genre_id)
     REFERENCES genres(genre_id)
@@ -110,44 +110,44 @@ CREATE TABLE comments(
 );
 
 INSERT INTO statuses (status_name) VALUES
-  ("Writing"),
-  ("In Review"),
-  ("Rejected"),
-  ("Published");
-
+  ('Writing'),
+  ('In Review'),
+  ('Rejected'),
+  ('Published');
+ 
 INSERT INTO genres (genre) VALUES
-  ("Politics"),
-  ("Music"),
-  ("Fashion"),
-  ("Food"),
-  ("Entertainment"),
-  ("Sport"),
-  ("Business"),
-  ("Culture"),
-  ("Technology"),
-  ("World");
+  ('Politics'),
+  ('Music'),
+  ('Fashion'),
+  ('Food'),
+  ('Entertainment'),
+  ('Sport'),
+  ('Business'),
+  ('Culture'),
+  ('Technology'),
+  ('World');
 
-INSERT INTO ARTICLE ( 
+INSERT INTO articles ( 
   article_title, 
   article_summary,
   article_text,
-  artcile_created_at,
+  article_created_at,
   article_published_at,
-  artcile_time_period,
+  article_time_period,
   article_is_breaking,
   article_status_id,
   article_rating,
   article_image_path)
 VALUES
     (
-    "Instructor astonished as students perfomr beyond expectations",
-    "Tech instructor ventures into uncharted territory with excelling pupils",
-    "More text about our very interesting first article",
-    "2026-02-02T14:35:12.345Z",
-    "2026-02-04T14:35:12.345Z",
+    'Instructor astonished as students perfomr beyond expectations',
+    'Tech instructor ventures into uncharted territory with excelling pupils',
+    'More text about our very interesting first article',
+    '2026-02-02T14:35:12.345Z',
+    '2026-02-04T14:35:12.345Z',
     1800,
     TRUE,
     4,
     23,
-    "THIS IS AN IMAGE LINK"
+    'THIS IS AN IMAGE LINK'
     )
