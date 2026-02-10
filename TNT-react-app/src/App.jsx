@@ -8,13 +8,13 @@ import { HomePage } from "./views/HomePage.jsx"
 import { articles } from "./mock-data/articles.js"
 import "./App.css"
 // import Image from 'react-bootstrap'
-import { Container } from "react-bootstrap";
+import { Container, Navbar } from "react-bootstrap";
 import { ArticleCard } from "./components/ArticleCard.jsx";
 import { BreakingNewsCard } from "./components/BreakingNewsCard.jsx"
 
 import {Col} from "react-bootstrap"
 import {Row} from "react-bootstrap"
-
+import { Nav } from "react-bootstrap";
 import { Card } from "react-bootstrap"
 import { Button } from "react-bootstrap"
 
@@ -27,16 +27,29 @@ export default function App() {
 
   return (
     <div className="App">
-      <header>
-        <nav>    
-          <div>
+      <Navbar expand="lg" className="bg-body-tertiary" sticky="top" data-bs-theme="dark">
+        <Container>   
             <img className="img-fluid rounded" decoding="async" src="/image.png" alt="Site logo" width={100} height={100} align="start"/>
-            <NavLink to="/" end>Home</NavLink>
-            <NavLink to='*' end>Random</NavLink>
-            <h1 className="fw-bolc text-center">T.N.T</h1>
-          </div>
-        </nav>   
-      </header>
+            <Navbar.Brand className="fw-bolc text-center">T.N.T</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Nav className="me-auto">
+            <Nav.Link to="/" end>Home</Nav.Link>
+            <Nav.Link to='*' end>Random</Nav.Link>
+          </Nav>
+        </Container>   
+      </Navbar>
+      <Navbar className="justify-content-center">
+        <Container>
+            <Navbar.Collapse>
+            <Nav className="mx-auto">
+            <Nav.Link href="##" end>History</Nav.Link>
+            <Nav.Link href="##" end>Geography</Nav.Link>
+            <Nav.Link href="##" end>Music</Nav.Link>
+            <Nav.Link href="##" end>Polictical Events</Nav.Link>
+            </Nav>
+            </Navbar.Collapse>
+        </Container>   
+      </Navbar>
         <Container>
           {/* hold the breaking news articles */}
           <div>
