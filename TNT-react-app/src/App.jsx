@@ -15,10 +15,6 @@ import { BreakingNewsCard } from "./components/BreakingNewsCard.jsx"
 import {Col} from "react-bootstrap"
 import {Row} from "react-bootstrap"
 import { Nav } from "react-bootstrap";
-import { Card } from "react-bootstrap"
-import { Button } from "react-bootstrap"
-
-
 
 export default function App() {
 
@@ -33,12 +29,20 @@ export default function App() {
             <Navbar.Brand className="fw-bolc text-center">T.N.T</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Nav className="me-auto">
-            <Nav.Link to="/" end>Home</Nav.Link>
-            <Nav.Link to='*' end>Random</Nav.Link>
+            <Nav.Link to="/">Home</Nav.Link>
+            <Nav.Link to='*'>Random</Nav.Link>
           </Nav>
         </Container>   
       </Navbar>
-      <Navbar className="justify-content-center">
+
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage articles={articles}/>}/>
+        </Routes>
+      </main>
+      
+
+      {/* <Navbar className="justify-content-center">
         <Container>
             <Navbar.Collapse>
             <Nav className="mx-auto">
@@ -50,8 +54,10 @@ export default function App() {
             </Navbar.Collapse>
         </Container>   
       </Navbar>
+
+      
+
         <Container>
-          {/* hold the breaking news articles */}
           <div>
             <Row xs={1} md={2} className="g-4 mb-5">
               {breakingArticles.map(article => (
@@ -68,6 +74,6 @@ export default function App() {
           ))}
           </Row>
         </div>
-        </Container>
+        </Container> */}
       </div>
   )}
