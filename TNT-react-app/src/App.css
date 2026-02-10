@@ -1,7 +1,13 @@
-/* /* #root {
+/* #root {
   max-width: 1280px;
 }
+*/
 
+.orbitron {
+  font-family: "Orbitron", sans-serif;
+}
+
+/*
 .logo {
   height: 6em;
   padding: 1.5em;
