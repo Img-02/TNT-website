@@ -11,7 +11,7 @@ export function BreakingNewsCard({ article }) {
     const [hover, setHover] = useState("")
 
     return (
-        <Card className="border-5 h-100" style={{ borderColor: breakingColour, borderWidth: '2px', cursor: "pointer", background:hover, font: orbitron }} 
+        <Card className="border-5 h-100" style={{ borderColor: breakingColour, borderWidth: '2px', cursor: "pointer", background:hover, font: "orbitron" }} 
         onClick={() => navigate(`/article/${article.id}`)}
         onMouseEnter={() => setHover(hoverColour)} onMouseLeave={() => setHover("")}>
         
