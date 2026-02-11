@@ -1,4 +1,4 @@
-import { Routes, Route, NavLink } from "react-router-dom";
+import { Routes, Route, NavLink, Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 // import Home from "./components/Home";
 // import About from "./components/About";
@@ -10,13 +10,17 @@ import "./App.css"
 // import Image from 'react-bootstrap'
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { ArticlePage } from "./views/ArticlePage.jsx"
+import { SignUpPage } from "./views/signUpPage.jsx";
+import { LogInPage } from "./views/LogInPage.jsx";
+import { JournalistPage } from "./views/JournalistPage.jsx";
 
 import { backgroundColour } from "./colours.js";
 
 import { useEffect } from "react"
 
 export default function App() {
-
+  
+  
 
   useEffect(() => {
     const body = document.querySelector("body")
@@ -30,13 +34,19 @@ export default function App() {
   return (
     <div className="App">
       <Navbar expand="lg" className="bg-body-tertiary" sticky="top" data-bs-theme="dark" >
-        <Container className="orbitron">   
+        <Container className="orbitron"> 
+            <Navbar.Brand className="fw-bolc text-center" as={Link} to="/">
             <img className="img-fluid rounded" decoding="async" src="/image.png" alt="Site logo" width={100} height={100} align="start"/>
-            <Navbar.Brand className="fw-bolc text-center">T.N.T</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            </Navbar.Brand>
+            <Navbar.Brand>T.N.T</Navbar.Brand>
+            {/* <Navbar.Toggle aria-controls="basic-navbar-nav" /> */}
           <Nav className="me-auto">
-            <Nav.Link to="/">Home</Nav.Link>
-            <Nav.Link to='*'>Random</Nav.Link>
+            <Nav.Link as={NavLink} to="/">Home</Nav.Link>
+            <Nav.Link as={NavLink} to="/journalist">Journalist Page</Nav.Link>
+          </Nav>
+          <Nav className="ms-auto">
+            <Nav.Link as={NavLink} to="/login">Login</Nav.Link>
+            <Nav.Link as={NavLink} to="/signup">Signup</Nav.Link>
           </Nav>
         </Container>   
       </Navbar>
@@ -44,9 +54,13 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<HomePage articles={articles}/>}/>
-          <Route path="/article/:id" element={<ArticlePage />}/>  {/*article page route to specific article id*/}
+          <Route path="/article/:id" element={<ArticlePage />}/>  
+          {/*article page route to specific article id, same for breaking and normal news*/}
+          <Route path="/signup" element={<SignUpPage/>}/>
+          <Route path="/login" element={<LogInPage/>}/>
+          <Route path="/journalist" element={<JournalistPage/>}/>
         </Routes>
-      </main>
+      </main> 
      
       
 

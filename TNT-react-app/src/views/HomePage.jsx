@@ -2,11 +2,13 @@ import { ArticleCard } from "../components/ArticleCard.jsx"
 import { BreakingNewsCard } from "../components/BreakingNewsCard.jsx"
 import { useState, useEffect } from "react"
 import { Navbar, Container, Nav, Row, Col } from "react-bootstrap"
-import { backgroundColour } from "../colours.js"
+import { backgroundColour, breakingColour } from "../colours.js"
+import { Marquee } from "react-fast-marquee";
 
 export function HomePage({ articles }) {
     const [breakingArticles, setBreakingArticles] = useState([])
     const [nonBreakingArticles, setNonBreakingArticles] = useState([])
+    const [hover, setHover] = useState(false)
 
     useEffect(() => {
         const breaking = articles.filter(article => article.isBreaking)
@@ -16,6 +18,7 @@ export function HomePage({ articles }) {
         setNonBreakingArticles(nonBreaking)
 
     }, [articles])
+
 
     return (
         <div>
@@ -32,6 +35,19 @@ export function HomePage({ articles }) {
             </Container>   
         </Navbar>
 
+        <marquee>
+            <div className="d-flex gap-4" style={{fontFamily: "orbitron"}}>
+            <h1 className="me-3 fw-bold">Breaking News:</h1>
+            {breakingArticles.map(article => (
+                <div key={article.id} className="d-flex align-items-center">
+                    <h2 className="mb-0">{article.title}</h2>
+                    </div>
+            ))}
+            </div>
+        </marquee>
+        <p>
+
+        </p>
         
 
         <Container className="orbitron">
@@ -51,6 +67,7 @@ export function HomePage({ articles }) {
         </Row>
         </div>
         </Container>
+      
 
         </div>
     )

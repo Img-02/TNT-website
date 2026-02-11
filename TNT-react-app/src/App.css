@@ -3,9 +3,31 @@
 }
 */
 
+/* card-component:hover {
+
+} */
+
+.tnt-card {
+  background-color: white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tnt-card:hover {
+  background-color: #D2B79A;
+  
+}
+
 .orbitron {
   font-family: "Orbitron", sans-serif;
 }
+
+.anta-regular {
+  font-family: "Anta", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 
 /*
 .logo {
