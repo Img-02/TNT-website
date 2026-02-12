@@ -5,6 +5,7 @@ import { Navbar, Container, Nav, Row, Col } from "react-bootstrap"
 import { backgroundColour, breakingColour } from "../colours.js"
 import { Marquee } from "react-fast-marquee";
 
+
 export function HomePage({ articles }) {
     const [breakingArticles, setBreakingArticles] = useState([])
     const [nonBreakingArticles, setNonBreakingArticles] = useState([])
@@ -53,21 +54,21 @@ export function HomePage({ articles }) {
         <Container className="orbitron">
         {/* hold the breaking news articles */}
         <div>
-            <Row xs={1} md={2} className="g-4 mb-5">
+            <Row xs={'auto'} sm={'auto'} md={'auto'} lg={'auto'} xl={'auto'} className="g-4 mb-5 justify-content-center">
             {breakingArticles.map(article => (
             <Col key={article.id}><BreakingNewsCard article={article}/></Col>
             ))}
             </Row>
         </div>
         <div>
-        <Row xs={2} md={4} className="gx-4">
+        <Row xs={'auto'} sm={'auto'} md={'auto'} lg={'auto'} xl={'auto'} className="mx-auto gx-4 justify-content-center">
             {nonBreakingArticles.map((article) => (
             <Col key={article.id}><ArticleCard article={article}/></Col>
         ))}
         </Row>
         </div>
         </Container>
-      
+        
 
         </div>
     )

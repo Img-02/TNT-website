@@ -6,11 +6,11 @@ import { hoverColour, breakingColour } from "../colours.js"
 
 export function BreakingNewsCard({article}) {
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     //background: `${hover ? hoverColour : ''}`}
     
     return (
-        <Card className={`border-5 h-100 tnt-card`} style={{ borderColor: breakingColour, borderWidth: '2px', cursor: "pointer", fontFamily: "anta"}}
+        <Card className={`border-5 tnt-card`} style={{ borderColor: breakingColour, width:"500px", borderWidth: '2px', cursor: "pointer", fontFamily: "anta"}}
         onClick={() => navigate(`/article/${article.id}`)}
 
         // onMouseEnter={(hover) => {setHover(true)}}

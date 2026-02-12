@@ -4,10 +4,10 @@ import { status } from "./status"
 export const articles = [
     {
       id: 1,
-      title: "Instructor astonished as students perform beyond expectations",
+      title: "Cannon discovered in Derbyshire Field. Peasants deny all knowledge",
       publishedAt: "2026-02-02T14:35:12.345Z",
       genre: [genres[0], genres[1]],
-      summary: "Tech instructor ventures into uncharted territory with excelling pupils",
+      summary: "A Middle Ages cannon was discovered in the Derbyshire Dales District",
       text: "More text about our very interesting first article",
       isBreaking: false,
       status: status[3],
@@ -48,11 +48,11 @@ export const articles = [
       isBreaking: false,
       status: status[3],
       rating: 6,
-      image: "/article-images/colin.png"
+      image: "/article-images/oldman.jpg"
     },
 {
       id: 5,
-      title: "Can't hit your protein? Try this one weird trick!",
+      title: "Can't hit your protein? Doctor Will weighs in",
       publishedAt: "2026-02-02T14:35:12.345Z",
       genre: [genres[2], genres[3]],
       summary: "6000 BOMBOCLAT CHICKEN NUGGETS",
@@ -96,14 +96,14 @@ export const articles = [
       isBreaking: true,
       status: status[3],
       rating: 2,
-      image: "/article-images/stonks_will.jpg"
+      image: "/article-images/wallstcrash.jpg"
     },
 {
       id: 9,
-      title: "Happy birthday colin!!!",
+      title: "Prime Minister of New Zealand celebrates 21st birthday",
       publishedAt: "2026-02-02T14:35:12.345Z",
       genre: [genres[6], genres[7]],
-      summary: "colincolincolincolincolincolincolincolin",
+      summary: "Colin McNewZealand celebrates his 21st birthday surrounded by friends and family",
       text: "More text about our very interesting ninth article",
       isBreaking: false,
       status: status[3],
@@ -115,12 +115,12 @@ export const articles = [
       title: "Try this weird victorian trick to get your baby to sleep",
       publishedAt: "2026-02-02T14:35:12.345Z",
       genre: [genres[2], genres[3]],
-      summary: "Move over Mr Snuggles, time to try arsenic!",
+      summary: "Move over Pampers, time to try arsenic!",
       text: "More text about our very interesting tenth article",
       isBreaking: false,
       status: status[3],
       rating: 5,
-      image: "/article-images/doctor_will.png"
+      image: "/article-images/babyarsenic.jpg"
     }, 
 {
       id:11,
@@ -132,7 +132,7 @@ export const articles = [
       isBreaking: false,
       status: status[3],
       rating: 5,
-      image: "article-images/harry.png"
+      image: "article-images/kirby.jpg"
     }
 ]
 

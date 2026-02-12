@@ -32,7 +32,7 @@ export default function App() {
   }, []) 
 
   return (
-    <div className="App">
+    <div className="App flex-column d-flex min-vh-100">
       <Navbar expand="lg" className="bg-body-tertiary" sticky="top" data-bs-theme="dark" >
         <Container className="orbitron"> 
             <Navbar.Brand className="fw-bolc text-center" as={Link} to="/">
@@ -51,7 +51,7 @@ export default function App() {
         </Container>   
       </Navbar>
 
-      <main>
+      <main className="Flex-grow-1">
         <Routes>
           <Route path="/" element={<HomePage articles={articles}/>}/>
           <Route path="/article/:id" element={<ArticlePage />}/>  
@@ -63,39 +63,20 @@ export default function App() {
       </main> 
      
       
-
-      {/* <Navbar className="justify-content-center">
-        <Container>
-            <Navbar.Collapse>
-            <Nav className="mx-auto">
-            <Nav.Link href="##" end>History</Nav.Link>
-            <Nav.Link href="##" end>Geography</Nav.Link>
-            <Nav.Link href="##" end>Music</Nav.Link>
-            <Nav.Link href="##" end>Polictical Events</Nav.Link>
-            </Nav>
-            </Navbar.Collapse>
+      <footer className="mt-auto">
+        <Navbar expand="lg" className="bg-body-tertiary" data-bs-theme="dark" >
+        <Container className="orbitron">
+          <Nav className="me-auto d-flex gap-3"> 
+            <Navbar.Brand>T.N.T</Navbar.Brand>
+            <Nav.Link as={NavLink} to="/">Contact</Nav.Link>
+            <Navbar.Text>Terms of Use</Navbar.Text>
+            <Navbar.Text>About T.N.T</Navbar.Text>
+            <Navbar.Text>Privacy Policy</Navbar.Text>
+            <Navbar.Text>Cookies</Navbar.Text>
+            <Navbar.Text>Accessibility Help</Navbar.Text>
+          </Nav>
         </Container>   
       </Navbar>
-
-      
-
-        <Container>
-          <div>
-            <Row xs={1} md={2} className="g-4 mb-5">
-              {breakingArticles.map(article => (
-              <Col><BreakingNewsCard key={article.id} article={article}/></Col>
-              ))}
-            </Row>
-        </div>
-        <div>
-          <Row xs={2} md={4} className="gx-4">
-            {otherArticles.map((article) => (
-              <Col>
-                <ArticleCard key={article.id} article={article}/>
-              </Col>
-          ))}
-          </Row>
-        </div>
-        </Container> */}
+      </footer>
       </div>
   )}

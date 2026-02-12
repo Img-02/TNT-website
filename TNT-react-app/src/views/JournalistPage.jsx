@@ -5,10 +5,10 @@ import { Form } from 'react-bootstrap';
 
 export function JournalistPage() {
 
-  const editorRef = useRef(null);
+  const editorRef = useRef(null)
   const log = () => {
     if (editorRef.current) {
-      console.log(editorRef.current.getContent());
+      console.log(editorRef.current.getContent())
     }
   };
   
@@ -19,7 +19,7 @@ export function JournalistPage() {
         <Container>
             <div>
             <p></p>
-            <h1 className="text-center"  style={{ fontFamily: "orbitron"}}>Welcome Loser </h1>
+            <h1 className="text-center"  style={{ fontFamily: "orbitron"}}>Welcome Default Story Writer!</h1>
             </div>
         <Form>
             <Form.Group>
