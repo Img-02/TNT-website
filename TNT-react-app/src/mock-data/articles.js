@@ -72,7 +72,7 @@ export const articles = [
       isBreaking: false,
       status: status[3],
       rating: 5,
-      image: "article-images/harry.png"
+      image: "/article-images/harry.png"
     },
     {
       id: 7,
@@ -132,7 +132,7 @@ export const articles = [
       isBreaking: false,
       status: status[3],
       rating: 5,
-      image: "article-images/kirby.jpg"
+      image: "/article-images/kirby.jpg"
     }
 ]
 

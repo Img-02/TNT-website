@@ -1,4 +1,4 @@
-import { ArticleCard } from "../components/ArticleCard.jsx"
+ import { ArticleCard } from "../components/ArticleCard.jsx"
 import { BreakingNewsCard } from "../components/BreakingNewsCard.jsx"
 import { useState, useEffect } from "react"
 import { Navbar, Container, Nav, Row, Col } from "react-bootstrap"
@@ -46,10 +46,8 @@ export function HomePage({ articles }) {
             ))}
             </div>
         </marquee>
-        <p>
 
-        </p>
-        
+        <p></p>
 
         <Container className="orbitron">
         {/* hold the breaking news articles */}
@@ -60,6 +58,7 @@ export function HomePage({ articles }) {
             ))}
             </Row>
         </div>
+        
         <div>
         <Row xs={'auto'} sm={'auto'} md={'auto'} lg={'auto'} xl={'auto'} className="mx-auto gx-4 justify-content-center">
             {nonBreakingArticles.map((article) => (
@@ -68,11 +67,6 @@ export function HomePage({ articles }) {
         </Row>
         </div>
         </Container>
-        
-
         </div>
     )
-
-
-
 }
