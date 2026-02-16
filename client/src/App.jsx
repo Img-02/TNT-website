@@ -20,8 +20,6 @@ import { useEffect } from "react"
 
 export default function App() {
   
-  
-
   useEffect(() => {
     const body = document.querySelector("body")
 

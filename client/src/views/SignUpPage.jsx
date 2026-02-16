@@ -4,12 +4,24 @@ import { Link } from "react-router-dom";
 
 export function SignUpPage() {
     const navigate = useNavigate()
+
+    const [isValid, setIsValid] = useState(false)
+
+    const submitForm = (event) => {
+        const form = event.currentTarget
+
+        if(form.checkValidity() === false) {
+            event.preventDefault()
+            event.stopPropogation()
+        }
+    }
+
     return(
     
     <Container className="orbitron">
         <Button className="orbitron" variant="primary" onClick={() => navigate(-1)}>BACK</Button>
             <h1>Create Account</h1>
-        <Form>
+        <Form noValidate validated={isValid} onSubmit={submitForm}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label style={{ fontFamily: "orbitron"}}>Email address</Form.Label>
                 <Form.Control type="email" placeholder="Enter email" style={{ fontFamily: "anta"}} />
