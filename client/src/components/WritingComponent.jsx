@@ -8,70 +8,32 @@ import { useNavigate } from 'react-router-dom';
 import { breakingColour } from '../colours';
 import { ArticleContentEditor } from "../components/ArticleContentEditor.jsx"
 import { useParams } from "react-router-dom";
-import { WritingComponent } from '../components/WritingComponent.jsx';
 
 import { articles } from "../mock-data/articles.js"
 
 
 
-export function JournalistPage() {
+export function WritingComponent({ formData, setFormData, onFormChange, onSubmit }) {
     const editorRef = useRef(null)
     const navigate = useNavigate()
     const initialValue = "This is where we will import saved progress "
+
     const [article, setArticle] = useState(null)
+
     const { id } = useParams()
-
-    const [formData, setFormData] = useState({
-        title: "",
-        content: "",
-        image: "",
-        summary: "",
-    })
     
-    const submitForm = (event) => {
-        event.preventDefault()
-        //event.stopPropagation()
-
-        console.log(formData)
-
-        console.log("form submitted")
-        const form = event.currentTarget
-
-        if(form.checkValidity() === true) {
-            console.log("form is valid")
-        }
-        else {
-            console.log("form is invalid")
-        }
-
-        setShowValidationText(true)
-    }
-
-    const onFormChange = (event) => {
-        console.log(event.target)
-		const { name, value } = event.target;
-
-        console.log(name, value)
-
-		setFormData({
-			...formData,
-			[name]: value,
-		});
-	};
     // below will be moved to useEffect that makes the api call when id changes and is not null
 
     useEffect(() => {
         if(id) {
 
             console.log(id)
-            const article = articles.find(article => article.id === Number(id))
+            const article = articles.find(article => article.id === id)
 
             // change this so it set form state similar to sign up page
             // then we can use the form state to fill out the forms
             if(article) {
-                setFormData({
-                    ...article
-                })
+                setArticle(article)
             }
 
             // tiny mce editor not stored in state, we modify it using the ref directly
@@ -82,32 +44,25 @@ export function JournalistPage() {
 
     }, [id])
 
-    return (
-        <Container className="mb-2">
-            <Button className="orbitron" variant="primary" onClick={() => navigate(-1)}>Go Back</Button>
-            <div>
-                <p></p>
-                <h1 className="text-center" style={{ fontFamily: "orbitron" }}>Welcome Default Story Writer!</h1>
-            </div>
-            
-            <WritingComponent formData={formData} setFormData={setFormData} onFormChange={onFormChange} onSubmit={submitForm}/>
 
-            {/* <Form>
+    return (
+        <div>
+            <Form onSubmit={onSubmit}>
                 <Form.Group>
                     <Form.Label style={{ fontFamily: "orbitron" }}>Title</Form.Label>
-                    <Form.Control type="text-muted" placeholder="Enter Title" style={{ fontFamily: "anta" }} />
+                    <Form.Control type="text-muted" placeholder="Enter Title" name="title" value={formData.title} onChange={onFormChange} style={{ fontFamily: "anta" }}/>
                 </Form.Group>
                 <p></p>
 
                 <Form.Group>
                     <Form.Label style={{ fontFamily: "orbitron" }}>Thumbnail</Form.Label>
-                    <Form.Control type="file" placeholder="Upload your Thumbnail" style={{ fontFamily: "anta" }} />
+                    <Form.Control type="file" placeholder="Upload your Thumbnail" name="image" onChange={onFormChange} style={{ fontFamily: "anta" }} />
                 </Form.Group>
                 <p></p>
 
                 <Form.Group>
                     <Form.Label style={{ fontFamily: "orbitron" }}>Summary</Form.Label>
-                    <textarea className="form-control" type="text-muted" placeholder="Enter Title" rows={4} style={{ fontFamily: "anta" }} />
+                    <textarea className="form-control" type="text-muted" name="summary" value={formData.summary} onChange={onFormChange} placeholder="Enter Title" rows={4} style={{ fontFamily: "anta" }} />
                 </Form.Group>
                 <p></p>
 
@@ -131,21 +86,16 @@ export function JournalistPage() {
                     />
                 </Form.Group>
 
-            </Form> */}
-            <p>
+            </Form>
+            {/* <p>
 
             </p>
-
             <div className="d-flex gap-2">
-
                 <Button className="orbitron" variant="warning">SUBMIT</Button>
-
                 <Button className="orbitron" variant="primary">SAVE</Button>
-
                 <Button className="orbitron" variant="secondary">SAVE and EXIT</Button>
-            </div>
-
-        </Container>
+            </div> */}
+        </div>
     )
 }
 

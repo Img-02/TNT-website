@@ -10,9 +10,13 @@ import "./App.css"
 // import Image from 'react-bootstrap'
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { ArticlePage } from "./views/ArticlePage.jsx"
-import { SignUpPage } from "./views/signUpPage.jsx";
+import { SignUpPage } from "./views/SignUpPage.jsx";
+import { ProfilePage } from "./views/ProfilePage.jsx";
 import { LogInPage } from "./views/LogInPage.jsx";
 import { JournalistPage } from "./views/JournalistPage.jsx";
+import { EditorPage } from "./views/EditorPage.jsx"
+import { EditorHomePage } from "./views/EditorHomePage.jsx"
+import { JournalistHomePage } from "./views/JournalistHomePage.jsx";
 
 import { backgroundColour } from "./colours.js";
 
@@ -40,7 +44,9 @@ export default function App() {
             {/* <Navbar.Toggle aria-controls="basic-navbar-nav" /> */}
           <Nav className="me-auto">
             <Nav.Link as={NavLink} to="/">Home</Nav.Link>
-            <Nav.Link as={NavLink} to="/journalist">Journalist Page</Nav.Link>
+            <Nav.Link as={NavLink} to="/journalisthomepage">Journalist Home Page</Nav.Link>
+            <Nav.Link as={NavLink} to="/editorhomepage">Editor Home Page</Nav.Link>
+            <Nav.Link as={NavLink} to="/profile">Profile Page</Nav.Link>
           </Nav>
           <Nav className="ms-auto">
             <Nav.Link as={NavLink} to="/login">Login</Nav.Link>
@@ -52,15 +58,19 @@ export default function App() {
       <main className="Flex-grow-1">
         <Routes>
           <Route path="/" element={<HomePage articles={articles}/>}/>
-          <Route path="/article/:id" element={<ArticlePage />}/>  
+          <Route path="/article/:id" element={<ArticlePage />}/> 
+          <Route path="/editorpage/:id" element={<EditorPage />}/> 
+          <Route path="/journalistpage/:id" element={<JournalistPage/>}/> 
+          <Route path="/journalistpage" element={<JournalistPage/>}/> 
           {/*article page route to specific article id, same for breaking and normal news*/}
           <Route path="/signup" element={<SignUpPage/>}/>
           <Route path="/login" element={<LogInPage/>}/>
-          <Route path="/journalist" element={<JournalistPage/>}/>
+          <Route path="/journalisthomepage" element={<JournalistHomePage/>}/>
+          <Route path="/editorhomepage" element={<EditorHomePage/>}/>
+          <Route path="/profile" element={<ProfilePage/>}/>
         </Routes>
       </main> 
      
-      
       <footer className="mt-auto">
         <Navbar expand="lg" className="bg-body-tertiary" data-bs-theme="dark" >
         <Container className="orbitron">
