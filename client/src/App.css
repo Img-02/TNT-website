@@ -7,6 +7,23 @@
 
 } */
 
+.news-ticker {
+  width: 100%;
+  overflow: hidden;
+  padding: 10px 0;
+  box-sizing: border-box;
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  padding-left:100%;
+  animation: marquee 10s linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%);}
+}
+
 .tnt-card {
   background-color: white;
   overflow: hidden;

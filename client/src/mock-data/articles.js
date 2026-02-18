@@ -1,6 +1,20 @@
 import { genres } from "./genres"
 import { status } from "./status"
 
+
+  // article_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  // article_title VARCHAR(255),
+  // article_summary VARCHAR(1000),
+  // article_text VARCHAR(10000),
+  // article_submitted_at VARCHAR(64),
+  // article_published_at VARCHAR(64),
+  // article_historical_date VARCHAR(64),
+  // article_status_id INTEGER NOT NULL,
+  // article_rating INTEGER NOT NULL,
+  // article_image_path VARCHAR(500),
+  // article_journalist_id INTEGER NOT NULL,
+  // article_editor_id INTEGER,
+
 export const articles = [
     {
       id: 1,
@@ -12,7 +26,8 @@ export const articles = [
       isBreaking: false,
       status: status[3],
       rating: 5,
-      image: "/article-images/article1.jpg"
+      image: "/article-images/article1.jpg",
+      submittedAt: "2026-02-02T14:35:12.345Z"
     },
 {
       id: 2,
@@ -24,7 +39,8 @@ export const articles = [
       isBreaking: true,
       status: status[3],
       rating: 9,
-      image: "/article-images/plank.jpg"
+      image: "/article-images/plank.jpg",
+      submittedAt: "2026-02-02T14:35:12.345Z"
     },
     {
       id: 3,
@@ -36,7 +52,8 @@ export const articles = [
       isBreaking: false,
       status: status[3],
       rating: 2,
-      image: "/article-images/stonks_will.jpg"
+      image: "/article-images/stonks_will.jpg",
+      submittedAt: "2026-02-02T14:35:12.345Z"
     },
 {
       id: 4,
@@ -48,7 +65,8 @@ export const articles = [
       isBreaking: false,
       status: status[3],
       rating: 6,
-      image: "/article-images/oldman.jpg"
+      image: "/article-images/oldman.jpg",
+      submittedAt: "2026-02-02T14:35:12.345Z"
     },
 {
       id: 5,
@@ -60,7 +78,8 @@ export const articles = [
       isBreaking: false,
       status: status[3],
       rating: 5,
-      image: "/article-images/doctor_will.png"
+      image: "/article-images/doctor_will.png",
+      submittedAt: "2026-02-02T14:35:12.345Z"
     }, 
 {
       id: 6,
@@ -72,7 +91,8 @@ export const articles = [
       isBreaking: false,
       status: status[3],
       rating: 5,
-      image: "/article-images/harry.png"
+      image: "/article-images/harry.png",
+      submittedAt: "2026-02-02T14:35:12.345Z"
     },
     {
       id: 7,
@@ -84,7 +104,8 @@ export const articles = [
       isBreaking: false,
       status: status[3],
       rating: 9,
-      image: "/article-images/stressed_goon.png"
+      image: "/article-images/stressed_goon.png",
+      submittedAt: "2026-02-02T14:35:12.345Z"
     },
     {
       id: 8,
@@ -96,7 +117,8 @@ export const articles = [
       isBreaking: true,
       status: status[3],
       rating: 2,
-      image: "/article-images/wallstcrash.jpg"
+      image: "/article-images/wallstcrash.jpg",
+      submittedAt: "2026-02-02T14:35:12.345Z"
     },
 {
       id: 9,
@@ -108,7 +130,8 @@ export const articles = [
       isBreaking: false,
       status: status[3],
       rating: 6,
-      image: "/article-images/colin.png"
+      image: "/article-images/colin.png",
+      submittedAt: "2026-02-02T14:35:12.345Z"
     },
 {
       id: 10,
@@ -120,7 +143,8 @@ export const articles = [
       isBreaking: false,
       status: status[3],
       rating: 5,
-      image: "/article-images/babyarsenic.jpg"
+      image: "/article-images/babyarsenic.jpg",
+      submittedAt: "2026-02-02T14:35:12.345Z"
     }, 
 {
       id:11,
@@ -132,7 +156,8 @@ export const articles = [
       isBreaking: false,
       status: status[3],
       rating: 5,
-      image: "/article-images/kirby.jpg"
+      image: "/article-images/kirby.jpg",
+      submittedAt: "2026-02-02T14:35:12.345Z"
     }
 ]
 

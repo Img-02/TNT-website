@@ -6,7 +6,6 @@ import { hoverColour } from "../colours"
 export function ArticleCard({ article }) {
 
     const navigate = useNavigate()
-    
 
     return (
     // <Row xs={3} md={5} className="g-1">

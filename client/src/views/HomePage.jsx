@@ -63,6 +63,7 @@ export function HomePage({ articles }) {
         <Row xs={'auto'} sm={'auto'} md={'auto'} lg={'auto'} xl={'auto'} className="mx-auto gx-4 justify-content-center">
             {nonBreakingArticles.map((article) => (
             <Col key={article.id}><ArticleCard article={article}/></Col>
+            
         ))}
         </Row>
         </div>

@@ -1,12 +1,78 @@
 import { Container } from "react-bootstrap"
+import { Row } from "react-bootstrap"
+import { Col } from "react-bootstrap"
+import { Card } from "react-bootstrap"
+import { Button } from "react-bootstrap"
+
+const user = {
+    user_first_name: "Colin",
+    user_surname: "Idk",
+    user_username: "Colin300",
+    user_password: "Colin",
+    user_email: "Colin",
+    user_profile_pic: "/article-images/colin.png",
+    user_journalists: ["Imogen", "Gabriel", "Chids", "Natalia"]
+}
 
 export function ProfilePage() {
-
-
     return (
-        <Container className="d-flex ">
+        <Container className="d-flex-column g-4 justify-content-center mb-3">
+        {/* profile component */}
+            <Row xs={'auto'} sm={'auto'} md={'auto'} lg={'auto'} xl={'auto'} className="d-flex justify-content-center mb-3">
+            <Col className="d-flex justify-content-center">
+            <Card style={{ width: '18rem' }}>
+                <Card.Img variant="top" src={user.user_profile_pic} />
+                <Card.Body>
+                    <Card.Title>{user.user_first_name} {user.user_surname}</Card.Title>
+                    <Card.Text>{user.user_username}</Card.Text>
+                    <Card.Text>{user.user_email}</Card.Text>
+                </Card.Body>
+                <Button variant="primary">Edit Profile</Button>
+                <Button variant="primary">Change Password</Button>
+            </Card>
+            </Col>
+            </Row>
 
+        {/* followed journalists componenent */}
+        <Row xs={'auto'} sm={'auto'} md={'auto'} lg={'auto'} xl={'auto'} className="d-flex justify-content-center g-4">
+            <Col>
+            <Card style={{ width: '18rem' }}>
+                <Card.Body>
+                    <Card.Title>Followed Journalists</Card.Title>
+                    {user.user_journalists.map(journalist => (
+                        <Card.Text>{journalist}</Card.Text>
+                    ))}
+                </Card.Body>
+            </Card>
+            </Col>
+
+            <Col>
+            <Card style={{ width: '18rem' }}>
+                <Card.Body>
+                    <Card.Title>Followed Genres</Card.Title>
+                    <Card.Text>API WILL GO HERE</Card.Text>
+                </Card.Body>
+            </Card>
+            </Col>
+
+            <Col>
+            <Card style={{ width: '18rem' }}>
+                    <Card.Body>
+                        <Card.Title>Saved Articles</Card.Title>
+                        <Card.Text>API WILL GO HERE</Card.Text>
+                    </Card.Body>
+                </Card>
+            </Col>               
+        </Row>
+
+        {/* followed genres component */}
+        <Row>
+        </Row>
+        <Row>
+        </Row>
         </Container>
+        
+        
     )
     
 }
