@@ -212,15 +212,24 @@ export class CdkStack extends Stack {
     // ----------------------------------
     // Lambdas
     // ----------------------------------
+    
+        // Write your other lambdas into here
+
+    // Grant Lambdas that need it access to the Aurora Data API
     const healthcheckLambda = new nodejs.NodejsFunction(this, 'health-check-lambda', {
       functionName: `${props.subDomain}-health-check-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
       entry: 'functions/health-check.js',
       handler: 'healthcheckHandler'
     })
-    // Write your other lambdas into here
 
-    // Grant Lambdas that need it access to the Aurora Data API
+    const getArticleLambda = new nodejs.NodejsFunction(this, 'get-article-lambda', {
+      functionName: `${props.subDomain}-get-article-lambda`,
+      runtime: lambda.Runtime.NODEJS_22_X,
+      entry: 'functions/utility-functions.js',
+      handler: 'getArticleHandler'
+    })
+
 
 
     // ----------------------------------
@@ -255,10 +264,38 @@ export class CdkStack extends Stack {
     })
 
     // Expose endpoint `/api/healthcheck`
-    const healthchckApi = api.root.addResource('healthcheck')
+    const healthchckAPI = api.root.addResource('healthcheck')
     // Allow `/api/healthcheck` to receive GET requests, and tell it which lambder to trigger whn it does
-    healthchckApi.addMethod('GET', new apigw.LambdaIntegration(healthcheckLambda))
+    healthchckAPI.addMethod('GET', new apigw.LambdaIntegration(healthcheckLambda))
     
+    //expose endpoint /api/article
+    //returns individual article info to display on screen
+    const articleAPI = api.root.addResource('article')
+    articleAPI.addMethod('GET', new apigw.LambdaIntegration(getArticleLambda))
+    // articleAPI.addMethod('POST', new apigw.LambdaIntegration()) //adds individual article to store in table
+    // articleAPI.addMethod('PATCH', new apigw.LambdaIntegration()) //updates individual article to store in table
+    
+    // //expose end point /api/user
+    // //updated db with user info and returns updated account 
+    // const userAPI = api.root.addResource('user')
+    // userAPI.addMethod('POST', new apigw.LambdaIntegration())
+    // userAPI.addMethod('GET', new apigw.LambdaIntegration())
+    // userAPI.addMethod('PATCH', new apigw.LambdaIntegration()) 
+
+    // // expose endpoint /api/login
+    // // validates a users login
+    // const logInAPI = api.root.addResource('login')
+    // logInAPI.addMethod('POST', new apigw.LambdaIntegration())
+    
+    // // expose endpoint /api/journalist-articles
+    // // gets articles by a certain journalist
+    // const journalistArticlesAPI = api.root.addResource('journalist-articles')
+    // journalistArticlesAPI.addMethod('GET', new apigw.LambdaIntegration())
+
+    // // expose endpoint /api/mainpage
+    // // returns articles to display on home page (only main text, date)
+    // const loadMainPageStoriesAPI = api.root.addResource('mainpage')
+    // loadMainPageStoriesAPI.addMethod('GET', new apigw.LambdaIntegration())
 
 
     // ----------------------------------
@@ -284,7 +321,8 @@ export class CdkStack extends Stack {
           ),
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-          cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED
+          cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+          originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER
         }
       },
       errorResponses: [
@@ -372,7 +410,7 @@ export class CdkStack extends Stack {
     // ----------------------------------
     writeFileSync(
       join(__dirname, '../../client/.env.production'), // THIS PATH WILL NEED TO CHANGE TO BE IN YOUR CLIENT DIRECTORY
-      `VITE_PRODUCT_CARDS_DOMAIN=https://${staticImagesInS3Domain}\n`
+      `VITE_ARTICLE_IMAGES_DOMAIN=https://${staticImagesInS3Domain}\n`
     )
 
     // --------------------------------------------------
