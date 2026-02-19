@@ -20,16 +20,38 @@ import { JournalistHomePage } from "./views/JournalistHomePage.jsx";
 
 import { backgroundColour } from "./colours.js";
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 export default function App() {
+  const [awsWorking, setAwsWorking] = useState(false)
   
+  // health check and set the background
   useEffect(() => {
+    const healthCheck = async () => {
+      try {
+        const response = await fetch('/api/healthcheck')
+
+        if (response.ok){
+          console.log("AWS Connected")
+          setAwsWorking(true)
+        }
+        else {
+          throw new Error("AWS backend not working")
+        }
+      } catch (error) {
+        console.log(error)
+        setAwsWorking(false)
+      }
+    }
+
     const body = document.querySelector("body")
 
     if(body){
       body.style.backgroundColor = backgroundColour
     }
+
+    healthCheck()
+
 
   }, []) 
 
