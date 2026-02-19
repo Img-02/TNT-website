@@ -1,7 +1,9 @@
 export const getArticleHandler = async (event, context) => {
     console.log('getArticleHandler invoked')  
+    console.log(event)
+    console.log(context)
 
-    const articleId = event.articleId || 'NOT_SET'
+    const articleId = event.articleId || event.queryStringParameters?.articleId || event.pathParameters?.articleId || 'NOT_SET'
     console.log(`PARAMS: articleId = ${articleId}`)
 
   if(articleId === "NOT_SET") {
