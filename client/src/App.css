@@ -6,7 +6,12 @@
 /* card-component:hover {
 
 } */
-
+#healthcheck{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: green;
+}
 .news-ticker {
   width: 100%;
   overflow: hidden;
@@ -44,6 +49,8 @@
   font-weight: 400;
   font-style: normal;
 }
+
+
 
 
 /*
