@@ -223,12 +223,63 @@ export class CdkStack extends Stack {
       handler: 'healthcheckHandler'
     })
 
+    const postHealthCheckLambda = new nodejs.NodejsFunction(this, 'post-health-check-lambda', {
+      functionName: `${props.subDomain}-post-health-check-lambda`,
+      runtime: lambda.Runtime.NODEJS_22_X,
+      entry: 'functions/utility-functions.js',
+      handler: 'postHealthCheckHandler'
+    })
+
     const getArticleLambda = new nodejs.NodejsFunction(this, 'get-article-lambda', {
       functionName: `${props.subDomain}-get-article-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
       entry: 'functions/utility-functions.js',
       handler: 'getArticleHandler'
     })
+
+    const getMainPageArticlesLambda = new nodejs.NodejsFunction(this, 'get-main-page-articles-lambda', {
+      functionName: `${props.subDomain}-get-main-page-articles-lambda`,
+      runtime: lambda.Runtime.NODEJS_22_X,
+      entry: 'functions/utility-functions.js',
+      handler: 'getMainPageArticlesHandler'
+    })
+
+    const getUserProfileLambda = new nodejs.NodejsFunction(this, 'get-user-profile-lambda', {
+      functionName: `${props.subDomain}-get-user-profile-lambda`,
+      runtime: lambda.Runtime.NODEJS_22_X,
+      entry: 'functions/utility-functions.js',
+      handler: 'getUserProfileHandler'
+    })
+
+    const getJouralistArticlesLambda = new nodejs.NodejsFunction(this, 'get-journalist-article-lambda', {
+      functionName: `${props.subDomain}-get-journalist-article-lambda`,
+      runtime: lambda.Runtime.NODEJS_22_X,
+      entry: 'functions/utility-functions.js',
+      handler: 'getJournalistArticleHandler'
+    })
+
+    const postLoginLambda = new nodejs.NodejsFunction(this, 'post-login-lambda', {
+      functionName: `${props.subDomain}-post-login-lambda`,
+      runtime: lambda.Runtime.NODEJS_22_X,
+      entry: 'functions/users.js',
+      handler: 'loginHandler'
+    })
+
+    const postSignUpLambda = new nodejs.NodejsFunction(this, 'post-signup-lambda', {
+      functionName: `${props.subDomain}-post-signup-lambda`,
+      runtime: lambda.Runtime.NODEJS_22_X,
+      entry: 'functions/users.js',
+      handler: 'postUsersHandler'
+    })
+
+    const postArticleLambda = new nodejs.NodejsFunction(this, 'post-article-lambda', {
+      functionName: `${props.subDomain}-post-article-lambda`,
+      runtime: lambda.Runtime.NODEJS_22_X,
+      entry: 'functions/utility-functions.js',
+      handler: 'postArticleHandler'
+    })
+  
+
 
 
 
@@ -267,37 +318,40 @@ export class CdkStack extends Stack {
     const healthchckAPI = api.root.addResource('healthcheck')
     // Allow `/api/healthcheck` to receive GET requests, and tell it which lambder to trigger whn it does
     healthchckAPI.addMethod('GET', new apigw.LambdaIntegration(healthcheckLambda))
+    healthchckAPI.addMethod('POST',new apigw.LambdaIntegration(postHealthCheckLambda))
     
     //expose endpoint /api/article
     //returns individual article info to display on screen
     const articleAPI = api.root.addResource('article')
     articleAPI.addMethod('GET', new apigw.LambdaIntegration(getArticleLambda))
-    // articleAPI.addMethod('POST', new apigw.LambdaIntegration()) //adds individual article to store in table
+    articleAPI.addMethod('POST', new apigw.LambdaIntegration(postArticleLambda)) //adds individual article to store in table
     // articleAPI.addMethod('PATCH', new apigw.LambdaIntegration()) //updates individual article to store in table
     
     // //expose end point /api/user
     // //updated db with user info and returns updated account 
-    // const userAPI = api.root.addResource('user')
-    // userAPI.addMethod('POST', new apigw.LambdaIntegration())
-    // userAPI.addMethod('GET', new apigw.LambdaIntegration())
+    const userAPI = api.root.addResource('user')
+    userAPI.addMethod('POST', new apigw.LambdaIntegration(postSignUpLambda))
+    userAPI.addMethod('GET', new apigw.LambdaIntegration(getUserProfileLambda))
     // userAPI.addMethod('PATCH', new apigw.LambdaIntegration()) 
-
+    
     // // expose endpoint /api/login
     // // validates a users login
-    // const logInAPI = api.root.addResource('login')
-    // logInAPI.addMethod('POST', new apigw.LambdaIntegration())
+    const logInAPI = api.root.addResource('login')
+    logInAPI.addMethod('POST', new apigw.LambdaIntegration(postLoginLambda))
     
     // // expose endpoint /api/journalist-articles
     // // gets articles by a certain journalist
-    // const journalistArticlesAPI = api.root.addResource('journalist-articles')
-    // journalistArticlesAPI.addMethod('GET', new apigw.LambdaIntegration())
+    const journalistArticlesAPI = api.root.addResource('journalist-articles')
+    journalistArticlesAPI.addMethod('GET', new apigw.LambdaIntegration(getJouralistArticlesLambda))
 
     // // expose endpoint /api/mainpage
     // // returns articles to display on home page (only main text, date)
-    // const loadMainPageStoriesAPI = api.root.addResource('mainpage')
-    // loadMainPageStoriesAPI.addMethod('GET', new apigw.LambdaIntegration())
+    const loadMainPageStoriesAPI = api.root.addResource('mainpage')
+    loadMainPageStoriesAPI.addMethod('GET', new apigw.LambdaIntegration(getMainPageArticlesLambda))
 
-
+    const uploadImagesAPI = api.root.addResource("image-upload")
+    // uploadImagesAPI.addMethod("POST", new apigw.LambdaIntegration())
+    
     // ----------------------------------
     // CloudFront distributions
     // ----------------------------------
