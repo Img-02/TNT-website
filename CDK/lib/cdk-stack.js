@@ -218,6 +218,7 @@ export class CdkStack extends Stack {
         // Write your other lambdas into here
 
     // Grant Lambdas that need it access to the Aurora Data API
+
     const healthcheckLambda = new nodejs.NodejsFunction(this, 'health-check-lambda', {
       functionName: `${props.subDomain}-health-check-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
@@ -246,6 +247,7 @@ export class CdkStack extends Stack {
       timeout: cdk.Duration.seconds(10),
       memorySize: 256
     });
+
     // Write your other lambdas into here
 
     // Grant Lambdas that need it access to the Aurora Data API
@@ -256,84 +258,108 @@ export class CdkStack extends Stack {
       functionName: `${props.subDomain}-post-health-check-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
       entry: 'functions/utility-functions.js',
-      handler: 'postHealthCheckHandler'
+      handler: 'postHealthCheckHandler',
+      bundling,
+      environment: lambdaEnvVars
     })
 
     const getArticleLambda = new nodejs.NodejsFunction(this, 'get-article-lambda', {
       functionName: `${props.subDomain}-get-article-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
       entry: 'functions/utility-functions.js',
-      handler: 'getArticleHandler'
+      handler: 'getArticleHandler',
+      bundling,
+      environment: lambdaEnvVars
     })
 
     const getMainPageArticlesLambda = new nodejs.NodejsFunction(this, 'get-main-page-articles-lambda', {
       functionName: `${props.subDomain}-get-main-page-articles-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
       entry: 'functions/utility-functions.js',
-      handler: 'getMainPageArticlesHandler'
+      handler: 'getMainPageArticlesHandler',
+      bundling,
+      environment: lambdaEnvVars
     })
 
     const getUserProfileLambda = new nodejs.NodejsFunction(this, 'get-user-profile-lambda', {
       functionName: `${props.subDomain}-get-user-profile-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
       entry: 'functions/utility-functions.js',
-      handler: 'getUserProfileHandler'
+      handler: 'getUserProfileHandler',
+      bundling,
+      environment: lambdaEnvVars
     })
 
     const getJouralistArticlesLambda = new nodejs.NodejsFunction(this, 'get-journalist-article-lambda', {
       functionName: `${props.subDomain}-get-journalist-article-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
       entry: 'functions/utility-functions.js',
-      handler: 'getJournalistArticleHandler'
+      handler: 'getJournalistArticleHandler',
+      bundling,
+      environment: lambdaEnvVars
     })
 
     const getEditorArticlesLambda = new nodejs.NodejsFunction(this, 'get-editor-article-lambda', {
       functionName: `${props.subDomain}-get-editor-article-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
       entry: 'functions/utility-functions.js',
-      handler: 'getEditorArticleHandler'
+      handler: 'getEditorArticleHandler',
+      bundling,
+      environment: lambdaEnvVars
     })
 
     const postLoginLambda = new nodejs.NodejsFunction(this, 'post-login-lambda', {
       functionName: `${props.subDomain}-post-login-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
       entry: 'functions/utility-functions.js',
-      handler: 'loginHandler'
+      handler: 'postLoginHandler',
+      bundling,
+      environment: lambdaEnvVars
     })
 
     const postSignUpLambda = new nodejs.NodejsFunction(this, 'post-signup-lambda', {
       functionName: `${props.subDomain}-post-signup-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
       entry: 'functions/utility-functions.js',
-      handler: 'postUsersHandler'
+      handler: 'postUsersHandler',
+      bundling,
+      environment: lambdaEnvVars
     })
 
     const postArticleLambda = new nodejs.NodejsFunction(this, 'post-article-lambda', {
       functionName: `${props.subDomain}-post-article-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
       entry: 'functions/utility-functions.js',
-      handler: 'postArticleHandler'
+      handler: 'postArticleHandler',
+      bundling,
+      environment: lambdaEnvVars
     })
 
     const postImageLambda = new nodejs.NodejsFunction(this, 'post-image-lambda', {
       functionName: `${props.subDomain}-post-image-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
       entry: 'functions/utility-functions.js',
-      handler: 'postImageHandler'
+      handler: 'postImageHandler',
+      bundling,
+      environment: lambdaEnvVars
     })
     
     const putArticleLambda = new nodejs.NodejsFunction(this, 'put-article-lambda', {
       functionName: `${props.subDomain}-put-article-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
       entry: 'functions/utility-functions.js',
-      handler: 'putArticleHandler'
+      handler: 'putArticleHandler',
+      bundling,
+      environment: lambdaEnvVars
     })
 
     const putUserLambda = new nodejs.NodejsFunction(this, 'put-user-lambda', {
       functionName: `${props.subDomain}-put-user-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
       entry: 'functions/utility-functions.js',
-      handler: 'putUserHandler'
+      handler: 'putUserHandler',
+      bundling,
+      environment: lambdaEnvVars
     })
 
     // ----------------------------------
