@@ -14,9 +14,18 @@ import {
   GetCommand,
   PutCommand
 } from "@aws-sdk/lib-dynamodb"
-import crypto from "crypto"
 
-// CDK passes these in as Lambda environment variables
+import crypto from "crypto"
+//import { jsonResponse } from "./utility-functions.js"
+
+const jsonResponse = (statusCode, body) => ({
+  statusCode,
+  headers: {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*"
+  },
+  body: JSON.stringify(body)
+})// CDK passes these in as Lambda environment vars.iables
 const TABLE_NAME = process.env.DYNAMO_TABLE_NAME
 const REGION = process.env.DYNAMO_REGION
 
@@ -27,15 +36,6 @@ const REGION = process.env.DYNAMO_REGION
 // )
 
 // Standard JSON response helper for API Gateway
-const jsonResponse = (statusCode, body) => ({
-  statusCode,
-  headers: {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*"
-  },
-  body: JSON.stringify(body)
-})
-
 /**
  * hashPassword(password, salt?)
  *

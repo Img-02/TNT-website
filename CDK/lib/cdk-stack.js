@@ -258,17 +258,24 @@ export class CdkStack extends Stack {
       handler: 'getJournalistArticleHandler'
     })
 
+    const getEditorArticlesLambda = new nodejs.NodejsFunction(this, 'get-editor-article-lambda', {
+      functionName: `${props.subDomain}-get-editor-article-lambda`,
+      runtime: lambda.Runtime.NODEJS_22_X,
+      entry: 'functions/utility-functions.js',
+      handler: 'getEditorArticleHandler'
+    })
+
     const postLoginLambda = new nodejs.NodejsFunction(this, 'post-login-lambda', {
       functionName: `${props.subDomain}-post-login-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/users.js',
+      entry: 'functions/utility-functions.js',
       handler: 'loginHandler'
     })
 
     const postSignUpLambda = new nodejs.NodejsFunction(this, 'post-signup-lambda', {
       functionName: `${props.subDomain}-post-signup-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/users.js',
+      entry: 'functions/utility-functions.js',
       handler: 'postUsersHandler'
     })
 
@@ -278,10 +285,27 @@ export class CdkStack extends Stack {
       entry: 'functions/utility-functions.js',
       handler: 'postArticleHandler'
     })
-  
 
+    const postImageLambda = new nodejs.NodejsFunction(this, 'post-image-lambda', {
+      functionName: `${props.subDomain}-post-image-lambda`,
+      runtime: lambda.Runtime.NODEJS_22_X,
+      entry: 'functions/utility-functions.js',
+      handler: 'postImageHandler'
+    })
+    
+    const putArticleLambda = new nodejs.NodejsFunction(this, 'put-article-lambda', {
+      functionName: `${props.subDomain}-put-article-lambda`,
+      runtime: lambda.Runtime.NODEJS_22_X,
+      entry: 'functions/utility-functions.js',
+      handler: 'putArticleHandler'
+    })
 
-
+    const putUserLambda = new nodejs.NodejsFunction(this, 'put-user-lambda', {
+      functionName: `${props.subDomain}-put-user-lambda`,
+      runtime: lambda.Runtime.NODEJS_22_X,
+      entry: 'functions/utility-functions.js',
+      handler: 'putUserHandler'
+    })
 
     // ----------------------------------
     // API Gateway
@@ -325,14 +349,13 @@ export class CdkStack extends Stack {
     const articleAPI = api.root.addResource('article')
     articleAPI.addMethod('GET', new apigw.LambdaIntegration(getArticleLambda))
     articleAPI.addMethod('POST', new apigw.LambdaIntegration(postArticleLambda)) //adds individual article to store in table
-    // articleAPI.addMethod('PATCH', new apigw.LambdaIntegration()) //updates individual article to store in table
-    
+    articleAPI.addMethod('PUT', new apigw.LambdaIntegration(putArticleLambda)) //updates individual article to store in table
     // //expose end point /api/user
     // //updated db with user info and returns updated account 
     const userAPI = api.root.addResource('user')
     userAPI.addMethod('POST', new apigw.LambdaIntegration(postSignUpLambda))
     userAPI.addMethod('GET', new apigw.LambdaIntegration(getUserProfileLambda))
-    // userAPI.addMethod('PATCH', new apigw.LambdaIntegration()) 
+    userAPI.addMethod('PUT', new apigw.LambdaIntegration(putUserLambda)) 
     
     // // expose endpoint /api/login
     // // validates a users login
@@ -344,13 +367,19 @@ export class CdkStack extends Stack {
     const journalistArticlesAPI = api.root.addResource('journalist-articles')
     journalistArticlesAPI.addMethod('GET', new apigw.LambdaIntegration(getJouralistArticlesLambda))
 
+    // // expose endpoint /api/editor-articles
+    // // gets articles being edited by a certain editor
+    const editorArticlesAPI = api.root.addResource('editor-articles')
+    editorArticlesAPI.addMethod("GET", new apigw.LambdaIntegration(getEditorArticlesLambda))
+
     // // expose endpoint /api/mainpage
     // // returns articles to display on home page (only main text, date)
     const loadMainPageStoriesAPI = api.root.addResource('mainpage')
     loadMainPageStoriesAPI.addMethod('GET', new apigw.LambdaIntegration(getMainPageArticlesLambda))
-
+    // // expose endpoint /api/image-upload
+    // // posts images to S3 bucket
     const uploadImagesAPI = api.root.addResource("image-upload")
-    // uploadImagesAPI.addMethod("POST", new apigw.LambdaIntegration())
+    uploadImagesAPI.addMethod("POST", new apigw.LambdaIntegration(postImageLambda))
     
     // ----------------------------------
     // CloudFront distributions
