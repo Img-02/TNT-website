@@ -3,12 +3,19 @@ import client from "data-api-client";
 
 import {
   sql00_dropAllTables,
-  sql01_createCustomersTable,
-  sql02_createProductsTable,
-  sql03_createOrdersTable,
-  sql04_seedCustomers,
-  sql05_seedProducts,
-  sql06_seedOrders
+  sql01_createGenresTable,
+  sql02_createStatusesTable,
+  sql03_createRolesTable,
+  sql04_createUsersTable,
+  sql05_createArticlesTable,
+  sql06_createArticleGenresTable,
+  sql07_createUserGenresTable,
+  sql08_createCommentsTable,
+  sql09_seedStatuses,
+  sql10_seedGenres,
+  sql11_seedRoles,
+  sql12_seedUsers,
+  sql13_seedArticles
 } from "./db-bootstrap-sqls.js";
 
 const connection = client({
@@ -22,22 +29,27 @@ export async function runQuery(sql, params = {}) {
   return connection.query(sql, params);
 }
 
-// This is the "bootstrap" the breakout slide refers to
 export async function bootstrapDatabase() {
   const statements = [
     sql00_dropAllTables,
-    sql01_createCustomersTable,
-    sql02_createProductsTable,
-    sql03_createOrdersTable,
-    sql04_seedCustomers,
-    sql05_seedProducts,
-    sql06_seedOrders
+    sql01_createGenresTable,
+    sql02_createStatusesTable,
+    sql03_createRolesTable,
+    sql04_createUsersTable,
+    sql05_createArticlesTable,
+    sql06_createArticleGenresTable,
+    sql07_createUserGenresTable,
+    sql08_createCommentsTable,
+    sql09_seedStatuses,
+    sql10_seedGenres,
+    sql11_seedRoles,
+    sql12_seedUsers,
+    sql13_seedArticles
   ];
 
   for (const statement of statements) {
     await runQuery(statement);
   }
 
-  // Return a numeric HTTP code, not a string, from the Lambda
   return 201;
 }
