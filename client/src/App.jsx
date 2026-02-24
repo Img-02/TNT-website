@@ -52,6 +52,8 @@ export default function App() {
 
     healthCheck()
 
+    //const users = await mockDatabase.getAllUsers()
+
 
   }, []) 
 
