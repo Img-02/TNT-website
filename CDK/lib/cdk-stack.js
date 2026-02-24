@@ -15,7 +15,6 @@ import * as origins from 'aws-cdk-lib/aws-cloudfront-origins'
 import * as acm from 'aws-cdk-lib/aws-certificatemanager'
 import * as route53 from 'aws-cdk-lib/aws-route53'
 import * as lambda from 'aws-cdk-lib/aws-lambda'
-import * as nodejs from 'aws-cdk-lib/aws-lambda-nodejs'
 import * as apigw from 'aws-cdk-lib/aws-apigateway'
 
 
@@ -195,10 +194,6 @@ export class CdkStack extends Stack {
     // ----------------------------------
     // Lambda bundling
     // ----------------------------------
-    const bundling = {
-      externalModules: ['aws-sdk'],
-      nodeModules: ['data-api-client']
-    }
 
     const lambdaEnvVars = {
       NODE_ENV: 'production',
@@ -214,154 +209,148 @@ export class CdkStack extends Stack {
     // ----------------------------------
     // Lambdas
     // ----------------------------------
-    
-        // Write your other lambdas into here
-
-    // Grant Lambdas that need it access to the Aurora Data API
-
-    const healthcheckLambda = new nodejs.NodejsFunction(this, 'health-check-lambda', {
+  
+    // health-check.js exports: export const healthcheckHandler = …
+    const healthcheckLambda = new lambda.Function(this, 'health-check-lambda', {
       functionName: `${props.subDomain}-health-check-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/health-check.js',
-      handler: 'healthcheckHandler'
+      code: lambda.Code.fromAsset('functions'),
+      handler: 'health-check.healthcheckHandler'
     })
 
-    const bootstrapLambda = new nodejs.NodejsFunction(this, 'bootstrap-lambda', {
+    const bootstrapLambda = new lambda.Function(this, 'bootstrap-lambda', {
       functionName: `${props.subDomain}-bootstrap-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/utility-functions.js',
-      handler: 'bootstrapHandler',
-      bundling,
+      code: lambda.Code.fromAsset('functions'),
+      handler: 'utility-functions.bootstrapHandler',
       timeout: cdk.Duration.seconds(30),
       memorySize: 256,
       environment: lambdaEnvVars
     })
 
-    const getArticlesLambda = new nodejs.NodejsFunction(this, 'get-articles-lambda', {
+    const getArticlesLambda = new lambda.Function(this, 'get-articles-lambda', {
       functionName: `${props.subDomain}-get-articles-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/utility-functions.js',
-      handler: 'getArticlesHandler',
-      bundling,
-      environment: lambdaEnvVars,
+      code: lambda.Code.fromAsset('functions'),
+      handler: 'utility-functions.getArticlesHandler',
       timeout: cdk.Duration.seconds(10),
-      memorySize: 256
-    });
+      memorySize: 256,
+      environment: lambdaEnvVars
+    })
 
-    // Write your other lambdas into here
-
-    // Grant Lambdas that need it access to the Aurora Data API
-    cluster.grantDataApiAccess(bootstrapLambda)
-    cluster.grantDataApiAccess(getArticlesLambda);
-
-    const postHealthCheckLambda = new nodejs.NodejsFunction(this, 'post-health-check-lambda', {
+    const postHealthCheckLambda = new lambda.Function(this, 'post-health-check-lambda', {
       functionName: `${props.subDomain}-post-health-check-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/utility-functions.js',
-      handler: 'postHealthCheckHandler',
-      bundling,
+      code: lambda.Code.fromAsset('functions'),
+      handler: 'utility-functions.postHealthCheckHandler',
       environment: lambdaEnvVars
     })
 
-    const getArticleLambda = new nodejs.NodejsFunction(this, 'get-article-lambda', {
+    const getArticleLambda = new lambda.Function(this, 'get-article-lambda', {
       functionName: `${props.subDomain}-get-article-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/utility-functions.js',
-      handler: 'getArticleHandler',
-      bundling,
+      code: lambda.Code.fromAsset('functions'),
+      handler: 'utility-functions.getArticleHandler',
       environment: lambdaEnvVars
     })
 
-    const getMainPageArticlesLambda = new nodejs.NodejsFunction(this, 'get-main-page-articles-lambda', {
+    const getMainPageArticlesLambda = new lambda.Function(this, 'get-main-page-articles-lambda', {
       functionName: `${props.subDomain}-get-main-page-articles-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/utility-functions.js',
-      handler: 'getMainPageArticlesHandler',
-      bundling,
+      code: lambda.Code.fromAsset('functions'),
+      handler: 'utility-functions.getMainPageArticlesHandler',
       environment: lambdaEnvVars
     })
 
-    const getUserProfileLambda = new nodejs.NodejsFunction(this, 'get-user-profile-lambda', {
+    const getUserProfileLambda = new lambda.Function(this, 'get-user-profile-lambda', {
       functionName: `${props.subDomain}-get-user-profile-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/utility-functions.js',
-      handler: 'getUserProfileHandler',
-      bundling,
+      code: lambda.Code.fromAsset('functions'),
+      handler: 'utility-functions.getUserProfileHandler',
       environment: lambdaEnvVars
     })
 
-    const getJouralistArticlesLambda = new nodejs.NodejsFunction(this, 'get-journalist-article-lambda', {
+    const getJouralistArticlesLambda = new lambda.Function(this, 'get-journalist-article-lambda', {
       functionName: `${props.subDomain}-get-journalist-article-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/utility-functions.js',
-      handler: 'getJournalistArticleHandler',
-      bundling,
+      code: lambda.Code.fromAsset('functions'),
+      handler: 'utility-functions.getJournalistArticleHandler',
       environment: lambdaEnvVars
     })
 
-    const getEditorArticlesLambda = new nodejs.NodejsFunction(this, 'get-editor-article-lambda', {
+    const getEditorArticlesLambda = new lambda.Function(this, 'get-editor-article-lambda', {
       functionName: `${props.subDomain}-get-editor-article-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/utility-functions.js',
-      handler: 'getEditorArticleHandler',
-      bundling,
+      code: lambda.Code.fromAsset('functions'),
+      handler: 'utility-functions.getEditorArticleHandler',
       environment: lambdaEnvVars
     })
 
-    const postLoginLambda = new nodejs.NodejsFunction(this, 'post-login-lambda', {
+    const postLoginLambda = new lambda.Function(this, 'post-login-lambda', {
       functionName: `${props.subDomain}-post-login-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/utility-functions.js',
-      handler: 'postLoginHandler',
-      bundling,
+      code: lambda.Code.fromAsset('functions'),
+      handler: 'utility-functions.postLoginHandler',
       environment: lambdaEnvVars
     })
 
-    const postSignUpLambda = new nodejs.NodejsFunction(this, 'post-signup-lambda', {
+    const postSignUpLambda = new lambda.Function(this, 'post-signup-lambda', {
       functionName: `${props.subDomain}-post-signup-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/utility-functions.js',
-      handler: 'postUsersHandler',
-      bundling,
+      code: lambda.Code.fromAsset('functions'),
+      handler: 'utility-functions.postUsersHandler',
       environment: lambdaEnvVars
     })
 
-    const postArticleLambda = new nodejs.NodejsFunction(this, 'post-article-lambda', {
+    const postArticleLambda = new lambda.Function(this, 'post-article-lambda', {
       functionName: `${props.subDomain}-post-article-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/utility-functions.js',
-      handler: 'postArticleHandler',
-      bundling,
+      code: lambda.Code.fromAsset('functions'),
+      handler: 'utility-functions.postArticleHandler',
       environment: lambdaEnvVars
     })
 
-    const postImageLambda = new nodejs.NodejsFunction(this, 'post-image-lambda', {
+    const postImageLambda = new lambda.Function(this, 'post-image-lambda', {
       functionName: `${props.subDomain}-post-image-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/utility-functions.js',
-      handler: 'postImageHandler',
-      bundling,
+      code: lambda.Code.fromAsset('functions'),
+      handler: 'utility-functions.postImageHandler',
       environment: lambdaEnvVars
     })
-    
-    const putArticleLambda = new nodejs.NodejsFunction(this, 'put-article-lambda', {
+
+    const putArticleLambda = new lambda.Function(this, 'put-article-lambda', {
       functionName: `${props.subDomain}-put-article-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/utility-functions.js',
-      handler: 'putArticleHandler',
-      bundling,
+      code: lambda.Code.fromAsset('functions'),
+      handler: 'utility-functions.putArticleHandler',
       environment: lambdaEnvVars
     })
 
-    const putUserLambda = new nodejs.NodejsFunction(this, 'put-user-lambda', {
+    const putUserLambda = new lambda.Function(this, 'put-user-lambda', {
       functionName: `${props.subDomain}-put-user-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: 'functions/utility-functions.js',
-      handler: 'putUserHandler',
-      bundling,
+      code: lambda.Code.fromAsset('functions'),
+      handler: 'utility-functions.putUserHandler',
       environment: lambdaEnvVars
     })
 
+    // Grant Lambdas that need it access to the Aurora Data API
+    cluster.grantDataApiAccess(healthcheckLambda)
+    cluster.grantDataApiAccess(bootstrapLambda)
+    cluster.grantDataApiAccess(getArticlesLambda)
+    cluster.grantDataApiAccess(postHealthCheckLambda)
+    cluster.grantDataApiAccess(getArticleLambda)
+    cluster.grantDataApiAccess(getMainPageArticlesLambda)
+    cluster.grantDataApiAccess(getUserProfileLambda)
+    cluster.grantDataApiAccess(getJouralistArticlesLambda)
+    cluster.grantDataApiAccess(getEditorArticlesLambda)
+    cluster.grantDataApiAccess(postLoginLambda)
+    cluster.grantDataApiAccess(postSignUpLambda)
+    cluster.grantDataApiAccess(postArticleLambda)
+    cluster.grantDataApiAccess(postImageLambda)
+    cluster.grantDataApiAccess(putArticleLambda)
+    cluster.grantDataApiAccess(putUserLambda)
+    
     // ----------------------------------
     // API Gateway
     // ----------------------------------
