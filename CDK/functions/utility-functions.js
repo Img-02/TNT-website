@@ -741,7 +741,7 @@ export const postUsersHandler = async (event) => {
 
     // Basic validation
     if (!user_email || !password || !user_first_name || !user_surname || !user_username) {
-      return jsonResponse(400, { status: "error", message: "Email and password are required" })
+      return jsonResponse(400, { status: "error", message: "Email, password, first name, surname and user name are required" })
     }
 
 
