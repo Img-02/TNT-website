@@ -46,10 +46,9 @@ export const sql04_createUsersTable = `
     user_first_name  VARCHAR(64) NOT NULL,
     user_surname     VARCHAR(64) NOT NULL,
     user_username    VARCHAR(64) UNIQUE NOT NULL,
-    user_password    VARCHAR(255) NOT NULL,
-    user_age         INTEGER,
+    user_password    VARCHAR(644) NOT NULL,
     user_email       VARCHAR(100) UNIQUE NOT NULL,
-    user_profile_pic VARCHAR(500),
+    user_profile_pic_path VARCHAR(500),
     user_role_id     INTEGER NOT NULL,
     PRIMARY KEY (user_id),
     CONSTRAINT fk_role
@@ -60,30 +59,30 @@ export const sql04_createUsersTable = `
 
 export const sql05_createArticlesTable = `
   CREATE TABLE IF NOT EXISTS articles (
-    article_id           INTEGER GENERATED ALWAYS AS IDENTITY,
-    article_title        VARCHAR(255)   NOT NULL,
-    article_summary      VARCHAR(1000)  NOT NULL,
-    article_text         VARCHAR(10000) NOT NULL,
-    article_created_at   VARCHAR(64)    NOT NULL,
-    article_published_at VARCHAR(64),
-    article_time_period  INTEGER        NOT NULL,
-    article_is_breaking  BOOLEAN,
-    article_status_id    INTEGER        NOT NULL,
-    article_rating       INTEGER        NOT NULL,
-    article_image_path   VARCHAR(500)   NOT NULL,
-    article_journalist_id INTEGER       NOT NULL,
-    article_editor_id     INTEGER       NOT NULL,
-    PRIMARY KEY (article_id),
-    CONSTRAINT fk_status
-      FOREIGN KEY (article_status_id)
-      REFERENCES statuses(status_id),
-    CONSTRAINT fk_journalist
-      FOREIGN KEY (article_journalist_id)
-      REFERENCES users(user_id),
-    CONSTRAINT fk_editor
-      FOREIGN KEY (article_editor_id)
-      REFERENCES users(user_id)
-  );
+  article_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  article_title VARCHAR(255),
+  article_summary VARCHAR(1000),
+  article_text VARCHAR(10000),
+  article_submitted_at VARCHAR(64),
+  article_published_at VARCHAR(64),
+  article_historical_date VARCHAR(64),
+  article_status_id INTEGER NOT NULL,
+  article_rating INTEGER NOT NULL,
+  article_image_path VARCHAR(500),
+  article_journalist_id INTEGER NOT NULL,
+  article_editor_id INTEGER,
+  article_draft_number INTEGER NOT NULL,
+  PRIMARY KEY (article_id),
+  CONSTRAINT fk_status
+    FOREIGN KEY (article_status_id)
+    REFERENCES statuses(status_id),
+  CONSTRAINT fk_journalist
+    FOREIGN KEY (article_journalist_id)
+    REFERENCES users(user_id),
+  CONSTRAINT fk_editor
+    FOREIGN KEY (article_editor_id)
+    REFERENCES users(user_id)
+);
 `;
 
 export const sql06_createArticleGenresTable = `
@@ -161,9 +160,9 @@ export const sql10_seedGenres = `
 
 export const sql11_seedRoles = `
   INSERT INTO roles (role_name) VALUES
+    ('Reader'),
     ('Journalist'),
-    ('Editor'),
-    ('Reader')
+    ('Editor')
   ON CONFLICT (role_name) DO NOTHING;
 `;
 
@@ -173,9 +172,8 @@ export const sql12_seedUsers = `
     user_surname,
     user_username,
     user_password,
-    user_age,
     user_email,
-    user_profile_pic,
+    user_profile_pic_path,
     user_role_id
   ) VALUES
     (
@@ -183,51 +181,341 @@ export const sql12_seedUsers = `
       'Reporter',
       'jane.reporter',
       'password123',
-      32,
       'jane.reporter@example.com',
       'THIS IS AN IMAGE LINK',
-      1
+      2
     ),
     (
       'Ed',
       'Editor',
       'ed.editor',
       'password123',
-      40,
       'ed.editor@example.com',
       'THIS IS AN IMAGE LINK',
-       2
+       3
+    ),
+    ( 'Gabriel',
+      'Barrett',
+      'G_Barrett',
+      'password',
+      'Gabriel@gmail.com',
+      'imageLInk',
+      1 
+    ),
+    ( 'Imogen',
+      'Greig',
+      'I_Greig',
+      'password',
+      'Imogen@gmail.com',
+      'THIS IS A IMAGE STINKY LINKY BINKY',
+      2
     )
   ON CONFLICT (user_username) DO NOTHING;
 `;
 
 export const sql13_seedArticles = `
   INSERT INTO articles (
-    article_title,
-    article_summary,
-    article_text,
-    article_created_at,
-    article_published_at,
-    article_time_period,
-    article_is_breaking,
-    article_status_id,
-    article_rating,
-    article_image_path,
+    article_title, 
+    article_summary, 
+    article_text, 
+    article_submitted_at, 
+    article_published_at, 
+    article_historical_date,
+    article_status_id, 
+    article_rating, 
+    article_image_path, 
     article_journalist_id,
-    article_editor_id
-  ) VALUES (
-    'Instructor astonished as students perform beyond expectations',
-    'Tech instructor ventures into uncharted territory with excelling pupils',
-    'More text about our very interesting first article',
+    article_editor_id,
+    article_draft_number
+) VALUES 
+  (
+    'Cannon discovered in Derbyshire Field. Peasants deny all knowledge', 
+    'A Middle Ages cannon was discovered in the Derbyshire Dales District', 
+    'More text about our very interesting first article', 
+    '2026-02-02T14:35:12.345Z', 
     '2026-02-02T14:35:12.345Z',
-    '2026-02-04T14:35:12.345Z',
-    1800,
-    TRUE,
-    4,
-    23,
-    'THIS IS AN IMAGE LINK',
+    1500, 
+    4, 
+    0, 
+    '/article1.jpg', 
     1,
+    2,
+    1
+  ),
+
+  (
+    'Planking: is your child at risk?', 
+    'Explore the risks of todays latest youth trends', 
+    'A man has died in Australia after taking part in the internet phenomenon of planking. But what is it and where did the craze come from?The victim, a man in his 20s, fell from a balcony railing in Brisbane while a friend photographed him, according to police. The phenomenon of planking involves lying face down in a public place - the stranger the better - and posting photos on social networking sites such as Facebook. Aficionados lie expressionless with a straight body, hands by their sides and toes pointing into the ground. Two groups claim to have invented the prank - either in Somerset in 2000 as the lying down game or eight years later in South Australia as planking. Both groups have rival Facebook sites boasting more than 100,000 fans.', 
+    '2026-02-02T14:35:12.345Z', 
+    '2026-02-02T14:35:12.345Z', 
+    2010,
+    4, 
+    10, 
+    '/plank.jpg', 
+    4,
+    2,
     2
-  )
-  ON CONFLICT DO NOTHING;
+  ),
+
+  (
+    'LISAs: Not just a simpson character', 
+    'How a LISA can help you buy your first home with government D''oh!', 
+    'More text about our very interesting third article', 
+    '2026-02-02T14:35:12.345Z', 
+    '2026-02-02T14:35:12.345Z',
+    2020,
+    1, 
+    2, 
+    '/stonks_will.jpg', 
+    4,
+    2,
+    1
+  ),
+
+  (
+    'Why your 67th birthday will make your grandkids love you', 
+    '67 is the new it number, we speak to sponsor Darshan McCarLover to find out more', 
+    'More text about our very interesting fourth article', 
+    '2026-02-02T14:35:12.345Z', 
+    '2026-02-02T14:35:12.345Z', 
+    2026,
+    1, 
+    4,
+    '/oldman.jpg', 
+    1,
+    2,
+    1
+  ),
+
+  (
+    'Can''t hit your protein? Doctor Will weighs in', 
+    '6000 BOMBOCLAT CHICKEN NUGGETS', 
+    'More text about our very interesting fifth article', 
+    '2026-02-02T14:35:12.345Z', 
+    '2026-02-02T14:35:12.345Z',
+    2025,
+    4, 
+    100, 
+    '/doctor_will.png', 
+    1,
+    2,
+    4
+  ),
+
+  (
+    'Harry Styles new album inspires Russian Revolution-esque revolt in all-girls Grammar School', 
+    'Mr Style''s new album ''Aperture'' has sent this London school into total anarchy as teachers are chased out with molotovs', 
+    'More text about our very interesting sixth article', 
+    '2026-02-02T14:35:12.345Z', 
+    '2026-02-02T14:35:12.345Z',
+    2026,
+    2, 
+    0, 
+    '/harry.png', 
+    4,
+    2,
+    2
+  ),
+
+  (
+    'TikTok to be renamed Hickory Dickory Tikory Tokory in the UK', 
+    'TikTok, reels, shorts and an appeal to british values', 
+    'More text about our very interesting seventh article',
+    '2026-02-02T14:35:12.345Z', 
+    '2026-02-02T14:35:12.345Z',
+    1700, 
+    4, 
+    0, 
+    '/stressed_goon.png', 
+    1,
+    2,
+    1
+  ),
+
+  (
+    'Wall St Crash more like Wall St Bash!', 
+    'Buy into Trading 212 today!', 
+    'More text about our very interesting eighth article', 
+    '2026-02-02T14:35:12.345Z', 
+    '2026-02-02T14:35:12.345Z',
+    1920, 
+    2,
+    0, 
+    '/wallstcrash.jpg', 
+    1,
+    2,
+    1
+  ),
+
+  (
+    'Prime Minister of New Zealand celebrates 21st birthday', 
+    'Colin McNewZealand celebrates his 21st birthday surrounded by friends and family', 
+    'More text about our very interesting ninth article', 
+    '2026-02-02T14:35:12.345Z', 
+    '2026-02-02T14:35:12.345Z', 
+    2076,
+    4, 
+    6, 
+    '/colin.png', 
+    4,
+    2,
+    3
+  ),
+
+    (
+    'Try this weird victorian trick to get your baby to sleep',
+    'Move over Pampers, time to try arsenic!', 
+    'More text about our very interesting tenth article', 
+    '2026-02-02T14:35:12.345Z', 
+    '2026-02-02T14:35:12.345Z', 
+    1800,
+    4, 
+    5,
+    '/babyarsenic.jpg',
+    1,
+    2,
+    4
+  ),
+
+  (
+    'Watermelon sugar is a euphemism but what for?', 
+    'Tastes like strawberries? Not so much', 
+    'More text about our very interesting sixth article',
+    '2026-02-02T14:35:12.345Z', 
+    '2026-02-02T14:35:12.345Z',
+    2020,
+    4,
+    5,
+    '/kirby.jpg',
+    1,
+    2,
+    5
+  ),
+  (
+    'Title',
+    'Summary',
+    'Article',
+    'Date',
+    'Date',
+    1300,
+    2,
+    0,
+    '',
+    4,
+    2,
+    2  
+    ),
+(
+  'First Human Colony Established on Mars',
+  'An international crew founded a permanent Martian settlement.',
+  'In 2037, astronauts established the first sustainable human settlement on Mars.',
+  '2026-02-08T11:00:00.000Z',
+  '2026-02-09T08:00:00.000Z',
+  '2037',
+  2,
+  5,
+  '/images/mars2037.jpg',
+  1,
+  2,
+  1
+),
+(
+  'Global Fusion Reactor Activated',
+  'Clean fusion energy became commercially viable.',
+  'In 2042, engineers activated the first commercially viable fusion power plant.',
+  '2026-02-07T10:00:00.000Z',
+  '2026-02-08T09:00:00.000Z',
+  '2042',
+  2,
+  5,
+  '/images/fusion2042.jpg',
+  2,
+  2,
+  1
+),
+(
+  'AI Granted Legal Personhood',
+  'Advanced AI systems gained limited legal status.',
+  'In 2045, an international court recognized certain advanced artificial intelligence systems as legal entities.',
+  '2026-02-06T09:30:00.000Z',
+  '2026-02-07T08:30:00.000Z',
+  '2045',
+  1,
+  4,
+  '/images/ai2045.jpg',
+  3,
+  2,
+  1
+),
+(
+  'Global Climate Accord of 2030',
+  'Nations signed binding emissions reductions targets.',
+  'In 2030, world leaders agreed to strict environmental targets to combat climate change.',
+  '2026-02-05T09:00:00.000Z',
+  '2026-02-06T08:00:00.000Z',
+  '2030',
+  2,
+  4,
+  '/images/climate2030.jpg',
+  4,
+  2,
+  1
+),
+(
+  'Quantum Internet Goes Live',
+  'Secure quantum communications network launches globally.',
+  'In 2035, the first global quantum internet infrastructure became operational.',
+  '2026-02-04T09:00:00.000Z',
+  '2026-02-05T08:00:00.000Z',
+  '2035',
+  2,
+  5,
+  '/images/quantum2035.jpg',
+  1,
+  2,
+  1
+),
+(
+  'Pacific Trade Alliance Formed',
+  'Nations created a sweeping economic pact.',
+  'In 2032, Pacific nations signed a comprehensive economic cooperation agreement.',
+  '2026-02-03T08:30:00.000Z',
+  '2026-02-04T07:30:00.000Z',
+  '2032',
+  2,
+  4,
+  '/images/pacific2032.jpg',
+  2,
+  2,
+  1
+),
+(
+  'Global Digital Currency Adopted',
+  'Central banks unified under a shared digital reserve.',
+  'In 2038, major economies adopted a shared digital settlement currency.',
+  '2026-02-02T08:30:00.000Z',
+  '2026-02-03T07:30:00.000Z',
+  '2038',
+  1,
+  4,
+  '/images/digital2038.jpg',
+  3,
+  2,
+  1
+),
+(
+  'First Asteroid Mining Operation Begins',
+  'Commercial extraction of asteroid minerals starts.',
+  'In 2050, a private consortium began extracting rare minerals from a near-Earth asteroid.',
+  '2026-02-01T08:30:00.000Z',
+  '2026-02-02T07:30:00.000Z',
+  '2050',
+  2,
+  5,
+  '/images/asteroid2040.jpg',
+  4,
+  2,
+  1
+);
 `;

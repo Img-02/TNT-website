@@ -1,0 +1,355 @@
+1.
+article_title: The Fall of Constantinople
+article_summary: The Ottoman capture of Constantinople ended the Byzantine Empire.
+article_text: In 1453, the forces of Mehmed II captured Constantinople after a prolonged siege. The massive cannons deployed against the ancient walls marked a turning point in military technology. The fall of the city ended the Byzantine Empire and strengthened Ottoman dominance in the region. The event reshaped European trade routes and is often cited as a catalyst for the Renaissance.
+article_submitted_at: 2026-02-20T10:12:45.123Z
+article_published_at: 2026-02-21T09:00:00.000Z
+article_historical_date: 1453
+article_status_id: 3
+article_rating: 4
+article_image_path: /images/fall_of_constantinople.jpg
+article_journalist_id: 1
+article_editor_id: 2
+article_draft_number: 2
+
+2.
+article_title: The Signing of the Magna Carta
+article_summary: A charter limiting royal power was sealed in England.
+article_text: In 1215, King John of England agreed to the Magna Carta at Runnymede. Pressured by rebellious barons, the king accepted limits on his authority. Though initially ineffective, the document later became foundational to constitutional law and influenced democratic principles worldwide.
+article_submitted_at: 2026-02-19T11:00:00.000Z
+article_published_at: 2026-02-20T08:30:00.000Z
+article_historical_date: 1215
+article_status_id: 4
+article_rating: 4
+article_image_path: /images/magna_carta.jpg
+article_journalist_id: 2
+article_editor_id: 2
+article_draft_number: 3
+
+3.
+article_title: Columbus Reaches the Americas
+article_summary: A transatlantic voyage reshaped global history.
+article_text: In 1492, Christopher Columbus sailed under the Spanish crown and reached the Caribbean. Sponsored by Ferdinand II of Aragon and Isabella I of Castile, his expedition initiated sustained contact between Europe and the Americas, leading to profound cultural and economic exchange.
+article_submitted_at: 2026-02-18T09:15:00.000Z
+article_published_at: 2026-02-19T07:45:00.000Z
+article_historical_date: 1492
+article_status_id: 3
+article_rating: 4
+article_image_path: /images/columbus_1492.jpg
+article_journalist_id: 3
+article_editor_id: 2
+article_draft_number: 1
+
+4.
+article_title: The American Declaration of Independence
+article_summary: Thirteen colonies declared independence from Britain.
+article_text: In 1776, representatives met in Philadelphia to adopt the Declaration of Independence. Drafted primarily by Thomas Jefferson, the document proclaimed the colonies free from British rule, igniting a transformative war and establishing a new nation.
+article_submitted_at: 2026-02-17T14:00:00.000Z
+article_published_at: 2026-02-18T09:00:00.000Z
+article_historical_date: 1776
+article_status_id: 4
+article_rating: 4
+article_image_path: /images/declaration_1776.jpg
+article_journalist_id: 4
+article_editor_id: 2
+article_draft_number: 2
+
+5.
+article_title: The French Revolution Begins
+article_summary: A revolution overthrew France’s monarchy.
+article_text: In 1789, citizens stormed the Bastille in Paris. The uprising symbolized resistance against royal authority and economic injustice. The revolution ultimately led to the rise of Napoleon Bonaparte and reshaped European politics.
+article_submitted_at: 2026-02-16T10:10:10.000Z
+article_published_at: 2026-02-17T08:00:00.000Z
+article_historical_date: 1789
+article_status_id: 3
+article_rating: 4
+article_image_path: /images/french_revolution.jpg
+article_journalist_id: 1
+article_editor_id: 2
+article_draft_number: 2
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+(
+  'The Fall of Constantinople Ends an Empire',
+  'Ottoman forces captured Constantinople, ending Byzantine rule.',
+  'In 1453, Ottoman forces breached the massive defensive walls of Constantinople after weeks of siege warfare. The use of heavy cannons marked a turning point in military history. The fall of the city ended the Byzantine Empire and reshaped trade routes between Europe and Asia.',
+  '2026-02-20T10:12:45.123Z',
+  '2026-02-21T09:00:00.000Z',
+  '1453',
+  3,
+  5,
+  '/images/constantinople.jpg',
+  1,
+  2,
+  2
+),
+(
+  'Magna Carta Sealed at Runnymede',
+  'King John agreed to a charter limiting royal authority.',
+  'In 1215, English barons compelled King John to accept a charter limiting the powers of the monarchy. Though initially resisted, the Magna Carta later became a cornerstone for constitutional governance.',
+  '2026-02-19T11:00:00.000Z',
+  '2026-02-20T08:30:00.000Z',
+  '1215',
+  4,
+  5,
+  '/images/magnacarta.jpg',
+  2,
+  2,
+  3
+),
+(
+  'Columbus Reaches the Caribbean',
+  'A voyage across the Atlantic reshaped world history.',
+  'In 1492, a Spanish-backed expedition crossed the Atlantic Ocean and reached Caribbean islands. The voyage permanently connected Europe and the Americas.',
+  '2026-02-18T09:15:00.000Z',
+  '2026-02-19T07:45:00.000Z',
+  '1492',
+  3,
+  4,
+  '/images/columbus.jpg',
+  3,
+  2,
+  1
+),
+(
+  'American Colonies Declare Independence',
+  'Thirteen colonies proclaimed independence from Britain.',
+  'In 1776, representatives formally declared independence from British rule, outlining principles of liberty and self-governance.',
+  '2026-02-17T14:00:00.000Z',
+  '2026-02-18T09:00:00.000Z',
+  '1776',
+  4,
+  5,
+  '/images/declaration.jpg',
+  4,
+  2,
+  2
+),
+(
+  'Storming of the Bastille Sparks Revolution',
+  'Parisians attacked a royal fortress, igniting revolution.',
+  'In 1789, citizens stormed a fortress prison in Paris that symbolized royal authority, triggering revolutionary change in France.',
+  '2026-02-16T10:10:10.000Z',
+  '2026-02-17T08:00:00.000Z',
+  '1789',
+  3,
+  4,
+  '/images/bastille.jpg',
+  1,
+  2,
+  2
+),
+(
+  'World War I Begins in Europe',
+  'An assassination triggered a global conflict.',
+  'In 1914, the assassination of a European archduke set off alliance obligations that plunged much of the world into war.',
+  '2026-02-15T12:00:00.000Z',
+  '2026-02-16T09:30:00.000Z',
+  '1914',
+  4,
+  4,
+  '/images/ww1.jpg',
+  2,
+  2,
+  1
+),
+(
+  'The First Moon Landing',
+  'Humans successfully landed on the Moon.',
+  'In 1969, astronauts landed on the lunar surface and returned safely to Earth, marking a milestone in space exploration.',
+  '2026-02-14T08:00:00.000Z',
+  '2026-02-15T07:00:00.000Z',
+  '1969',
+  4,
+  5,
+  '/images/moonlanding.jpg',
+  3,
+  2,
+  1
+),
+(
+  'The Fall of the Berlin Wall',
+  'A divided Germany moved toward reunification.',
+  'In 1989, political reforms and public demonstrations led to the dismantling of the Berlin Wall.',
+  '2026-02-13T10:30:00.000Z',
+  '2026-02-14T09:00:00.000Z',
+  '1989',
+  3,
+  5,
+  '/images/berlinwall.jpg',
+  4,
+  2,
+  2
+),
+(
+  'The Renaissance Flourishes in Florence',
+  'A cultural rebirth transformed European art and science.',
+  'Around 1500, Florence became a center of artistic and intellectual revival that influenced Europe for centuries.',
+  '2026-02-12T09:00:00.000Z',
+  '2026-02-13T08:00:00.000Z',
+  '1500',
+  2,
+  4,
+  '/images/renaissance.jpg',
+  1,
+  2,
+  1
+),
+(
+  'The Industrial Revolution Accelerates',
+  'Steam power transformed manufacturing and transport.',
+  'By 1800, mechanized factories and steam engines reshaped economies and societies across Europe.',
+  '2026-02-11T08:00:00.000Z',
+  '2026-02-12T07:30:00.000Z',
+  '1800',
+  3,
+  4,
+  '/images/industrial.jpg',
+  2,
+  2,
+  1
+),
+(
+  'The Russian Revolution Reshapes a Nation',
+  'A monarchy fell and a new political system emerged.',
+  'In 1917, revolutionary movements overthrew imperial rule and established a new socialist government.',
+  '2026-02-10T10:00:00.000Z',
+  '2026-02-11T09:00:00.000Z',
+  '1917',
+  3,
+  4,
+  '/images/russianrevolution.jpg',
+  3,
+  2,
+  1
+),
+(
+  'The End of World War II',
+  'Global conflict concluded after six devastating years.',
+  'In 1945, Allied victories in Europe and the Pacific brought the Second World War to an end.',
+  '2026-02-09T09:00:00.000Z',
+  '2026-02-10T08:00:00.000Z',
+  '1945',
+  4,
+  5,
+  '/images/ww2end.jpg',
+  4,
+  2,
+  2
+),
+
+-- FUTURE EVENTS --
+
+(
+  'First Human Colony Established on Mars',
+  'An international crew founded a permanent Martian settlement.',
+  'In 2037, astronauts established the first sustainable human settlement on Mars.',
+  '2026-02-08T11:00:00.000Z',
+  '2026-02-09T08:00:00.000Z',
+  '2037',
+  2,
+  5,
+  '/images/mars2037.jpg',
+  1,
+  2,
+  1
+),
+(
+  'Global Fusion Reactor Activated',
+  'Clean fusion energy became commercially viable.',
+  'In 2042, engineers activated the first commercially viable fusion power plant.',
+  '2026-02-07T10:00:00.000Z',
+  '2026-02-08T09:00:00.000Z',
+  '2042',
+  2,
+  5,
+  '/images/fusion2042.jpg',
+  2,
+  2,
+  1
+),
+(
+  'AI Granted Legal Personhood',
+  'Advanced AI systems gained limited legal status.',
+  'In 2045, an international court recognized certain advanced artificial intelligence systems as legal entities.',
+  '2026-02-06T09:30:00.000Z',
+  '2026-02-07T08:30:00.000Z',
+  '2045',
+  1,
+  4,
+  '/images/ai2045.jpg',
+  3,
+  2,
+  1
+),
+(
+  'Global Climate Accord of 2030',
+  'Nations signed binding emissions reductions targets.',
+  'In 2030, world leaders agreed to strict environmental targets to combat climate change.',
+  '2026-02-05T09:00:00.000Z',
+  '2026-02-06T08:00:00.000Z',
+  '2030',
+  2,
+  4,
+  '/images/climate2030.jpg',
+  4,
+  2,
+  1
+),
+(
+  'Quantum Internet Goes Live',
+  'Secure quantum communications network launches globally.',
+  'In 2035, the first global quantum internet infrastructure became operational.',
+  '2026-02-04T09:00:00.000Z',
+  '2026-02-05T08:00:00.000Z',
+  '2035',
+  2,
+  5,
+  '/images/quantum2035.jpg',
+  1,
+  2,
+  1
+),
+(
+  'Pacific Trade Alliance Formed',
+  'Nations created a sweeping economic pact.',
+  'In 2032, Pacific nations signed a comprehensive economic cooperation agreement.',
+  '2026-02-03T08:30:00.000Z',
+  '2026-02-04T07:30:00.000Z',
+  '2032',
+  2,
+  4,
+  '/images/pacific2032.jpg',
+  2,
+  2,
+  1
+),
+(
+  'Global Digital Currency Adopted',
+  'Central banks unified under a shared digital reserve.',
+  'In 2038, major economies adopted a shared digital settlement currency.',
+  '2026-02-02T08:30:00.000Z',
+  '2026-02-03T07:30:00.000Z',
+  '2038',
+  1,
+  4,
+  '/images/digital2038.jpg',
+  3,
+  2,
+  1
+),
+(
+  'First Asteroid Mining Operation Begins',
+  'Commercial extraction of asteroid minerals starts.',
+  'In 2050, a private consortium began extracting rare minerals from a near-Earth asteroid.',
+  '2026-02-01T08:30:00.000Z',
+  '2026-02-02T07:30:00.000Z',
+  '2050',
+  2,
+  5,
+  '/images/asteroid2040.jpg',
+  4,
+  2,
+  1
+)
+;

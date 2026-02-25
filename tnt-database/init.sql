@@ -37,7 +37,7 @@ CREATE TABLE users(
   user_username VARCHAR(64) UNIQUE NOT NULL,
   user_password VARCHAR(255) NOT NULL,
   user_email VARCHAR(100) UNIQUE NOT NULL,
-  user_profile_pic VARCHAR(500),
+  user_profile_pic_path VARCHAR(500),
   user_role_id INTEGER NOT NULL,
   PRIMARY KEY (user_id),
   CONSTRAINT fk_role
@@ -344,17 +344,4 @@ INSERT INTO articles (
     '/kirby.jpg',
     1,
     2
-  ),
-  (
-    'Title',
-    'Summary',
-    'Article',
-    'Date',
-    'Date',
-    1300,
-    2,
-    0,
-    '',
-    1,
-    2  
-    );
+  );
