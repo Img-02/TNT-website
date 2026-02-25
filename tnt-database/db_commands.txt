@@ -1,0 +1,1 @@
+docker exec -i my-postgres psql -U postgres < ./init.sql

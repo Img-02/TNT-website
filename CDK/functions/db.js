@@ -29,6 +29,7 @@ export async function runQuery(sql, params = {}) {
   return connection.query(sql, params);
 }
 
+
 export async function bootstrapDatabase() {
   const statements = [
     sql00_dropAllTables,

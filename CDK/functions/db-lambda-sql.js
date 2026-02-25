@@ -44,7 +44,7 @@ SELECT * FROM articles WHERE article_id = :articleId;
 
 export const sql_postArticleHandler_8 = `
 INSERT INTO articles (article_title, article_summary, article_text, article_submitted_at, article_published_at, article_historical_date,article_status_id, article_rating, article_image_path, article_journalist_id, article_editor_id,article_draft_number)
-VALUES (:article_title,:article_summary,:article_text,:article_submitted_at,:article_published_at,:article_historical_date,:article_status_id,:article_rating,:article_image_path,:article_journalist_id, :article_editor_id1, :article_draft_number)
+VALUES (:article_title,:article_summary,:article_text,:article_submitted_at,:article_published_at,:article_historical_date,:article_status_id,:article_rating,:article_image_path,:article_journalist_id, :article_editor_id, :article_draft_number)
 RETURNING article_id;
 ` 
 export const sql_putArticleHandler_9 = `

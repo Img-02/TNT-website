@@ -123,7 +123,19 @@ export class CdkStack extends Stack {
         ignorePublicAcls: true,
         blockPublicPolicy: false,
         restrictPublicBuckets: false
-      })
+      }),
+      cors: [
+        {
+          allowedMethods: [
+            s3.HttpMethods.GET,
+            s3.HttpMethods.POST,
+            s3.HttpMethods.PUT,
+          ],
+          allowedOrigins: ['*'], // In production, use ['https://yourdomain.com']
+          allowedHeaders: ['*'],
+          maxAge: 3000,
+        },
+      ],
     })
 
     const clientBucket = new s3.Bucket(this, 'client-bucket', {
@@ -203,7 +215,7 @@ export class CdkStack extends Stack {
       CLUSTER_ARN: cluster.clusterArn,
       SECRET_ARN: cluster.secret?.secretArn || 'NOT_SET',
       STATIC_IMAGES_BUCKET: staticImagesBucket.bucketName,
-      STATIC_IMAGES_BASE_URL: `https://${staticImagesInS3Domain}`
+      STATIC_IMAGES_BASE_URL: `https://${staticImagesInS3Domain}`,
     }
 
     // ----------------------------------
@@ -347,7 +359,7 @@ export class CdkStack extends Stack {
     cluster.grantDataApiAccess(postLoginLambda)
     cluster.grantDataApiAccess(postSignUpLambda)
     cluster.grantDataApiAccess(postArticleLambda)
-    cluster.grantDataApiAccess(postImageLambda)
+    staticImagesBucket.grantReadWrite(postImageLambda)
     cluster.grantDataApiAccess(putArticleLambda)
     cluster.grantDataApiAccess(putUserLambda)
     
@@ -423,7 +435,7 @@ export class CdkStack extends Stack {
     // // expose endpoint /api/image-upload
     // // posts images to S3 bucket
     const uploadImagesAPI = api.root.addResource("image-upload")
-    uploadImagesAPI.addMethod("POST", new apigw.LambdaIntegration(postImageLambda))
+    uploadImagesAPI.addMethod("GET", new apigw.LambdaIntegration(postImageLambda))
     
     const articlesApi = api.root.addResource('articles');
     articlesApi.addMethod('GET', new apigw.LambdaIntegration(getArticlesLambda));

@@ -1,6 +1,8 @@
 //Imports//////////////////////////////////////////////////////////////////////////////////////////////
 import crypto from "crypto"
 import { runQuery, bootstrapDatabase } from "./db.js";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import {
   sql_getMainPageHandler_1,
   sql_getJournalistArticleHandler_2,
@@ -13,7 +15,11 @@ import {
   sql_putArticleHandler_9
   } from "./db-lambda-sql.js"
 
+const staticImagesBucket = process.env.STATIC_IMAGES_BUCKET
+const staticImageBaseUrl = process.env.STATIC_IMAGES_BASE_URL || ''
+const awsRegion = process.env.AWS_REGION || 'eu-west-2'
 
+const s3Client = new S3Client({ region: awsRegion })
 
 // Functions //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -25,6 +31,27 @@ const jsonResponse = (statusCode, body) => ({
   },
   body: JSON.stringify(body)
 })
+
+export async function uploadImage (key, imageBytes) {
+  if (!productCardsBucket) {
+    throw new Error('PRODUCT_CARDS_BUCKET env var is not set')
+  }
+
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: productCardsBucket,
+      Key: key,
+      Body: Buffer.from(imageBytes),
+      ContentType: 'image/jpg'
+    })
+  )
+
+  const url = staticImageBaseUrl
+    ? `${staticImageBaseUrl}/${key}`
+    : `https://${staticImagesBucket}.s3.${awsRegion}.amazonaws.com/${key}`
+
+  return { key, url }
+}
 
 const hashPassword = (
   password,
@@ -368,7 +395,7 @@ export const putUserHandler  = async (event) => {
         const user_password = body.user_password 
         const user_email = body.user_email 
         const user_profile_pic_path = body.user_profile_pic_path 
-        const user_role_id = body.user_role_id 
+        const user_role_id = Number(body.user_role_id)
 
     const result = await runQuery(sql_putUserHandler_6, { userId, user_first_name, user_surname, user_username, user_password, user_email, user_profile_pic_path, user_role_id }) //matching userid to the query to obtain the rest of the rows
     const rows = normaliseRows(result) //turns sql database into a vector containing the objects (list of objects)
@@ -446,12 +473,12 @@ export const putArticleHandler = async (event) => {
     const article_submitted_at = body.article_submitted_at
     const article_published_at = body.article_published_at
     const article_historical_date = body.article_historical_date
-    const article_rating = body.article_rating
+    const article_rating = Number(body.article_rating)
     const article_image_path = body.article_image_path
-    const article_status_id = body.article_status_id
-    const article_journalist_id = body.article_journalist_id
-    const article_editor_id = body.article_editor_id
-    const article_draft_number = body.article_draft_number
+    const article_status_id = Number(body.article_status_id)
+    const article_journalist_id = Number(body.article_journalist_id)
+    const article_editor_id = Number(body.article_editor_id)
+    const article_draft_number = Number(body.article_draft_number)
 
     const result = await runQuery(sql_putArticleHandler_9, { articleId, article_title, article_summary,article_text, article_submitted_at, article_published_at, article_historical_date, article_rating, article_image_path, article_status_id, article_editor_id, article_journalist_id, article_draft_number })
     const rows = normaliseRows(result)
@@ -528,18 +555,48 @@ export const postHealthCheckHandler = async (event, context) => {
   }
 }
 
-//POST an image to DB //10
-export const postImageHandler = async (event) => {
+export const postImageHandler = async(event) => {
   console.log(event)
-  const body = event.body ? JSON.parse(event.body) : {}
-  const image_url = body.image_url
 
-  if (!image_url) {
-    return jsonResponse(500, { status: "error", message: "Missing image url" })
-  }
+  const key = `${Date.now()}-image.jpg`
 
-  return jsonResponse(200, { status: "success", message: "Image uploaded to S3" })
+  const command = new PutObjectCommand({
+    Bucket: staticImagesBucket,
+    Key: key,
+    ContentType: "image/jpeg"
+  })
+
+  const uploadUrl = await getSignedUrl(s3Client, command, { expiresIn: 600 });
+
+  return jsonResponse(200, {status: "success", uploadUrl })
 }
+
+//POST an image to DB //10
+// only works with JPG images
+// export const postImageHandler = async (event) => {
+//   console.log(event)
+
+//   if(!event.body){
+//     return jsonResponse(500, { status: "error", message: "Missing image" })
+//   }
+
+//   const body = event.body
+
+//   const image_bytes = body.image
+//   const image_name = crypto.randomBytes(16).toString("hex")
+
+//   if (!image_bytes) {
+//     return jsonResponse(500, { status: "error", message: "Missing image link" })
+//   }
+
+//   const { key, url } = uploadImage(image_name, image_bytes)
+
+//   if(!key || !url){
+//     return jsonResponse(500, { status: "error", message: "Failed to upload image" })
+//   }
+
+//   return jsonResponse(200, { status: "success", message: "Image uploaded to S3" })
+// }
 
 
 // post articles to DB //8
@@ -548,28 +605,21 @@ export const postArticleHandler = async (event) => {
 
   try {
     const body = event.body ? JSON.parse(event.body) : {}
-    const articleId = Number(body.articleId)
 
-    if(!articleId){
-      return jsonResponse(404, {status: "error", message: "Missing article ID"})
-    }
-    // let articleId = event.articleId || event.queryStringParameters?.articleId || event.pathParameters?.u ||'NOT_SET' //get event with passing userid through 
-
- 
     const article_title = body.article_title
     const article_summary = body.article_summary
     const article_text = body.article_text
     const article_submitted_at = body.article_submitted_at
     const article_published_at = body.article_published_at
     const article_historical_date = body.article_historical_date
-    const article_rating = body.article_rating
+    const article_rating = Number(body.article_rating)
     const article_image_path = body.article_image_path
-    const article_status_id = body.article_status_id
-    const article_journalist_id = body.article_journalist_id
-    const article_editor_id = body.article_editor_id
-    const article_draft_number = body.article_draft_number
+    const article_status_id = Number(body.article_status_id)
+    const article_journalist_id = Number(body.article_journalist_id)
+    const article_editor_id = Number(body.article_editor_id)
+    const article_draft_number = Number(body.article_draft_number)
 
-    const result = await runQuery(sql_postArticleHandler_8, { articleId, article_title, article_summary, article_text, article_submitted_at, article_published_at, article_historical_date,article_status_id, article_rating, article_image_path, article_journalist_id, article_editor_id, article_draft_number }) //matching userid to the query to obtain the rest of the rows
+    const result = await runQuery(sql_postArticleHandler_8, { article_title, article_summary, article_text, article_submitted_at, article_published_at, article_historical_date,article_status_id, article_rating, article_image_path, article_journalist_id, article_editor_id, article_draft_number }) //matching userid to the query to obtain the rest of the rows
     const rows = normaliseRows(result) //turns sql database into a vector containing the objects (list of objects)
 
     const article_id = rows[0]
@@ -622,22 +672,31 @@ export const postArticleHandler = async (event) => {
 
 //POST handler to allow user to login //3
 export const postLoginHandler = async (event) => {
+  console.log(event.body)
   try {
-
     const body = event.body ? JSON.parse(event.body) : {}
-    const username = body.username?.trim()?.toLowerCase()
+    const username = body.username?.trim()
     const password = body.password
 
     if (!username || !password) {
       return jsonResponse(400, { status: "error", message: "Username and password are required" })
     }
+    
+    console.log(username)
 
     const result = await runQuery(sql_postLoginHandler_3, { username })
+
+    console.log(result)
+
     const rows = normaliseRows(result)
+
+    console.log(rows)
 
     const userDetails = rows[0]
 
-    const dbPassword = userDetails.user_password
+    console.log(userDetails)
+
+    const dbPassword = JSON.parse(userDetails.user_password)
     const ok = verifyPassword(password, dbPassword)
 
     if (!ok) {
@@ -676,7 +735,8 @@ export const postUsersHandler = async (event) => {
       return jsonResponse(400, { status: "error", message: "Email and password are required" })
     }
 
-    const user_password = JSON.stringify((password))
+
+    const user_password = JSON.stringify(hashPassword(password))
 
     await runQuery(sql_postUserHandler_5, { user_username, user_first_name, user_surname, user_email, user_password, user_role_id })
     // store the password in sql here
