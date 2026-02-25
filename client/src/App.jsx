@@ -22,6 +22,8 @@ import { backgroundColour } from "./colours.js"
 
 import { useEffect, useState } from "react"
 
+import { getMainPageArticles } from "./api.js"
+
 export default function App() {
   const [awsWorking, setAwsWorking] = useState(false)
   const [mainPageArticles, setMainPageArticles] = useState([])
@@ -48,26 +50,19 @@ export default function App() {
     }
 
     async function mainPageFunction () {
-        try {
-          const response = await fetch('/api/mainpage')
+      try {
+        const articles = await getMainPageArticles();
+        console.log(articles)
+        setMainPageArticles(articles)
+        setStatus("loaded")
 
-          if (!response.ok){
-            throw new Error("API error")
-          }
-          
-          const data = await response.json()
-          
-          setMainPageArticles(data.articles)
-          setStatus("loaded")
+      }
+      catch(error) {
+        console.log(error)
+      }
 
-        } catch {
-  
-          setStatus("error")
-        }
       }
     
-
-
     const body = document.querySelector("body")
 
     if(body){

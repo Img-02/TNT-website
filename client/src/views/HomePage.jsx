@@ -5,6 +5,8 @@ import { Navbar, Container, Nav, Row, Col } from "react-bootstrap"
 import { backgroundColour, breakingColour } from "../colours.js"
 import { Marquee } from "react-fast-marquee";
 
+import { getMainPageArticles } from "../api.js"
+
 
 export function HomePage({ articles }) {
     const [breakingArticles, setBreakingArticles] = useState([])

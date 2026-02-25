@@ -9,8 +9,7 @@ import { breakingColour } from '../colours';
 import { ArticleContentEditor } from "../components/ArticleContentEditor.jsx"
 import { useParams } from "react-router-dom";
 
-import { articles } from "../mock-data/articles.js"
-
+import { getArticle } from '../api.js';
 
 
 export function WritingComponent({ formData, setFormData, onFormChange, onSubmit }) {
@@ -23,26 +22,39 @@ export function WritingComponent({ formData, setFormData, onFormChange, onSubmit
     const { id } = useParams()
     
     // below will be moved to useEffect that makes the api call when id changes and is not null
-
     useEffect(() => {
-        if(id) {
-
-            console.log(id)
-            const article = articles.find(article => article.id === id)
-
-            // change this so it set form state similar to sign up page
-            // then we can use the form state to fill out the forms
-            if(article) {
-                setArticle(article)
-            }
-
-            // tiny mce editor not stored in state, we modify it using the ref directly
-            if(editorRef.current) {
-                editorRef.current.setContent(article.text)
-            }
+        if(formData.article_text && editorRef.current){
+            editorRef.current.setContent(formData.article_text)
         }
 
-    }, [id])
+    }, [formData])
+
+
+    // useEffect(() => {
+    //     const loadArticle = async(id) => {
+    //         try {
+    //             const article = getArticle(id)
+
+    //             if (editorRef.current) {
+    //                 editorRef.current.setContent(article.text)
+    //             }
+
+    //             if (article) {
+    //                 setFormData({
+    //                     ...article
+    //                 })
+    //             }
+
+    //             }catch(error) {
+    //                 console.log(error)
+    //             }
+    //     }
+
+    //     if (id) {
+    //         loadArticle(id)
+    //     }
+        
+    // }, [id])
 
 
     return (
@@ -50,19 +62,19 @@ export function WritingComponent({ formData, setFormData, onFormChange, onSubmit
             <Form onSubmit={onSubmit}>
                 <Form.Group>
                     <Form.Label style={{ fontFamily: "orbitron" }}>Title</Form.Label>
-                    <Form.Control type="text-muted" placeholder="Enter Title" name="title" value={formData.title} onChange={onFormChange} style={{ fontFamily: "anta" }}/>
+                    <Form.Control type="text-muted" placeholder="Enter Title" name="article_title" value={formData.article_title || ""} onChange={onFormChange} style={{ fontFamily: "anta" }}/>
                 </Form.Group>
                 <p></p>
 
                 <Form.Group>
                     <Form.Label style={{ fontFamily: "orbitron" }}>Thumbnail</Form.Label>
-                    <Form.Control type="file" placeholder="Upload your Thumbnail" name="image" onChange={onFormChange} style={{ fontFamily: "anta" }} />
+                    <Form.Control type="file" placeholder="Upload your Thumbnail" name="article_image_path" onChange={onFormChange} style={{ fontFamily: "anta" }} />
                 </Form.Group>
                 <p></p>
 
                 <Form.Group>
                     <Form.Label style={{ fontFamily: "orbitron" }}>Summary</Form.Label>
-                    <textarea className="form-control" type="text-muted" name="summary" value={formData.summary} onChange={onFormChange} placeholder="Enter Title" rows={4} style={{ fontFamily: "anta" }} />
+                    <textarea className="form-control" type="text-muted" name="article_summary" value={formData.article_summary} onChange={onFormChange} placeholder="Enter Title" rows={4} style={{ fontFamily: "anta" }} />
                 </Form.Group>
                 <p></p>
 

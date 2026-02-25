@@ -1,0 +1,259 @@
+// sign up, login and update user api requests
+
+async function loginUser(username, password) {
+    const response = await fetch("api/login", {
+        method: "POST",
+        body: JSON.stringify({
+            username,
+            password
+        })
+    })
+
+    if(!response.ok){
+        const { message } = response.json()
+        throw new Error(message)
+    }
+
+    const data = response.json()
+
+    
+    // this is an object that contains .user_username and .user_role
+
+    return data.user
+}
+
+async function signUpUser(userData){
+    const response = await fetch(`api/user`, {
+        method: "POST",
+        body: JSON.stringify({
+            user_mail: userData.email,
+            user_password: userData.password,
+            user_first_name: userData.first_name,
+            user_surname: userData.user_username,
+            user_username: userData.username
+        })
+    })
+
+
+    if(!response.ok){
+        const { message } = response.json()
+        throw new Error(message)
+    }
+
+    const data = response.json()
+
+    // this is an object that contains .user_email (idk why we need this lol)
+    return data.user
+}
+
+async function updateUser(userData){
+    const response = await fetch(`api/user`, {
+        method: "PUT",
+        body: JSON.stringify({
+            user_mail: userData.email,
+            user_password: userData.password,
+            user_first_name: userData.first_name,
+            user_surname: userData.user_username,
+            user_username: userData.username,
+            user_role_id: userData.user_role_id
+        })
+    })
+
+    if(!response.ok){
+        const { message } = response.json()
+        throw new Error(message)
+    }
+
+    const data = response.json()
+
+    // returns the user id
+    return data.user_id
+}
+
+async function getUserProfile(userId){
+    const response = await fetch(`api/user?userId=${userId}`)
+
+
+    if(!response.ok){
+        const { message } = response.json()
+        throw new Error(message)
+    }
+
+    const data = response.json()
+
+    // returns an object containing all the user details
+    return data.user
+}
+
+// article api requests
+
+export async function getMainPageArticles() {
+    const response = await fetch(`/api/mainpage`)
+    
+    if(!response.ok){
+        const { message } = response.json()
+        throw new Error(message)
+    }
+
+    const data = await response.json()
+
+    console.log(data)
+
+    // returns a list of articles
+    return data.articles
+
+}
+
+export async function getArticle(articleId) {
+    const response = await fetch(`/api/article?articleId=${articleId}`)
+
+    if(!response.ok){
+        const { message } = response.json()
+        throw new Error(message)
+    }
+
+    const data = await response.json()
+
+    console.log("from get article", data)
+
+    // returns a article
+    return data.article
+}
+
+async function uploadArticle(article) {
+    const response = await fetch(`api/article`, {
+        method: "POST",
+        body: JSON.stringify({
+            article_title: article.article_title,
+            article_summary: article.article_summary,
+            article_text: article.article_text,
+            article_submitted_at: article.article_submitted_at,
+            article_published_at: article.article_published_at,
+            article_historical_date: article.article_historical_date,
+            article_rating: Number(article.article_rating),
+            article_image_path: article.article_image_path,
+            article_status_id: Number(article.article_status_id),
+            article_journalist_id: Number(article.article_journalist_id),
+            article_editor_id: Number(article.article_editor_id),
+            article_draft_number: Number(article.article_draft_number)
+        })
+    })
+
+    if(!response.ok){
+        const { message } = response.json()
+        throw new Error(message)
+    }
+
+    const data = response.json()
+
+    return data.article_id
+}
+
+export async function updateArticle(newArticle) {
+    const response = await fetch(`api/article`, {
+        method: "POST",
+        body: JSON.stringify({
+            article_title: article.article_title,
+            article_summary: article.article_summary,
+            article_text: article.article_text,
+            article_submitted_at: article.article_submitted_at,
+            article_published_at: article.article_published_at,
+            article_historical_date: article.article_historical_date,
+            article_rating: Number(article.article_rating),
+            article_image_path: article.article_image_path,
+            article_status_id: Number(article.article_status_id),
+            article_journalist_id: Number(article.article_journalist_id),
+            article_editor_id: Number(article.article_editor_id),
+            article_draft_number: Number(article.article_draft_number)
+        })
+    })
+
+    if(!response.ok){
+        const { message } = response.json()
+        throw new Error(message)
+    }
+
+    const data = response.json()
+
+    return data.article_id
+
+}
+
+export async function getJournalistArticles(journalistId) {
+
+    const response = await fetch(`api/journalist-articles?article_journalist_id=${journalistId}`)
+
+    if(!response.ok){
+        const { message } = response.json()
+        throw new Error(message)
+    }
+
+    const data = await response.json()
+
+    console.log("data from api", data)
+
+    // returns a list of articles
+    return data.articles
+}
+
+// we don't actually have a lambda for this yet, oops
+export async function getEditorArticles(editorId) {
+
+    const response = await fetch(`api/article?articleId=${articleId}`)
+
+    if(!response.ok){
+        const { message } = response.json()
+        throw new Error(message)
+    }
+
+    const data = response.json()
+
+    // returns a list of articles
+    return data.article
+}
+
+// gabriel and chids
+// uploads image to s3 bucket using presigned url then returns the filename
+export async function imageUpload(imageBlob) {
+    const apiResponse = await fetch(`api/image-upload`);
+
+    const { uploadUrl } = await apiResponse.json(); 
+
+    const finalImageUrl = uploadUrl.split('?')[0];
+
+    const uploadRes = await fetch(uploadUrl, {
+      method: "PUT",
+      body: imageBlob,
+      headers: {
+        "Content-Type": "image/jpeg" 
+      }
+    });
+
+    if (uploadRes.ok) {
+      console.log(" Image uploaded to S3.");
+      console.log("Your file is located at:", finalImageUrl);
+
+      // get the filename from the url to use for storing in db
+      // then we can add the filename to the end of the s3 url in our env to load images
+      const url = new URL(finalImageUrl)
+
+      // the file name is after that last '/' in the url, 
+      // .split('/') creates a list after seperating the string at every '/'
+      // .pop() returns the last item in an array, giving the filename
+
+      const fileName = url.pathname.split("/").pop()
+
+      return fileName
+
+    } else {
+      console.log(`upload failed with status: ${uploadRes.status}`);
+      throw new Error("Failed to upload image to S3")
+
+    }
+}
+
+
+
+
+
+

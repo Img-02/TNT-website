@@ -9,13 +9,37 @@ import { useNavigate } from "react-router-dom";
 import { articles } from "../mock-data/articles.js"
 import { ArticlePageCard } from "../components/ArticlePageCard.jsx";
 import { Form, Button } from 'react-bootstrap';
+import { useState, useEffect } from "react";
+import { getArticle } from "../api.js"
 
 export function EditorPage() {
 
     const { id }  = useParams()
     const navigate = useNavigate()
+    const [article, setArticle] = useState()
 
-    const article = articles.find(article => article.id === Number(id))
+
+    useEffect(() => {
+        const loadArticle = async(id) => {
+            try {
+            const article = await getArticle(id)
+
+            console.log("loaded article", article)
+
+            if (article) {
+                setArticle(article)
+            }
+
+            }catch(error) {
+                console.log(error)
+            }
+        }
+
+        if (Number(id)) {
+            loadArticle(id)
+        }
+
+    }, [id])
 
     return (
         // Source - https://stackoverflow.com/a/66395583
@@ -23,9 +47,12 @@ export function EditorPage() {
 // Retrieved 2026-02-17, License - CC BY-SA 4.0
 
     <div className="orbitron">
-                <h1> Welcome, INSERT NAME to editor page</h1>
-                    <p></p>
-                    
+    <h1> Welcome, INSERT NAME to editor page</h1>
+        <p></p>
+        
+        {
+            article &&  (
+                <>
                     <h3>Preview Article:</h3>
                     <ArticlePageCard article={article}/>
                     
@@ -34,7 +61,7 @@ export function EditorPage() {
                     <h3>Preview Article Thumbnail:</h3>
                     <ArticleCard article = {article}/>
                     
-    
+
                     <h3>Preview Breaking News Article Thumbnail:</h3>
                     <BreakingNewsCard article = {article}/>
 
@@ -55,7 +82,12 @@ export function EditorPage() {
                         <Button className="orbitron" variant="danger">REJECT</Button>
                         <Button className="orbitron" variant="warning">PUBLISH TO SITE</Button>
                     </div>
-                    <p></p>
+
+                </>
+
+            )
+        }
+        <p></p>
                 
     </div>
     )

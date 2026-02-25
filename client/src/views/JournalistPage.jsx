@@ -1,33 +1,60 @@
 //Display work in progress article
 
-import { Editor } from '@tinymce/tinymce-react';
 import { Container } from 'react-bootstrap';
 import { useRef, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { breakingColour } from '../colours';
-import { ArticleContentEditor } from "../components/ArticleContentEditor.jsx"
 import { useParams } from "react-router-dom";
 import { WritingComponent } from '../components/WritingComponent.jsx';
-
-import { articles } from "../mock-data/articles.js"
-
-
+import { getArticle } from '../api.js'
 
 export function JournalistPage() {
     const editorRef = useRef(null)
     const navigate = useNavigate()
-    const initialValue = "This is where we will import saved progress "
-    const [article, setArticle] = useState(null)
     const { id } = useParams()
 
     const [formData, setFormData] = useState({
-        title: "",
-        content: "",
-        image: "",
-        summary: "",
+        article_title: "",
+        article_text: "",
+        article_image_path: "",
+        article_summary: "",
+        article_submitted_at: "",
+        article_historical_date: "",
+        article_status_id: 0,
+        article_journalist_id: 0,
+        article_editor_id: 0,
+        aritcle_draft_numer: 0,
     })
-    
+
+    useEffect(() => {
+        const loadArticle = async(id) => {
+            try {
+            const article = await getArticle(id)
+
+            console.log("loaded article", article)
+
+            if (editorRef.current) {
+                editorRef.current.setContent(article.text)
+            }
+
+            if (article) {
+                setFormData({
+                    ...article
+                })
+            }
+
+            }catch(error) {
+                console.log(error)
+            }
+        }
+
+        if (Number(id)) {
+            loadArticle(id)
+        }
+
+    }, [id])
+
+
     const submitForm = (event) => {
         event.preventDefault()
         //event.stopPropagation()
@@ -37,7 +64,7 @@ export function JournalistPage() {
         console.log("form submitted")
         const form = event.currentTarget
 
-        if(form.checkValidity() === true) {
+        if (form.checkValidity() === true) {
             console.log("form is valid")
         }
         else {
@@ -49,38 +76,16 @@ export function JournalistPage() {
 
     const onFormChange = (event) => {
         console.log(event.target)
-		const { name, value } = event.target;
+        const { name, value } = event.target;
 
         console.log(name, value)
 
-		setFormData({
-			...formData,
-			[name]: value,
-		});
-	};
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
     // below will be moved to useEffect that makes the api call when id changes and is not null
-
-    useEffect(() => {
-        if(id) {
-
-            console.log(id)
-            const article = articles.find(article => article.id === Number(id))
-
-            // change this so it set form state similar to sign up page
-            // then we can use the form state to fill out the forms
-            if(article) {
-                setFormData({
-                    ...article
-                })
-            }
-
-            // tiny mce editor not stored in state, we modify it using the ref directly
-            if(editorRef.current) {
-                editorRef.current.setContent(article.text)
-            }
-        }
-
-    }, [id])
 
     return (
         <Container className="mb-2">
@@ -89,8 +94,8 @@ export function JournalistPage() {
                 <p></p>
                 <h1 className="text-center" style={{ fontFamily: "orbitron" }}>Welcome Default Story Writer!</h1>
             </div>
-            
-            <WritingComponent formData={formData} setFormData={setFormData} onFormChange={onFormChange} onSubmit={submitForm}/>
+
+            <WritingComponent formData={formData} setFormData={setFormData} onFormChange={onFormChange} onSubmit={submitForm} />
 
             {/* <Form>
                 <Form.Group>

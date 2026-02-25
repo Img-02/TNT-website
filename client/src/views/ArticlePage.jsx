@@ -1,50 +1,45 @@
 import { useParams } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
-import { Container ,Button } from "react-bootstrap"
+import { Container, Button } from "react-bootstrap"
 import { ArticlePageCard } from "../components/ArticlePageCard.jsx"
 import { useEffect, useState } from "react"
+import { getArticle } from "../api.js"
 
 
 
 export function ArticlePage() {
 
-    const [article, setArticle] = useState([])
-    
+    const [article, setArticle] = useState()
+
     const { id } = useParams()
-      
+
     useEffect(() => {
-        async function articleFunction () {
-        try {
+        async function loadArticle(id) {
+            try {
+                const article = await getArticle(id)
 
-          const response = await fetch(`/api/article?articleId=${id}`)
-          console.log(response.body)
+                console.log("from article page", article)
+                setArticle(article)
 
-          if (!response.ok){
-            throw new Error("API error")
-          }
-          
-          const data = await response.json()
-          
-          setArticle(data.article)
-
-
-        } catch {
-            console.log("Brooooo error in article page ")
+            } catch {
+                console.log("Brooooo error in article page ")
+            }
         }
-    }
-      
-    articleFunction()
-    },[id])
 
-    
-    
+        if (id) {
+            loadArticle(id)
+        }
+    }, [id])
+
+
+
     const navigate = useNavigate()
 
-    
+
     return (
         <div>
             <Button className="orbitron" variant="outline-light" onClick={() => navigate(-1)}>Go Back</Button>
-            <ArticlePageCard article={article}/>
+            {article && (<ArticlePageCard article={article} />)}
         </div>
 
     )
