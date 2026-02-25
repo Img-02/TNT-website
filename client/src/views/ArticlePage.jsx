@@ -1,15 +1,45 @@
-import { useParams } from "react-router-dom";
-import { articles } from "../mock-data/articles.js";
-import { useNavigate } from "react-router-dom";
-import { Container ,Button } from "react-bootstrap";
-import { ArticlePageCard } from "../components/ArticlePageCard.jsx";
+import { useParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { Container ,Button } from "react-bootstrap"
+import { ArticlePageCard } from "../components/ArticlePageCard.jsx"
+import { useEffect, useState } from "react"
+
+
 
 export function ArticlePage() {
+
+    const [article, setArticle] = useState([])
     
     const { id } = useParams()
+      
+    useEffect(() => {
+        async function articleFunction () {
+        try {
+
+          const response = await fetch(`/api/article?articleId=${id}`)
+          console.log(response.body)
+
+          if (!response.ok){
+            throw new Error("API error")
+          }
+          
+          const data = await response.json()
+          
+          setArticle(data.article)
+
+
+        } catch {
+            console.log("Brooooo error in article page ")
+        }
+    }
+      
+    articleFunction()
+    },[id])
+
+    
+    
     const navigate = useNavigate()
 
-    const article = articles.find(article => article.id === Number(id))
     
     return (
         <div>

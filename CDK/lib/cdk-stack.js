@@ -420,11 +420,14 @@ export class CdkStack extends Stack {
     // // returns articles to display on home page (only main text, date)
     const loadMainPageStoriesAPI = api.root.addResource('mainpage')
     loadMainPageStoriesAPI.addMethod('GET', new apigw.LambdaIntegration(getMainPageArticlesLambda))
+
+    
     // // expose endpoint /api/image-upload
     // // posts images to S3 bucket
     const uploadImagesAPI = api.root.addResource("image-upload")
     uploadImagesAPI.addMethod("POST", new apigw.LambdaIntegration(postImageLambda))
     
+
     const articlesApi = api.root.addResource('articles');
     articlesApi.addMethod('GET', new apigw.LambdaIntegration(getArticlesLambda));
 

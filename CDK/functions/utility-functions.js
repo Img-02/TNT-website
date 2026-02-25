@@ -11,7 +11,7 @@ import {
   sql_getArticleHandler_7,
   sql_postArticleHandler_8,
   sql_putArticleHandler_9
-  } from "./db-lambda-sql.js"
+} from "./db-lambda-sql.js"
 
 
 
@@ -90,25 +90,25 @@ const logInvocationDetails = (event, context) => {
 export const getArticleHandler = async (event, context) => {
   console.log('getArticleHandler invoked')
   console.log(event)
-  
+
 
   try {
     let articleId = event.articleId || event.queryStringParameters?.articleId || event.pathParameters?.articleId || 'NOT_SET'
 
-    if(articleId == "NOT_SET") {
-      return jsonResponse(404, {status: "error", message: "Article ID missing"})
+    if (articleId == "NOT_SET") {
+      return jsonResponse(404, { status: "error", message: "Article ID missing" })
     }
 
     console.log(`PARAMS: articleId = ${articleId}`)
 
-    articleId = Number(articleId) 
+    articleId = Number(articleId)
 
     const result = await runQuery(sql_getArticleHandler_7, { articleId })
     const rows = normaliseRows(result)
 
     const article = rows[0]
 
-    if(!article) {
+    if (!article) {
       console.error("Article ID not found in database")
       throw new Error;
     }
@@ -118,16 +118,16 @@ export const getArticleHandler = async (event, context) => {
       article
     })
   }
-  
-  catch(error){
+
+  catch (error) {
     console.error(error)
-    return jsonResponse(404, { status: "error ", message: "Failed to get article"})
+    return jsonResponse(404, { status: "error ", message: "Failed to get article" })
 
   }
 
 
 
-  
+
 
   // if (articleId === "NOT_SET") {
   //   return {
@@ -172,8 +172,8 @@ export const getUserProfileHandler = async (event, context) => {
   try {
     let userId = event.userId || event.queryStringParameters?.userId || event.pathParameters?.userId || 'NOT_SET'
 
-    if(userId == "NOT_SET") {
-      return jsonResponse(404, {status: "error", message: "User ID missing"})
+    if (userId == "NOT_SET") {
+      return jsonResponse(404, { status: "error", message: "User ID missing" })
     }
 
     console.log(`PARAMS: userId = ${userId}`)
@@ -185,7 +185,7 @@ export const getUserProfileHandler = async (event, context) => {
 
     const user = rows[0]
 
-    if(!user) {
+    if (!user) {
       console.error("User ID not found in database")
       throw new Error;
     }
@@ -195,10 +195,10 @@ export const getUserProfileHandler = async (event, context) => {
       user
     })
   }
-  
-  catch(error){
+
+  catch (error) {
     console.error(error)
-    return jsonResponse(404, { status: "error ", message: "Failed to get user data"})
+    return jsonResponse(404, { status: "error ", message: "Failed to get user data" })
 
   }
 
@@ -249,17 +249,17 @@ export const getJournalistArticleHandler = async (event) => {
   try {
     let article_journalist_id = event.article_journalist_id || event.queryStringParameters?.article_journalist_id || event.pathParameters?.article_journalist_id || 'NOT_SET'
 
-    if(article_journalist_id == "NOT_SET") {
-      return jsonResponse(404, {status: "error", message: "Article Journalist ID missing"})
+    if (article_journalist_id == "NOT_SET") {
+      return jsonResponse(404, { status: "error", message: "Article Journalist ID missing" })
     }
 
     console.log(`PARAMS: article_journalist_id = ${article_journalist_id}`)
 
-    article_journalist_id = Number(article_journalist_id) 
+    article_journalist_id = Number(article_journalist_id)
     const result = await runQuery(sql_getJournalistArticleHandler_2, { article_journalist_id })
     const articles = normaliseRows(result)
 
-    if(!articles) {
+    if (!articles) {
       console.error("Article Journalist ID not found in database")
       throw new Error;
     }
@@ -269,10 +269,10 @@ export const getJournalistArticleHandler = async (event) => {
       articles
     })
   }
-  
-  catch(error){
+
+  catch (error) {
     console.error(error)
-    return jsonResponse(404, { status: "error ", message: "Failed to get article_journalist_id"})
+    return jsonResponse(404, { status: "error ", message: "Failed to get article_journalist_id" })
 
   }
 }
@@ -282,11 +282,11 @@ export const getMainPageArticlesHandler = async (event, context) => {
   console.log('getMainPageArticlesHandler invoked')
   console.log(event)
   console.log(context)
-  try{
+  try {
     const result = await runQuery(sql_getMainPageHandler_1);
 
-    if(!result){
-      return jsonResponse(404, {status: "error", message: "Failed to get main page articles from database"})
+    if (!result) {
+      return jsonResponse(404, { status: "error", message: "Failed to get main page articles from database" })
     }
 
     const articles = normaliseRows(result)
@@ -296,9 +296,9 @@ export const getMainPageArticlesHandler = async (event, context) => {
       articles
     })
   }
-  catch(error){
+  catch (error) {
     console.error(String(error))
-    return jsonResponse(404, {status: "error", message: "Failed to get main page articles from database"})
+    return jsonResponse(404, { status: "error", message: "Failed to get main page articles from database" })
   }
 
   // if (!articles) {
@@ -347,28 +347,28 @@ export const getMainPageArticlesHandler = async (event, context) => {
   //     })
 
   //   }
-   }
+}
 
 /////////////////////////////////////////////// PUT REQUESTS ////////////////////////////////////////////////////////////////////////////
 
 // This handler is used to add information to the users profile info from their profile page //6
-export const putUserHandler  = async (event) => {
+export const putUserHandler = async (event) => {
   console.log(event)
 
   try {
-      const body = event.body ? JSON.parse(event.body) : {}
-      const userId = Number(body.userId)
+    const body = event.body ? JSON.parse(event.body) : {}
+    const userId = Number(body.userId)
 
-      if(!userId){
-        return jsonResponse(404, {status: "error", message: "Missing User ID"})
-      }
-        const user_first_name = body.user_first_name 
-        const user_surname = body.user_surname 
-        const user_username = body.user_username 
-        const user_password = body.user_password 
-        const user_email = body.user_email 
-        const user_profile_pic_path = body.user_profile_pic_path 
-        const user_role_id = body.user_role_id 
+    if (!userId) {
+      return jsonResponse(404, { status: "error", message: "Missing User ID" })
+    }
+    const user_first_name = body.user_first_name
+    const user_surname = body.user_surname
+    const user_username = body.user_username
+    const user_password = body.user_password
+    const user_email = body.user_email
+    const user_profile_pic_path = body.user_profile_pic_path
+    const user_role_id = Number(body.user_role_id)
 
     const result = await runQuery(sql_putUserHandler_6, { userId, user_first_name, user_surname, user_username, user_password, user_email, user_profile_pic_path, user_role_id }) //matching userid to the query to obtain the rest of the rows
     const rows = normaliseRows(result) //turns sql database into a vector containing the objects (list of objects)
@@ -376,7 +376,7 @@ export const putUserHandler  = async (event) => {
     const user_id = rows[0]
     console.log(user_id)
 
-    if(!user_id) {
+    if (!user_id) {
       console.error("user ID not found in database")
       throw new Error;
     }
@@ -386,14 +386,15 @@ export const putUserHandler  = async (event) => {
       user_id
     })
   }
-  
-  catch(error){
+
+  catch (error) {
     console.error(error)
-    return jsonResponse(404, { status: "error ", message: "Failed to get user"})
+    return jsonResponse(404, { status: "error ", message: "Failed to get user" })
 
-  }}
+  }
+}
 
-   
+
 
 //   const body = event.body ? JSON.parse(event.body) : {}
 
@@ -427,7 +428,7 @@ export const putUserHandler  = async (event) => {
 
 
 //handler for updating article website/database //9
-export const putArticleHandler = async (event) => {  
+export const putArticleHandler = async (event) => {
   console.log('putArticleHandler invoked')
   console.log(event)
 
@@ -436,8 +437,8 @@ export const putArticleHandler = async (event) => {
     const body = event.body ? JSON.parse(event.body) : {}
     const articleId = Number(body.articleId)
 
-    if(!articleId) {
-      return jsonResponse(404, {status: "error", message: "Article ID missing"})
+    if (!articleId) {
+      return jsonResponse(404, { status: "error", message: "Article ID missing" })
     }
 
     const article_title = body.article_title
@@ -446,19 +447,19 @@ export const putArticleHandler = async (event) => {
     const article_submitted_at = body.article_submitted_at
     const article_published_at = body.article_published_at
     const article_historical_date = body.article_historical_date
-    const article_rating = body.article_rating
+    const article_rating = Number(body.article_rating)
     const article_image_path = body.article_image_path
-    const article_status_id = body.article_status_id
-    const article_journalist_id = body.article_journalist_id
-    const article_editor_id = body.article_editor_id
-    const article_draft_number = body.article_draft_number
+    const article_status_id = Number(body.article_status_id)
+    const article_journalist_id = Number(body.article_journalist_id)
+    const article_editor_id = Number(body.article_editor_id)
+    const article_draft_number = Number(body.article_draft_number)
 
-    const result = await runQuery(sql_putArticleHandler_9, { articleId, article_title, article_summary,article_text, article_submitted_at, article_published_at, article_historical_date, article_rating, article_image_path, article_status_id, article_editor_id, article_journalist_id, article_draft_number })
+    const result = await runQuery(sql_putArticleHandler_9, { articleId, article_title, article_summary, article_text, article_submitted_at, article_published_at, article_historical_date, article_rating, article_image_path, article_status_id, article_editor_id, article_journalist_id, article_draft_number })
     const rows = normaliseRows(result)
 
     const article_id = rows[0]
 
-    if(!article_id) {
+    if (!article_id) {
       console.error("Article ID not found in database")
       throw new Error;
     }
@@ -468,45 +469,46 @@ export const putArticleHandler = async (event) => {
       article_id
     })
   }
-  
-  catch(error){
+
+  catch (error) {
     console.error(error)
-    return jsonResponse(404, { status: "error ", message: "Failed to update article"})
+    return jsonResponse(404, { status: "error ", message: "Failed to update article" })
 
-  }}
-  // console.log('putArticleHandeler invoked')
-  // console.log(event.body)
+  }
+}
+// console.log('putArticleHandeler invoked')
+// console.log(event.body)
 
-  // const body = event.body ? JSON.parse(event.body) : {}
+// const body = event.body ? JSON.parse(event.body) : {}
 
-  // // these are the non null fields which dont have any defaults
-  // const article_id = body.article_id
-  // const article_journalist_id = body.article_journalist_id
-  // const article_status_id = body.article_status_id
+// // these are the non null fields which dont have any defaults
+// const article_id = body.article_id
+// const article_journalist_id = body.article_journalist_id
+// const article_status_id = body.article_status_id
 
-  // if (!article_id || !article_status_id || !article_journalist_id) {
-  //   return jsonResponse(404, { status: "error", message: "Missing article id" })
-  // }
+// if (!article_id || !article_status_id || !article_journalist_id) {
+//   return jsonResponse(404, { status: "error", message: "Missing article id" })
+// }
 
-  // const article_title = body.article_title ?? ""
-  // const article_summary = body.article_summary ?? ""
-  // const article_text = body.article_text ?? ""
-  // const article_submitted_at = body.article_submitted_at ?? ""
-  // const article_published_at = body.article_published_at ?? ""
-  // const article_historical_date = body.article_historical_date ?? 2000
-  // const article_rating = body.article_rating ?? 0
-  // const article_image_path = body.article_image_path ?? ""
-  // const article_status = body.article_status ?? 4
+// const article_title = body.article_title ?? ""
+// const article_summary = body.article_summary ?? ""
+// const article_text = body.article_text ?? ""
+// const article_submitted_at = body.article_submitted_at ?? ""
+// const article_published_at = body.article_published_at ?? ""
+// const article_historical_date = body.article_historical_date ?? 2000
+// const article_rating = body.article_rating ?? 0
+// const article_image_path = body.article_image_path ?? ""
+// const article_status = body.article_status ?? 4
 
-  // // update the db here
+// // update the db here
 
-  // return jsonResponse(200, { status: "updated", article_id })
+// return jsonResponse(200, { status: "updated", article_id })
 
 
 ////////////////////POST REQUESTS/////////////////////////////////////////////////////////////
 
 //handler for checking method  
-export const postHealthCheckHandler = async (event, context) => { 
+export const postHealthCheckHandler = async (event, context) => {
   console.log(event.body)
 
   const body = event.body ? JSON.parse(event.body) : {}
@@ -550,12 +552,12 @@ export const postArticleHandler = async (event) => {
     const body = event.body ? JSON.parse(event.body) : {}
     const articleId = Number(body.articleId)
 
-    if(!articleId){
-      return jsonResponse(404, {status: "error", message: "Missing article ID"})
+    if (!articleId) {
+      return jsonResponse(404, { status: "error", message: "Missing article ID" })
     }
     // let articleId = event.articleId || event.queryStringParameters?.articleId || event.pathParameters?.u ||'NOT_SET' //get event with passing userid through 
 
- 
+
     const article_title = body.article_title
     const article_summary = body.article_summary
     const article_text = body.article_text
@@ -569,12 +571,12 @@ export const postArticleHandler = async (event) => {
     const article_editor_id = body.article_editor_id
     const article_draft_number = body.article_draft_number
 
-    const result = await runQuery(sql_postArticleHandler_8, { articleId, article_title, article_summary, article_text, article_submitted_at, article_published_at, article_historical_date,article_status_id, article_rating, article_image_path, article_journalist_id, article_editor_id, article_draft_number }) //matching userid to the query to obtain the rest of the rows
+    const result = await runQuery(sql_postArticleHandler_8, { articleId, article_title, article_summary, article_text, article_submitted_at, article_published_at, article_historical_date, article_status_id, article_rating, article_image_path, article_journalist_id, article_editor_id, article_draft_number }) //matching userid to the query to obtain the rest of the rows
     const rows = normaliseRows(result) //turns sql database into a vector containing the objects (list of objects)
 
     const article_id = rows[0]
 
-    if(!article_id) {
+    if (!article_id) {
       console.error("article ID not found in database")
       throw new Error;
     }
@@ -584,14 +586,15 @@ export const postArticleHandler = async (event) => {
       article_id
     })
   }
-  
-  catch(error){
+
+  catch (error) {
     console.error(error)
-    return jsonResponse(404, { status: "error ", message: "Failed to post article"})
+    return jsonResponse(404, { status: "error ", message: "Failed to post article" })
 
-  }}
+  }
+}
 
-  //   try {
+//   try {
 
 //     // API Gateway gives us the request body as a string
 //     const body = event.body ? JSON.parse(event.body) : {}
