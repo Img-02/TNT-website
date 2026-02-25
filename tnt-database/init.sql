@@ -344,17 +344,4 @@ INSERT INTO articles (
     '/kirby.jpg',
     1,
     2
-  ),
-  (
-    'Title',
-    'Summary',
-    'Article',
-    'Date',
-    'Date',
-    1300,
-    2,
-    0,
-    '',
-    1,
-    2  
-    );
+  );
