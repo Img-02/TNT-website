@@ -121,7 +121,7 @@ export async function getArticle(articleId) {
 }
 
 async function uploadArticle(article) {
-    const response = await fetch(`api/article`, {
+    const response = await fetch(`/api/article`, {
         method: "POST",
         body: JSON.stringify({
             article_title: article.article_title,
@@ -150,7 +150,7 @@ async function uploadArticle(article) {
 }
 
 export async function updateArticle(newArticle) {
-    const response = await fetch(`api/article`, {
+    const response = await fetch(`/api/article`, {
         method: "POST",
         body: JSON.stringify({
             article_title: article.article_title,
@@ -181,7 +181,7 @@ export async function updateArticle(newArticle) {
 
 export async function getJournalistArticles(journalistId) {
 
-    const response = await fetch(`api/journalist-articles?article_journalist_id=${journalistId}`)
+    const response = await fetch(`/api/journalist-articles?article_journalist_id=${journalistId}`)
 
     if(!response.ok){
         const { message } = response.json()
@@ -199,7 +199,7 @@ export async function getJournalistArticles(journalistId) {
 // we don't actually have a lambda for this yet, oops
 export async function getEditorArticles(editorId) {
 
-    const response = await fetch(`api/article?articleId=${articleId}`)
+    const response = await fetch(`/api/article?articleId=${articleId}`)
 
     if(!response.ok){
         const { message } = response.json()
@@ -215,9 +215,13 @@ export async function getEditorArticles(editorId) {
 // gabriel and chids
 // uploads image to s3 bucket using presigned url then returns the filename
 export async function imageUpload(imageBlob) {
-    const apiResponse = await fetch(`api/image-upload`);
+    console.log("runnning image upload")
+    const apiResponse = await fetch(`/api/image-upload`);
 
+    console.log(apiResponse)
     const { uploadUrl } = await apiResponse.json(); 
+
+    console.log(uploadUrl)
 
     const finalImageUrl = uploadUrl.split('?')[0];
 
@@ -228,6 +232,7 @@ export async function imageUpload(imageBlob) {
         "Content-Type": "image/jpeg" 
       }
     });
+
 
     if (uploadRes.ok) {
       console.log(" Image uploaded to S3.");
