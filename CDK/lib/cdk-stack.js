@@ -290,6 +290,7 @@ export class CdkStack extends Stack {
       environment: lambdaEnvVars
     })
 
+
     const getEditorArticlesLambda = new lambda.Function(this, 'get-editor-article-lambda', {
       functionName: `${props.subDomain}-get-editor-article-lambda`,
       runtime: lambda.Runtime.NODEJS_22_X,

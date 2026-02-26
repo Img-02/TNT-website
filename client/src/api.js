@@ -14,7 +14,7 @@ async function loginUser(username, password) {
         throw new Error(message)
     }
 
-    const data = response.json()
+    const data = await response.json()
 
     
     // this is an object that contains .user_username and .user_role
@@ -40,17 +40,17 @@ async function signUpUser(userData){
         throw new Error(message)
     }
 
-    const data = response.json()
+    const data = await response.json()
 
     // this is an object that contains .user_email (idk why we need this lol)
     return data.user
 }
 
-async function updateUser(userData){
+export async function updateUser(userData){
     const response = await fetch(`api/user`, {
         method: "PUT",
         body: JSON.stringify({
-            user_mail: userData.email,
+            user_email: userData.email,
             user_password: userData.password,
             user_first_name: userData.first_name,
             user_surname: userData.user_username,
@@ -64,14 +64,14 @@ async function updateUser(userData){
         throw new Error(message)
     }
 
-    const data = response.json()
+    const data = await response.json()
 
     // returns the user id
     return data.user_id
 }
 
-async function getUserProfile(userId){
-    const response = await fetch(`api/user?userId=${userId}`)
+export async function getUserProfile(userId){
+    const response = await fetch(`/api/user?userId=${userId}`)
 
 
     if(!response.ok){
@@ -79,7 +79,7 @@ async function getUserProfile(userId){
         throw new Error(message)
     }
 
-    const data = response.json()
+    const data = await response.json()
 
     // returns an object containing all the user details
     return data.user
@@ -120,7 +120,7 @@ export async function getArticle(articleId) {
     return data.article
 }
 
-async function uploadArticle(article) {
+export async function uploadArticle(article) {
     const response = await fetch(`/api/article`, {
         method: "POST",
         body: JSON.stringify({
@@ -144,7 +144,7 @@ async function uploadArticle(article) {
         throw new Error(message)
     }
 
-    const data = response.json()
+    const data = await response.json()
 
     return data.article_id
 }
@@ -173,7 +173,7 @@ export async function updateArticle(newArticle) {
         throw new Error(message)
     }
 
-    const data = response.json()
+    const data = await response.json()
 
     return data.article_id
 
@@ -190,26 +190,23 @@ export async function getJournalistArticles(journalistId) {
 
     const data = await response.json()
 
-    console.log("data from api", data)
-
     // returns a list of articles
     return data.articles
 }
 
-// we don't actually have a lambda for this yet, oops
-export async function getEditorArticles(editorId) {
+export async function getEditorArticles() {
 
-    const response = await fetch(`/api/article?articleId=${articleId}`)
+    const response = await fetch(`/api/editor-articles`)
 
     if(!response.ok){
         const { message } = response.json()
         throw new Error(message)
     }
 
-    const data = response.json()
+    const data = await response.json()
 
     // returns a list of articles
-    return data.article
+    return data.articles
 }
 
 // gabriel and chids

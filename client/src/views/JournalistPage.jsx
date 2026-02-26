@@ -1,5 +1,4 @@
 //Display work in progress article
-
 import { Container } from 'react-bootstrap';
 import { useRef, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
@@ -7,12 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import { WritingComponent } from '../components/WritingComponent.jsx';
 import { getArticle } from '../api.js'
-import { imageUpload } from '../api.js';
+import { imageUpload, updateArticle, uploadArticle } from '../api.js';
 
 export function JournalistPage() {
     const editorRef = useRef(null)
     const navigate = useNavigate()
     const { id } = useParams()
+    const [newArticle, setNewArticle] = useState(null)
 
     const [formData, setFormData] = useState({
         article_title: "",
@@ -26,7 +26,6 @@ export function JournalistPage() {
         article_editor_id: 0,
         aritcle_draft_number: 0,
     })
-
 
     const formRef = useRef(null)
 
@@ -55,10 +54,13 @@ export function JournalistPage() {
 
         if (Number(id)) {
             loadArticle(id)
+            setNewArticle(false)
+        }
+        else {
+            setNewArticle(true)
         }
 
     }, [id])
-
 
     const submitForm = (event) => {
         event.preventDefault()
@@ -80,20 +82,71 @@ export function JournalistPage() {
     }
 
 
-
-
     const onFormChange = (event) => {
         console.log(event.target)
         const { name, value } = event.target;
 
-        console.log(name, value)
+        if(name == "article_image_path"){
+            setFormData({
+                ...formData,
+                [name]: event.target.files[0],
+            });
+            
+        }
+        else {
+            setFormData({
+                ...formData,
+                [name]: value,
+            });
+        }
 
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
     };
 
+    const onSaveClicked = async () => {
+        const article_text = editorRef.current.getContent()
+        const journalistId = 0
+
+        const article = {
+            ...formData,
+            article_text,
+            article_journalist_id: journalistId,
+            article_status_id: 1,
+        }
+
+        // post request if the article is new
+        if(newArticle) {
+            try {
+                const res = await uploadArticle(article)
+                alert(`Article uploaded succesfully with id = ${res}`)
+            }catch(error) {
+                console.log("error")
+                alert(`Failed to upload new article`)
+            }
+        }
+        else {
+            try {
+                const res = await updateArticle(article)
+                alert(`Article updated succesfully with id = ${res}`)
+            }catch(error) {
+                console.log("error")
+                alert(`Failed to update article`)
+            }
+            // put request for already existing article,
+            // the article_id will already be in the formData, which is unpacked into article object
+        }
+    }
+
+
+    const uploadNewArticle = async(article) => {
+        try {
+            const article_id = await uploadArticle(article)
+            alert(`Article uploaded succesfully with ID ${article_id}`)
+
+        }catch(error) {
+            console.log(error)
+            alert(`Failed to update article please try again later`)
+        }
+    }
 
 
     const onSubmitClicked = async () => {
@@ -102,10 +155,11 @@ export function JournalistPage() {
 
         // REPLACE THIS WITH JOURNALIST ID FROM LOCAL STORAGE
 
-        await editorRef.current.uploadImages()
+        //await editorRef.current.uploadImages()
+
         const article_text = editorRef.current.getContent()
-        console.log(article_text)
         const journalistId = 0
+
 
         const timestamp = Date.now()
         const currentDateAsString = new Date(timestamp).toISOString()
@@ -116,13 +170,48 @@ export function JournalistPage() {
 
         const article = {
             ...formData,
+            article_text,
             article_journalist_id: journalistId,
             article_submitted_at: currentDateAsString,
             aritcle_draft_number: 1,
+            article_status_id: 2,
         }
 
-        console.log(article)
+        // first need to upload image to s3 if the image is new
+        if(newArticle && article.article_image_path){
+            const reader = new FileReader()
+            console.log(article.article_image_path)
 
+            reader.onload = async () => {
+                console.log(reader.result)
+                const img_link = await imageUpload(reader.result)
+
+                article.article_image_path = img_link
+
+                uploadNewArticle(article)
+            }
+
+            reader.onerror = (event) => {
+                console.log(event)
+                return;
+            }
+
+            reader.readAsArrayBuffer(article.article_image_path)
+        }
+        else if(newArticle) {
+            uploadNewArticle(article)
+        }
+        else if(!newArticle) {
+
+            try {
+                const article_id = await updateArticle(article)
+                alert(`Article ID ${article_id} succesfully with ID `)
+
+            }catch(error) {
+                console.log("error")
+                alert(`Failed to update article please try again later`)
+            }
+        }
     }
     // below will be moved to useEffect that makes the api call when id changes and is not null
 
@@ -135,47 +224,6 @@ export function JournalistPage() {
             </div>
 
             <WritingComponent formData={formData} setFormData={setFormData} onFormChange={onFormChange} onSubmit={submitForm} editorRef={editorRef} formRef={formRef} />
-
-            {/* <Form>
-                <Form.Group>
-                    <Form.Label style={{ fontFamily: "orbitron" }}>Title</Form.Label>
-                    <Form.Control type="text-muted" placeholder="Enter Title" style={{ fontFamily: "anta" }} />
-                </Form.Group>
-                <p></p>
-
-                <Form.Group>
-                    <Form.Label style={{ fontFamily: "orbitron" }}>Thumbnail</Form.Label>
-                    <Form.Control type="file" placeholder="Upload your Thumbnail" style={{ fontFamily: "anta" }} />
-                </Form.Group>
-                <p></p>
-
-                <Form.Group>
-                    <Form.Label style={{ fontFamily: "orbitron" }}>Summary</Form.Label>
-                    <textarea className="form-control" type="text-muted" placeholder="Enter Title" rows={4} style={{ fontFamily: "anta" }} />
-                </Form.Group>
-                <p></p>
-
-                <Form.Group>
-                    <Form.Label style={{ fontFamily: "orbitron" }}>Content</Form.Label>
-                    <ArticleContentEditor
-                        onInit={(_evt, editor) => editorRef.current = editor}
-                        initialValue={initialValue}
-                        init={{
-                            height: 500,
-                            menubar: false,
-                            plugins: [
-                                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap',
-                                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                                'insertdatetime', 'media', 'table', 'preview', 'help', 'wordcount',
-                            ],
-                            toolbar: 'undo redo | blocks | alignleft aligncenter alignright alignjustify' +
-                                'bold italic  | bullist numlist | image | help',
-                            content_style: 'body { fontFamily: orbitron; font-size:14px }'
-                        }}
-                    />
-                </Form.Group>
-
-            </Form> */}
             <p>
 
             </p>

@@ -3,8 +3,11 @@ import { Row } from "react-bootstrap"
 import { Col } from "react-bootstrap"
 import { Card } from "react-bootstrap"
 import { Button } from "react-bootstrap"
-import { useState, useEffect} from "react"
+import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { getUserProfile } from "../api.js"
+
 
     // user_first_name: "Colin",
     // user_surname: "Idk",
@@ -17,32 +20,36 @@ import { useParams } from "react-router-dom"
 
 export function ProfilePage() {
 
+   // const userRef = useRef(null)
+    const [ user, setUser ] = useState([])
+    const navigate = useNavigate()
+   // const [ updateUser, setUpdateUser ] = useState([])
+    const id = 1
     
-    const [user, setUser] = useState([])
-    const { id }  = useParams()
-      
     useEffect(() => {
-        async function userFunction () {
+        async function userFunction (id) {
+
         try {
+          const user = await getUserProfile(id)
+          console.log(id)
+          console.log("loaded user", user)
 
-          const response = await fetch(`/api/user?userId=${id}`)
-          console.log(response.body)
+            // if (userRef.current) {
+            //     userRef.current.setContent(user.user_username)
+            // }
 
-          if (!response.ok){
-            throw new Error("API error")
-          }
-          
-          const data = await response.json()
-          
-          setUser(data.user)
 
+          setUser(user)
 
         } catch {
             console.log("Bombaclaat error in profile page (no user passed) ")
         }
     }
-      
-    userFunction()
+    if (id) {
+        userFunction(id)
+    }
+
+
     },[id])
 
     return (
@@ -51,14 +58,13 @@ export function ProfilePage() {
             <Row xs={'auto'} sm={'auto'} md={'auto'} lg={'auto'} xl={'auto'} className="d-flex justify-content-center mb-3">
             <Col className="d-flex justify-content-center">
             <Card style={{ width: '18rem' }}>
-                <Card.Img variant="top" src={user.user_profile_pic_path} />
                 <Card.Body>
                     <Card.Title>{user.user_first_name} {user.user_surname}</Card.Title>
                     <Card.Text>{user.user_username}</Card.Text>
                     <Card.Text>{user.user_email}</Card.Text>
                 </Card.Body>
-                <Button variant="primary">Edit Profile</Button>
-                <Button variant="primary">Change Password</Button>
+                <Button key={user.user_id} onClick={() => navigate(`/profileEdit/${id}`)} style={{cursor:"pointer"}} variant="primary">Edit Profile</Button>
+                <Button key={user.user_id} onClick={() => navigate(`/profileEditPassword/${id}`)} style={{cursor:"pointer"}} variant="primary">Change Password</Button>
             </Card>
             </Col>
             </Row>
@@ -66,41 +72,43 @@ export function ProfilePage() {
         {/* followed journalists componenent */}
         <Row xs={'auto'} sm={'auto'} md={'auto'} lg={'auto'} xl={'auto'} className="d-flex justify-content-center g-4">
             <Col>
-            <Card style={{ width: '18rem' }}>
+            {/* <Card style={{ width: '18rem' }}>
                 <Card.Body>
                     <Card.Title>Followed Journalists</Card.Title>
                         <Card.Text>Journalist would go here</Card.Text>
                 </Card.Body>
-            </Card>
+            </Card> */}
             </Col>
 
-            <Col>
+            {/* <Col>
             <Card style={{ width: '18rem' }}>
                 <Card.Body>
                     <Card.Title>Followed Genres</Card.Title>
                     <Card.Text>Genres would go here</Card.Text>
                 </Card.Body>
             </Card>
-            </Col>
+            </Col> */}
 
-            <Col>
+            {/* <Col>
             <Card style={{ width: '18rem' }}>
                     <Card.Body>
                         <Card.Title>Saved Articles</Card.Title>
                         <Card.Text>Saved articles would go here</Card.Text>
                     </Card.Body>
                 </Card>
-            </Col>               
+            </Col>                */}
         </Row>
 
         {/* followed genres component */}
-        <Row>
+        {/* <Row>
         </Row>
         <Row>
-        </Row>
+        </Row> */}
         </Container>
         
         
     )
     
 }
+
+//  <Card.Img variant="top" src={user.user_profile_pic_path} />

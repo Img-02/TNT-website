@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { ArticleCard } from "../components/ArticleCard.jsx"
 import { BreakingNewsCard } from "../components/BreakingNewsCard.jsx";
 import { useNavigate } from "react-router-dom";
-import { articles } from "../mock-data/articles.js"
+//import { articles } from "../mock-data/articles.js"
 import { ArticlePageCard } from "../components/ArticlePageCard.jsx";
 import { Form, Button } from 'react-bootstrap';
 import { useState, useEffect } from "react";
@@ -77,7 +77,7 @@ export function EditorPage() {
                     <p></p>
                     
                     <div className="d-flex gap-2">
-                        <Button className="orbitron" variant="secondary">MANUALLY EDIT</Button>
+                        <Button className="orbitron" variant="secondary" onClick={() => navigate(`/editor-writing?id=${article.article_id}`)}>MANUALLY EDIT</Button>
                         <Button className="orbitron" variant="primary">SUBMIT FOR RE-WRITE</Button>
                         <Button className="orbitron" variant="danger">REJECT</Button>
                         <Button className="orbitron" variant="warning">PUBLISH TO SITE</Button>

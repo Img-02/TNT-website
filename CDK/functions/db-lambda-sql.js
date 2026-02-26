@@ -15,6 +15,7 @@ WHERE article_journalist_id = :article_journalist_id
 ORDER BY article_status_id;
 `
 
+
 export const sql_postLoginHandler_3 = `
 SELECT user_username, user_id, user_password, user_role_id
 FROM users
@@ -53,3 +54,8 @@ WHERE article_id = :articleId
 RETURNING article_id;
 `
 
+export const sql_getEditorArticlesHandler_11 = `
+SELECT article_id, article_title, article_submitted_at, article_status_id, article_published_at
+FROM articles
+ORDER BY article_status_id;
+`

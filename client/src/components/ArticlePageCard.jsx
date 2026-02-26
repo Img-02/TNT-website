@@ -15,6 +15,7 @@ export function ArticlePageCard({ article }) {
                 <div>
                 <img src={`${imgBasePath}/${article.article_image}`} className="img-thumbnail mx-auto d-block " style={{height: "400px", objectFit: "contain", marginBottom: "2em"}} />
                 </div>
+            <h4 style={{fontFamily: "anta"}}> Historical Date: {article.article_historical_date}</h4>    
             <h4 style={{fontFamily: "anta"}}>{article.article_summary}</h4>
             <p style={{fontFamily: "anta"}}>{article.article_text}</p>
             </div>

@@ -55,6 +55,20 @@ export function JournalistHomePage() {
         journalistArticlesFunction()
 
         },[])
+
+    function getStatus(statID) {
+        if (statID === 1){
+            return "Writing"
+        }else if(statID=== 2){
+            return "Submitted for review"
+        }else if(statID===3){
+            return "Rejected"
+        }else if(statID===4){
+            return "Published"
+        }else {
+            return "No status found"
+        }
+    }
     
 
     return (
@@ -74,10 +88,10 @@ export function JournalistHomePage() {
             </thead> 
             <tbody>
                     {journalistArticles && journalistArticles.map(article => (
-                        <tr key={article.article_id} onClick={() => navigate(`/journalistpage/${article.article_id}`)} style={{cursor:"pointer"}}>
+                        <tr key={article.article_id} onClick={() => article.article_status_id===1 && navigate(`/journalistpage/${article.article_id}`)} style={{cursor:"pointer"}}>
                             <td>{article.article_id}</td>
                             {/* TODO: make sure to retunr the actual status and not the status id */}
-                            <td>{article.article_status_id}</td>
+                            <td>{getStatus(article.article_status_id)}</td>
                             <td>{article.article_title}</td>
                             <td>{article.article_historical_date}</td> 
                             <td>{article.article_submitted_at}</td>

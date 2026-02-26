@@ -17,9 +17,10 @@ import { JournalistPage } from "./views/JournalistPage.jsx"
 import { EditorPage } from "./views/EditorPage.jsx"
 import { EditorHomePage } from "./views/EditorHomePage.jsx"
 import { JournalistHomePage } from "./views/JournalistHomePage.jsx"
-
+// import { EditorWritingPage } from "./views/EditorWritingPage.jsx"
+import { ProfileEdit } from  "./views/ProfileEdit.jsx"
 import { backgroundColour } from "./colours.js"
-
+import  {ProfileEditPassword } from "./views/ProfileEditPassword.jsx"
 import { useEffect, useState } from "react"
 
 import { getMainPageArticles } from "./api.js"
@@ -29,7 +30,14 @@ export default function App() {
   const [mainPageArticles, setMainPageArticles] = useState([])
   const [status, setStatus] = useState("loading")
   const [article, setArticle] = useState([])
+
+  // const [isJournalist, setIsJournalist] = useState(false)
+  // const [isUser, setIsUser] = useState(false)
+  // const [isEditor, setIsEditor] = useState(false)
   
+  //get role from local storage
+  const role_id = 1
+
   // health check and set the background
   useEffect(() => {
     const healthCheck = async () => {
@@ -73,6 +81,7 @@ export default function App() {
     mainPageFunction()
 
 
+
      }, []) 
 
     //const users = await mockDatabase.getAllUsers()
@@ -105,7 +114,6 @@ export default function App() {
     
 
   // }, []) 
-
   
   // const [article, setArticles] = useState([])
   // try {
@@ -159,6 +167,9 @@ export default function App() {
           <Route path="/journalisthomepage" element={<JournalistHomePage/>}/>
           <Route path="/editorhomepage" element={<EditorHomePage/>}/>
           <Route path="/profile" element={<ProfilePage/>}/>
+          <Route path="/profileEdit/:id" element={<ProfileEdit/>}/>
+          <Route path="/editor-writing" element={<EditorWritingPage/>}/>
+          <Route path="/editor-writing" element={<ProfileEditPassword/>}/>
         </Routes>
       </main> 
      
