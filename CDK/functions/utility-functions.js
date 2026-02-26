@@ -152,43 +152,6 @@ export const getArticleHandler = async (event, context) => {
     return jsonResponse(404, { status: "error ", message: "Failed to get article" })
 
   }
-
-
-
-
-
-  // if (articleId === "NOT_SET") {
-  //   return {
-  //     statusCode: 404,
-  //     body: JSON.stringify({
-  //       status: "error",
-  //       message: "Missing article ID",
-  //     })
-  //   }
-  // } else {
-  //   return {
-  //     statusCode: 200,
-  //     body: JSON.stringify({
-  //       status: 'ok',
-  //       article: {
-  //         article_id: articleId,
-  //         article_title: 'Cannon discovered in Derbyshire Field. Peasants deny all knowledge',
-  //         article_summary: 'A Middle Ages cannon was discovered in the Derbyshire Dales District',
-  //         article_text: 'More text about our very interesting first article',
-  //         article_submitted_at: '2026-02-02T14:35:12.345Z',
-  //         aricle_publishead_at: '2026-02-02T14:35:12.345Z',
-  //         article_historical_date: 1500,
-  //         article_status_id: 4,
-  //         article_rating: 0,
-  //         article_image_path: "article-images/article1.jpg",
-  //         article_journalist_id: 1,
-  //         article_editor_id: 2
-  //       }
-  //     })
-
-  //   }
-  // }
-
 }
 
 // gets user details (for specific user) from the data base //4
@@ -229,44 +192,6 @@ export const getUserProfileHandler = async (event, context) => {
     return jsonResponse(404, { status: "error ", message: "Failed to get user data" })
 
   }
-
-  // console.log('getUserProfileLambdaHandler invoked')
-  // console.log(event)
-  // console.log(context)
-
-  // const userId = event.userId || event.queryStringParameters?.userId || event.pathParameters?.userId || 'NOT_SET'
-  // console.log(`PARAMS: userId = ${userId}`)
-
-  // //const x = await runQuery(sql_sql_getUserHandler_4, { userId })
-
-
-  // if (userId === 'NOT_SET') {
-  //   return {
-  //     statusCode: 404,
-  //     body: JSON.stringify({
-  //       status: "error",
-  //       message: "Missing user ID",
-  //     })
-  //   }
-  // } else {
-  //   return {
-  //     statusCode: 200,
-  //     body: JSON.stringify({
-  //       status: 'ok',
-  //       article: {
-  //         user_id: userId,
-  //         user_name: 'DashNotDave1987',
-  //         first_name: 'Darshan',
-  //         last_name: 'Dave',
-  //         user_email: 'DashNotDave@cars.com',
-  //         user_genres: ['Cars', 'Politics'],
-  //         profilePicture: "client/public/user_images/reba.jpg"
-
-  //       }
-  //     }
-  //     )
-  //   }
-  // }
 }
 
 // GET articles journalist has written //2
@@ -353,100 +278,8 @@ export const getMainPageArticlesHandler = async (event, context) => {
     console.error(String(error))
     return jsonResponse(404, { status: "error", message: "Failed to get main page articles from database" })
   }
-
-  // if (!articles) {
-  //   return {
-  //     statusCode: 404,
-  //     body: JSON.stringify({
-  //       status: "error",
-  //       message: "Articles not found",
-  //     })
-  //   }
-  // } else {
-  //   return {
-  //     statusCode: 200,
-  //     body: JSON.stringify({
-  //       status: 'ok',
-  //       article: [
-  //         {
-  //           article_id: 1,
-  //           article_title: 'Cannon discovered in Derbyshire Field. Peasants deny all knowledge',
-  //           article_date_published: '2026-02-02T14:35:12.345Z',
-  //           article_summary: 'This is a summary',
-  //           article_image_path: 'This is an image path'
-  //         },
-  //         {
-  //           article_id: 2,
-  //           article_title: 'this is a second article title',
-  //           article_date_published: '2026-02-02T14:35:12.345Z',
-  //           article_summary: 'This is a summary',
-  //           article_image_path: 'This is an image path'
-  //         },
-  //         {
-  //           article_id: 3,
-  //           article_title: 'this is a third article title',
-  //           article_date_published: '2026-02-02T14:35:12.345Z',
-  //           article_summary: 'This is a summary',
-  //           article_image_path: 'This is an image path'
-  //         },
-  //         {
-  //           article_id: 4,
-  //           article_title: 'this is a fourth article title',
-  //           article_date_published: '2026-02-02T14:35:12.345Z',
-  //           article_summary: 'This is a summary',
-  //           article_image_path: 'This is an image path'
-  //         }
-  //       ]
-  //     })
-
-  //   }
 }
 
-/////////////////////////////////////////////// PUT REQUESTS ////////////////////////////////////////////////////////////////////////////
-
-//TESTING 
-// // This handler is used to add information to the users profile info from their profile page //6
-// export const putUserHandler = async (event) => {
-//   console.log(event)
-
-//   try {
-//     const body = event.body ? JSON.parse(event.body) : {}
-//     const userId = Number(body.userId)
-
-//     if (!userId) {
-//       return jsonResponse(404, { status: "error", message: "Missing User ID" })
-//     }
-//     const user_first_name = body.user_first_name
-//     const user_surname = body.user_surname
-//     const user_username = body.user_username
-//     const user_password = body.user_password
-//     const user_email = body.user_email
-//     const user_profile_pic_path = body.user_profile_pic_path
-//     const user_role_id = Number(body.user_role_id)
-
-//     const result = await runQuery(sql_putUserHandler_6, { userId, user_first_name, user_surname, user_username, user_password, user_email, user_profile_pic_path, user_role_id }) //matching userid to the query to obtain the rest of the rows
-//     const rows = normaliseRows(result) //turns sql database into a vector containing the objects (list of objects)
-
-//     const user_id = rows[0]
-//     console.log(user_id)
-
-//     if (!user_id) {
-//       console.error("user ID not found in database")
-//       throw new Error;
-//     }
-
-//     return jsonResponse(200, {
-//       status: "success",
-//       user_id
-//     })
-//   }
-
-//   catch (error) {
-//     console.error(error)
-//     return jsonResponse(404, { status: "error ", message: "Failed to get user" })
-
-//   }
-// }
 // PUT USER HANDLER
 export const putUserHandler = async (event) => {
   console.log("putUserHandler invoked");
@@ -504,38 +337,6 @@ export const putUserHandler = async (event) => {
 };
 
 
-
-//   const body = event.body ? JSON.parse(event.body) : {}
-
-//     if (!body.user_id) {
-//     return {
-//       statusCode: 404,
-//       body: JSON.stringify({
-//         message: "missing message in post request body"
-//       })
-//     }
-//   }
-//   const user_first_name = body.user_first_name ?? ""
-//   const user_surname = body.user_surname ?? ""
-//   const user_username = body.user_username ?? ""
-//   const user_password = body.user_password ?? ""
-//   const user_email = body.user_email ?? ""
-//   const user_profile_pic = body.user_profile_pic ?? 2000
-//   const user_role_id = body.user_role_id ?? 0
-
-//   return {
-//     statusCode: 200,
-//     body: JSON.stringify({
-//       message: "put handler function done"
-//     })
-//   }
-// }
-
-//   console.log('getArticleHandler invoked')
-//   console.log(event)
-//   console.log(context)
-
-
 //handler for updating article website/database //9
 export const putArticleHandler = async (event) => {
   console.log('putArticleHandler invoked')
@@ -587,35 +388,6 @@ export const putArticleHandler = async (event) => {
 
   }
 }
-// console.log('putArticleHandeler invoked')
-// console.log(event.body)
-
-// const body = event.body ? JSON.parse(event.body) : {}
-
-// // these are the non null fields which dont have any defaults
-// const article_id = body.article_id
-// const article_journalist_id = body.article_journalist_id
-// const article_status_id = body.article_status_id
-
-// if (!article_id || !article_status_id || !article_journalist_id) {
-//   return jsonResponse(404, { status: "error", message: "Missing article id" })
-// }
-
-// const article_title = body.article_title ?? ""
-// const article_summary = body.article_summary ?? ""
-// const article_text = body.article_text ?? ""
-// const article_submitted_at = body.article_submitted_at ?? ""
-// const article_published_at = body.article_published_at ?? ""
-// const article_historical_date = body.article_historical_date ?? 2000
-// const article_rating = body.article_rating ?? 0
-// const article_image_path = body.article_image_path ?? ""
-// const article_status = body.article_status ?? 4
-
-// // update the db here
-
-// return jsonResponse(200, { status: "updated", article_id })
-
-
 ////////////////////POST REQUESTS/////////////////////////////////////////////////////////////
 
 //handler for checking method  
@@ -640,123 +412,116 @@ export const postHealthCheckHandler = async (event, context) => {
     })
   }
 }
-
-export const postImageHandler = async(event) => {
-  console.log(event)
-
-  const key = `${Date.now()}-image.jpg`
-
-  const command = new PutObjectCommand({
-    Bucket: staticImagesBucket,
-    Key: key,
-    ContentType: "image/jpeg"
-  })
-
-  const uploadUrl = await getSignedUrl(s3Client, command, { expiresIn: 600 });
-
-  return jsonResponse(200, {status: "success", uploadUrl })
-}
-
-//POST an image to DB //10
-// only works with JPG images
-// export const postImageHandler = async (event) => {
-//   console.log(event)
-
-//   if(!event.body){
-//     return jsonResponse(500, { status: "error", message: "Missing image" })
-//   }
-
-//   const body = event.body
-
-//   const image_bytes = body.image
-//   const image_name = crypto.randomBytes(16).toString("hex")
-
-//   if (!image_bytes) {
-//     return jsonResponse(500, { status: "error", message: "Missing image link" })
-//   }
-
-//   const { key, url } = uploadImage(image_name, image_bytes)
-
-//   if(!key || !url){
-//     return jsonResponse(500, { status: "error", message: "Failed to upload image" })
-//   }
-
-//   return jsonResponse(200, { status: "success", message: "Image uploaded to S3" })
-// }
-
-// post articles to DB //8
-export const postArticleHandler = async (event) => {
-  console.log(event)
+export const postImageHandler = async (event) => {
+  console.log("postImageHandler event:", JSON.stringify(event, null, 2));
 
   try {
-    const body = event.body ? JSON.parse(event.body) : {}
+    const qs = event.queryStringParameters || {};
 
-    const article_title = body.article_title
-    const article_summary = body.article_summary
-    const article_text = body.article_text
-    const article_submitted_at = body.article_submitted_at
-    const article_published_at = body.article_published_at
-    const article_historical_date = body.article_historical_date
-    const article_rating = Number(body.article_rating)
-    const article_image_path = body.article_image_path
-    const article_status_id = Number(body.article_status_id)
-    const article_journalist_id = Number(body.article_journalist_id)
-    const article_editor_id = Number(body.article_editor_id)
-    const article_draft_number = Number(body.article_draft_number)
+    // fileName from client, e.g. "punch.jpg"
+    const rawName = qs.fileName || "";
 
-    const result = await runQuery(sql_postArticleHandler_8, { article_title, article_summary, article_text, article_submitted_at, article_published_at, article_historical_date, article_status_id, article_rating, article_image_path, article_journalist_id, article_editor_id, article_draft_number }) //matching userid to the query to obtain the rest of the rows
-    const rows = normaliseRows(result) //turns sql database into a vector containing the objects (list of objects)
+    // Very basic sanitising – keep only safe characters
+    const safeName = rawName.replace(/[^a-zA-Z0-9._-]/g, "_") || `${Date.now()}-image.jpg`;
 
-    const article_id = rows[0].article_id
+    // If you want them in a folder, do `const key = \`article-images/${safeName}\`;`
+    const key = safeName;
+
+    const command = new PutObjectCommand({
+      Bucket: staticImagesBucket,
+      Key: key,
+      ContentType: "image/jpeg"
+    });
+
+    const uploadUrl = await getSignedUrl(s3Client, command, { expiresIn: 600 });
+
+    // Return both the presigned URL (for the PUT) and the key (for DB)
+    return jsonResponse(200, {
+      status: "success",
+      uploadUrl,
+      key
+    });
+  } catch (err) {
+    console.error("postImageHandler error:", err);
+    return jsonResponse(500, {
+      status: "error",
+      message: "Failed to create upload URL"
+    });
+  }
+};
+
+export const postArticleHandler = async (event) => {
+  console.log(event);
+
+  try {
+    const body = event.body ? JSON.parse(event.body) : {};
+
+    const article_title = body.article_title;
+    const article_summary = body.article_summary;
+    const article_text = body.article_text;
+    const article_submitted_at = body.article_submitted_at;
+    const article_published_at = body.article_published_at;
+    const article_historical_date = body.article_historical_date;
+    const article_rating = Number(body.article_rating);
+    const article_image_path = body.article_image_path;
+    const article_status_id = Number(body.article_status_id);
+    const article_journalist_id = Number(body.article_journalist_id);
+    const article_editor_id = Number(body.article_editor_id);
+    const article_draft_number = Number(body.article_draft_number);
+
+    console.log("DEBUG postArticleHandler body:", {
+      article_image_path,
+      type: typeof article_image_path,
+    });
+
+    const result = await runQuery(sql_postArticleHandler_8, {
+      article_title,
+      article_summary,
+      article_text,
+      article_submitted_at,
+      article_published_at,
+      article_historical_date,
+      article_status_id,
+      article_rating,
+      article_image_path,
+      article_journalist_id,
+      article_editor_id,
+      article_draft_number,
+    });
+
+    const rows = normaliseRows(result);
+    const article_id = rows[0].article_id;
 
     if (!article_id) {
-      console.error("article ID not found in database")
-      throw new Error;
+      console.error("article ID not found in database");
+      throw new Error("Insert did not return article_id");
     }
 
-    console.log(article_id)
+    console.log("DEBUG postArticleHandler inserted article_id:", article_id);
+
+    // 🔍 NEW: immediately read the row we just inserted
+    const checkResult = await runQuery(
+      `SELECT article_image_path
+         FROM articles
+        WHERE article_id = :article_id`,
+      { article_id }
+    );
+
+    const checkRows = normaliseRows(checkResult) || [];
+    console.log("DEBUG postArticleHandler DB check:", checkRows);
 
     return jsonResponse(200, {
       status: "success",
-      article_id
-    })
+      article_id,
+    });
+  } catch (error) {
+    console.error("postArticleHandler error:", error);
+    return jsonResponse(404, {
+      status: "error ",
+      message: "Failed to post article",
+    });
   }
-
-  catch (error) {
-    console.error(error)
-    return jsonResponse(404, { status: "error ", message: "Failed to post article" })
-
-  }
-}
-
-//   try {
-
-//     // API Gateway gives us the request body as a string
-//     const body = event.body ? JSON.parse(event.body) : {}
-
-//     // Normalise email so log in is consistent
-//     const article_title = body.article_title ?? ""
-//     const article_summary = body.article_summary ?? ""
-//     const article_text = body.article_text ?? ""
-//     const article_submitted_at = body.article_submitted_at
-
-//     const article_id = 1 //this is dummy data. It will need to be returned by the sql
-
-//     return jsonResponse(201, {
-//       status: "created",
-//       article_id: article_id
-//     })
-//   }
-//   catch (err) {
-//     // If the conditional write failed, the user already exists
-//     if (err?.name === "ConditionalCheckFailedException") {
-//       return jsonResponse(409, { status: "error", message: "User already exists" })
-//     }
-
-//     console.error("postUsersHandler error:", err)
-//     return jsonResponse(500, { status: "error", message: "Could not create user" })
-//   }
-
+};
 
 //POST handler to allow user to login //3
 // POST handler to allow user to login //3
@@ -898,49 +663,6 @@ export const postUsersHandler = async (event) => {
 };
 
 ////////////////////////////////////////////////////// ⋆. 𐙚˚࿔ WILL 𝜗𝜚˚⋆  /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// --- Will adding to get actual data from a db ----
-// export const getArticlesHandler = async (event, context) => {
-//   logInvocationDetails(event, context);
-
-//   try {
-//     const result = await runQuery(
-//       `
-//       SELECT
-//         article_id,
-//         article_title,
-//         article_summary,
-//         article_text,
-//         article_submitted_at,
-//         article_published_at,
-//         article_time_period,
-//         article_is_breaking,
-//         article_status_id,
-//         article_rating,
-//         article_image_path,
-//         article_journalist_id,
-//         article_editor_id
-//       FROM articles
-//       ORDER BY article_created_at DESC
-//       `
-//     );
-
-//     const rows = normaliseRows(result);
-
-//     return jsonResponse(200, {
-//       status: "ok",
-//       count: rows.length,
-//       articles: rows
-//     });
-//   } catch (err) {
-//     console.error("getArticlesHandler error:", err);
-
-//     return jsonResponse(500, {
-//       status: "error",
-//       message: "Failed to fetch articles"
-//     });
-//   }
-// };
 
 
 // -------------------------

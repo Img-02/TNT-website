@@ -32,12 +32,6 @@ async function signUpUser(userData){
             user_surname: userData.user_username,
             user_username: userData.username
 
-    //             const user_email = body.user_mail?.trim()?.toLowerCase();
-    // const password = body.user_password;
-    // const user_first_name = body.user_first_name?.trim();
-    // const user_surname = body.user_surname?.trim();
-    // const user_username = body.user_username?.trim().toLowerCase();
-
         })
     })
 
@@ -53,29 +47,6 @@ async function signUpUser(userData){
     return data.user
 }
 
-// export async function updateUser(userData){
-//     const response = await fetch(`/api/user`, {
-//         method: "PUT",
-//         body: JSON.stringify({
-//             user_mail: userData.user_email,
-//             user_password: userData.user_password,
-//             user_first_name: userData.user_first_name,
-//             user_surname: userData.user_surname,
-//             user_username: userData.user_username,
-//             user_role_id: userData.user_role_id
-//         })
-//     })
-
-//     if(!response.ok){
-//         const { message } = response.json()
-//         throw new Error(message)
-//     }
-
-//     const data = await response.json()
-
-//     // returns the user id
-//     return data.user_id
-// }
 export async function getUserProfile(userId) {
     const response = await fetch(`/api/user?userId=${userId}`);
   
@@ -240,51 +211,45 @@ export async function getEditorArticles() {
     return data.articles
 }
 
-// gabriel and chids
-// uploads image to s3 bucket using presigned url then returns the filename
-export async function imageUpload(imageBlob) {
-    console.log("runnning image upload")
-    const apiResponse = await fetch(`/api/image-upload`);
-
-    console.log(apiResponse)
-    const { uploadUrl } = await apiResponse.json(); 
-
-    console.log(uploadUrl)
-
-    const finalImageUrl = uploadUrl.split('?')[0];
-
+export async function imageUpload(file) {
+    console.log("running imageUpload with file:", file?.name);
+  
+    if (!file) {
+      throw new Error("No file provided to imageUpload");
+    }
+  
+    // 1) Ask Lambda for a presigned URL, passing the file name
+    const res = await fetch(`/api/image-upload?fileName=${encodeURIComponent(file.name)}`);
+  
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      console.error("Failed to get upload URL:", res.status, text);
+      throw new Error("Failed to get image upload URL");
+    }
+  
+    const { uploadUrl, key } = await res.json();
+    console.log("Presigned uploadUrl:", uploadUrl, "key:", key);
+  
+    // 2) Upload the actual file to S3
     const uploadRes = await fetch(uploadUrl, {
       method: "PUT",
-      body: imageBlob,
+      body: file,
       headers: {
-        "Content-Type": "image/jpeg" 
+        "Content-Type": file.type || "image/jpeg"
       }
     });
-
-    if (uploadRes.ok) {
-      console.log(" Image uploaded to S3.");
-      console.log("Your file is located at:", finalImageUrl);
-
-      // get the filename from the url to use for storing in db
-      // then we can add the filename to the end of the s3 url in our env to load images
-      const url = new URL(finalImageUrl)
-
-      // the file name is after that last '/' in the url, 
-      // .split('/') creates a list after seperating the string at every '/'
-      // .pop() returns the last item in an array, giving the filename
-
-      const fileName = url.pathname.split("/").pop()
-
-      return fileName
-
-    } else {
-      console.log(`upload failed with status: ${uploadRes.status}`);
-      throw new Error("Failed to upload image to S3")
-
+  
+    if (!uploadRes.ok) {
+      const text = await uploadRes.text().catch(() => "");
+      console.error("Image upload failed:", uploadRes.status, text);
+      throw new Error("Failed to upload image to S3");
     }
-}
-
-
+  
+    console.log("Image uploaded to S3 with key:", key);
+  
+    // 3) Return the key that should be stored in Aurora
+    return key; // e.g. "punch.jpg" or "article-images/punch.jpg"
+  }
 
 
 

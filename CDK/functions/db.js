@@ -26,9 +26,16 @@ const connection = client({
 
 export async function runQuery(sql, params = {}) {
   if (!sql || !sql.trim()) return;
-  return connection.query(sql, params);
-}
 
+  console.log("runQuery SQL:", sql);
+  console.log("runQuery PARAMS:", JSON.stringify(params, null, 2));
+
+  const result = await connection.query(sql, params);
+
+  console.log("runQuery RESULT:", JSON.stringify(result, null, 2));
+
+  return result;
+}
 
 export async function bootstrapDatabase() {
   const statements = [
