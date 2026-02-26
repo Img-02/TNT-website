@@ -49,10 +49,24 @@ VALUES (:article_title,:article_summary,:article_text,:article_submitted_at,:art
 RETURNING article_id;
 ` 
 export const sql_putArticleHandler_9 = `
-UPDATE articles SET article_title= :article_title , article_summary= :article_summary , article_text= :article_text , article_submitted_at= :article_submitted_at , article_published_at= :article_published_at , article_historical_date= :article_historical_date , article_status_id= :article_status_id, article_rating= :article_rating, article_image_path= article_journalist_id= :article_journalist_id, article_editor_id= :article_editor_id, article_draft_number = :article_draft_number 
-WHERE article_id = :articleId 
+UPDATE articles
+SET
+  article_title          = :article_title,
+  article_summary        = :article_summary,
+  article_text           = :article_text,
+  article_submitted_at   = :article_submitted_at,
+  article_published_at   = :article_published_at,
+  article_historical_date= :article_historical_date,
+  article_status_id      = :article_status_id,
+  article_rating         = :article_rating,
+  article_image_path     = :article_image_path,
+  article_journalist_id  = :article_journalist_id,
+  article_editor_id      = :article_editor_id,
+  article_draft_number   = :article_draft_number
+WHERE article_id = :articleId
 RETURNING article_id;
 `
+
 
 export const sql_getEditorArticlesHandler_11 = `
 SELECT article_id, article_title, article_submitted_at, article_status_id, article_published_at
