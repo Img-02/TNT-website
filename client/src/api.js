@@ -137,7 +137,7 @@ export async function getArticle(articleId) {
     const response = await fetch(`/api/article?articleId=${articleId}`)
 
     if(!response.ok){
-        const { message } = response.json()
+        const { message } = await response.json()
         throw new Error(message)
     }
 
@@ -169,7 +169,7 @@ export async function uploadArticle(article) {
     })
 
     if(!response.ok){
-        const { message } = response.json()
+        const { message } = await response.json()
         throw new Error(message)
     }
 
@@ -178,10 +178,12 @@ export async function uploadArticle(article) {
     return data.article_id
 }
 
-export async function updateArticle(newArticle) {
+export async function updateArticle(article) {
+
     const response = await fetch(`/api/article`, {
-        method: "POST",
+        method: "PUT",
         body: JSON.stringify({
+            articleId: article.article_id,
             article_title: article.article_title,
             article_summary: article.article_summary,
             article_text: article.article_text,
@@ -198,7 +200,7 @@ export async function updateArticle(newArticle) {
     })
 
     if(!response.ok){
-        const { message } = response.json()
+        const { message } = await response.json()
         throw new Error(message)
     }
 

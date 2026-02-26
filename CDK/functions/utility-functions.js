@@ -465,13 +465,8 @@ export const putUserHandler = async (event) => {
       });
     }
 
-    const user_first_name = body.user_first_name ?? "";
-    const user_surname = body.user_surname ?? "";
-    const user_username = body.user_username ?? "";
-    const user_password = body.user_password ?? "";
-    const user_email = body.user_email ?? "";
-    const user_profile_pic_path = body.user_profile_pic_path ?? "";
-    const user_role_id = Number(body.user_role_id ?? 1);
+    const user_id = rows[0].user_id
+    console.log(user_id)
 
     const result = await runQuery(sql_putUserHandler_6, {
       userId,
@@ -572,6 +567,8 @@ export const putArticleHandler = async (event) => {
     const rows = normaliseRows(result)
 
     const article_id = rows[0].article_id
+
+    console.log(article_id)
 
     if (!article_id) {
       console.error("Article ID not found in database")
