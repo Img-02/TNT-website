@@ -1,3 +1,44 @@
+import { Routes, Route, NavLink, Link } from "react-router-dom"
+import 'bootstrap/dist/css/bootstrap.min.css'
+// import Home from "./components/Home";
+// import About from "./components/About";
+// import BlogPost from "./components/BlogPost";
+// import NotFound from "./components/NotFound";
+import { HomePage } from "./views/HomePage.jsx"
+// import { articles } from "./mock-data/articles.js"
+import "./App.css"
+// import Image from 'react-bootstrap'
+import { Container, Navbar, Nav } from "react-bootstrap"
+import { ArticlePage } from "./views/ArticlePage.jsx"
+import { SignUpPage } from "./views/SignUpPage.jsx"
+import { ProfilePage } from "./views/ProfilePage.jsx"
+import { LogInPage } from "./views/LogInPage.jsx"
+import { JournalistPage } from "./views/JournalistPage.jsx"
+import { EditorPage } from "./views/EditorPage.jsx"
+import { EditorHomePage } from "./views/EditorHomePage.jsx"
+import { JournalistHomePage } from "./views/JournalistHomePage.jsx"
+// import { EditorWritingPage } from "./views/EditorWritingPage.jsx"
+import { ProfileEdit } from  "./views/ProfileEdit.jsx"
+import { backgroundColour } from "./colours.js"
+import  {ProfileEditPassword } from "./views/ProfileEditPassword.jsx"
+import { useEffect, useState } from "react"
+
+import { getMainPageArticles } from "./api.js"
+
+export default function App() {
+  const [awsWorking, setAwsWorking] = useState(false)
+  const [mainPageArticles, setMainPageArticles] = useState([])
+  const [status, setStatus] = useState("loading")
+  const [article, setArticle] = useState([])
+
+  // const [isJournalist, setIsJournalist] = useState(false)
+  // const [isUser, setIsUser] = useState(false)
+  // const [isEditor, setIsEditor] = useState(false)
+  
+  //get role from local storage
+  const role_id = 1
+
+  // health check and set the background
 import { Routes, Route, NavLink } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -53,6 +94,57 @@ export default function App() {
       }
     }
 
+    healthCheck()
+    mainPageFunction()
+
+
+
+     }, []) 
+
+    //const users = await mockDatabase.getAllUsers()
+
+//////////Main page articles to load the main page ///////////////////////////////////////////////////////
+
+  
+  // health check and set the background
+  // useEffect(() => {
+  // async function mainPageFunction () {
+  //     try {
+  //       const response = await fetch('/api/mainpage')
+
+  //       if (!response.ok){
+  //         throw new Error("API error")
+  //       }
+        
+  //       const data = await response.json()
+  //       console.log(data.articles)
+  //       setMainPageArticles(data.articles)
+  //       setStatus("loaded")
+
+  //     } catch {
+  //       console.log("Error in main page App.jsx")
+  //       setStatus("error")
+  //     }
+  //   }
+  //   mainPageFunction()
+  //   console.log(mainPageArticles)
+    
+
+  // }, []) 
+  
+  // const [article, setArticles] = useState([])
+  // try {
+  //   const [mainPageArticles, setMainPageArticles] = await Promise.all([
+  //     fetch("/api/articles")
+  //   ])
+
+  //   const articleData = await mainPageArticles.json()
+
+  //   setArticles(articleData.article || [])
+  // } catch (err) {
+  //   console.error("Failed to update article")
+    
+  // }
     const body = document.querySelector("body");
     if (body) {
       body.style.backgroundColor = backgroundColour;
@@ -71,6 +163,20 @@ export default function App() {
       {/* Main Content */}
       <main className="flex-grow-1">
         <Routes>
+          <Route path="/" element={<HomePage articles={mainPageArticles}/>}/>
+          <Route path="/article/:id" element={<ArticlePage />}/> 
+          <Route path="/editorpage/:id" element={<EditorPage />}/> 
+          <Route path="/journalistpage/:id" element={<JournalistPage/>}/> 
+          <Route path="/journalistpage" element={<JournalistPage/>}/> 
+          {/*article page route to specific article id, same for breaking and normal news*/}
+          <Route path="/signup" element={<SignUpPage/>}/>
+          <Route path="/login" element={<LogInPage/>}/>
+          <Route path="/journalisthomepage" element={<JournalistHomePage/>}/>
+          <Route path="/editorhomepage" element={<EditorHomePage/>}/>
+          <Route path="/profile" element={<ProfilePage/>}/>
+          <Route path="/profileEdit/:id" element={<ProfileEdit/>}/>
+          <Route path="/editor-writing" element={<EditorWritingPage/>}/>
+          <Route path="/editor-writing" element={<ProfileEditPassword/>}/>
           <Route path="/" element={<HomePage articles={mainPageArticles} />} />
           <Route path="/article/:id" element={<ArticlePage />} />
           <Route path="/editorpage/:id" element={<EditorPage />} />

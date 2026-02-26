@@ -26,7 +26,7 @@ export function HomePage({ articles }) {
 
     return (
         <div>
-        <Navbar className="justify-content-center" style={{backgroundColor:backgroundColour}}>
+        {/* <Navbar className="justify-content-center" style={{backgroundColor:backgroundColour}}>
             <Container className="orbitron">
                 <Navbar.Collapse>
                 <Nav className="mx-auto">
@@ -37,7 +37,7 @@ export function HomePage({ articles }) {
                 </Nav>
                 </Navbar.Collapse>
             </Container>   
-        </Navbar>
+        </Navbar> */}
 
         <marquee>
             <div className="d-flex gap-4" style={{fontFamily: "orbitron"}}>

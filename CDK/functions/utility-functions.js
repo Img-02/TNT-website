@@ -12,7 +12,8 @@ import {
   sql_putUserHandler_6,
   sql_getArticleHandler_7,
   sql_postArticleHandler_8,
-  sql_putArticleHandler_9
+  sql_putArticleHandler_9,
+  sql_getEditorArticlesHandler_11
 } from "./db-lambda-sql.js"
 
 const staticImagesBucket = process.env.STATIC_IMAGES_BUCKET
@@ -301,6 +302,31 @@ export const getJournalistArticleHandler = async (event) => {
     console.error(error)
     return jsonResponse(404, { status: "error ", message: "Failed to get article_journalist_id" })
 
+  }
+}
+
+export const getEditorArticleHandler = async (event) => {
+  console.log('getEditorHandler invoked')
+  console.log(event)
+
+  try {
+    const result = await runQuery(sql_getEditorArticlesHandler_11)
+    const articles = normaliseRows(result)
+
+    if (!articles) {
+      console.error("Article Journalist ID not found in database")
+      throw new Error;
+    }
+
+    return jsonResponse(200, {
+      status: "success",
+      articles
+    })
+  }
+
+  catch (error) {
+    console.error(error)
+    return jsonResponse(404, { status: "error ", message: "Failed to get article_journalist_id" })
   }
 }
 
@@ -600,19 +626,12 @@ export const postImageHandler = async(event) => {
 //   return jsonResponse(200, { status: "success", message: "Image uploaded to S3" })
 // }
 
-
 // post articles to DB //8
 export const postArticleHandler = async (event) => {
   console.log(event)
 
   try {
     const body = event.body ? JSON.parse(event.body) : {}
-
-    if (!articleId) {
-      return jsonResponse(404, { status: "error", message: "Missing article ID" })
-    }
-    // let articleId = event.articleId || event.queryStringParameters?.articleId || event.pathParameters?.u ||'NOT_SET' //get event with passing userid through 
-
 
     const article_title = body.article_title
     const article_summary = body.article_summary
@@ -627,7 +646,7 @@ export const postArticleHandler = async (event) => {
     const article_editor_id = Number(body.article_editor_id)
     const article_draft_number = Number(body.article_draft_number)
 
-    const result = await runQuery(sql_postArticleHandler_8, { articleId, article_title, article_summary, article_text, article_submitted_at, article_published_at, article_historical_date, article_status_id, article_rating, article_image_path, article_journalist_id, article_editor_id, article_draft_number }) //matching userid to the query to obtain the rest of the rows
+    const result = await runQuery(sql_postArticleHandler_8, { article_title, article_summary, article_text, article_submitted_at, article_published_at, article_historical_date, article_status_id, article_rating, article_image_path, article_journalist_id, article_editor_id, article_draft_number }) //matching userid to the query to obtain the rest of the rows
     const rows = normaliseRows(result) //turns sql database into a vector containing the objects (list of objects)
 
     const article_id = rows[0]
@@ -636,6 +655,8 @@ export const postArticleHandler = async (event) => {
       console.error("article ID not found in database")
       throw new Error;
     }
+
+    console.log(article_id)
 
     return jsonResponse(200, {
       status: "success",
