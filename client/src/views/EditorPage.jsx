@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { ArticlePageCard } from "../components/ArticlePageCard.jsx";
 import { Form, Button } from 'react-bootstrap';
 import { useState, useEffect } from "react";
-import { getArticle } from "../api.js"
+import { getArticle, updateArticle } from "../api.js"
 
 export function EditorPage() {
 
@@ -51,11 +51,12 @@ export function EditorPage() {
                 }
 
                 const article_id = updateArticle(newArticle)
-                alert(`Published article ${article_id} to site`)
+                alert(`Article has been published to site.`)
 
 
             }catch(error) {
                 console.error(String(error))
+                alert(`Failed to publish article. `)
             }
         }
     }
@@ -69,11 +70,12 @@ export function EditorPage() {
                 }
 
                 const article_id = updateArticle(newArticle)
-                alert(`Rejected article ${article_id} `)
+                alert(`Article has been rejected`)
 
 
             }catch(error) {
                 console.error(String(error))
+                alert(`Failed to reject article. `)
             }
         }
     }
@@ -87,11 +89,12 @@ export function EditorPage() {
                 }
 
                 const article_id = updateArticle(newArticle)
-                alert(`Rejected article ${article_id} `)
+                alert(`Article has been sent for rewrite`)
 
 
             }catch(error) {
                 console.error(String(error))
+                alert(`Failed to send article to rewrite. `)
             }
         }
     }
@@ -135,7 +138,7 @@ export function EditorPage() {
                     <div className="d-flex gap-2">
                         <Button className="orbitron" variant="secondary" onClick={() => navigate(`/editor-writing/${article.article_id}`)}>MANUALLY EDIT</Button>
                         <Button className="orbitron" variant="primary" onClick={rewriteArticle}>SUBMIT FOR RE-WRITE</Button>
-                        <Button className="orbitron" variant="danger">REJECT</Button>
+                        <Button className="orbitron" variant="danger" onClick={rejectArticle}>REJECT</Button>
                         <Button className="orbitron" variant="warning" onClick={publishToSite}>PUBLISH TO SITE</Button>
                     </div>
 

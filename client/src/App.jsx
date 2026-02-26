@@ -156,8 +156,6 @@ export default function App() {
 
   return (
     <div className="App flex-column d-flex min-vh-100">
-
-      Header Navbar
       <TntNavbar awsWorking={awsWorking} />
 
       {/* Main Content */}

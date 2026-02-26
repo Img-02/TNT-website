@@ -57,6 +57,7 @@ export async function updateUser(userData){
     const response = await fetch(`/api/user`, {
         method: "PUT",
         body: JSON.stringify({
+            userId: userData.user_id,
             user_mail: userData.user_email,
             user_password: userData.user_password,
             user_first_name: userData.user_first_name,
@@ -79,7 +80,6 @@ export async function updateUser(userData){
 
 export async function getUserProfile(userId){
     const response = await fetch(`/api/user?userId=${userId}`)
-
 
     if(!response.ok){
         const { message } = response.json()
@@ -115,7 +115,7 @@ export async function getArticle(articleId) {
     const response = await fetch(`/api/article?articleId=${articleId}`)
 
     if(!response.ok){
-        const { message } = response.json()
+        const { message } = await response.json()
         throw new Error(message)
     }
 
@@ -147,7 +147,7 @@ export async function uploadArticle(article) {
     })
 
     if(!response.ok){
-        const { message } = response.json()
+        const { message } = await response.json()
         throw new Error(message)
     }
 
@@ -156,10 +156,12 @@ export async function uploadArticle(article) {
     return data.article_id
 }
 
-export async function updateArticle(newArticle) {
+export async function updateArticle(article) {
+
     const response = await fetch(`/api/article`, {
-        method: "POST",
+        method: "PUT",
         body: JSON.stringify({
+            articleId: article.article_id,
             article_title: article.article_title,
             article_summary: article.article_summary,
             article_text: article.article_text,
@@ -176,7 +178,7 @@ export async function updateArticle(newArticle) {
     })
 
     if(!response.ok){
-        const { message } = response.json()
+        const { message } = await response.json()
         throw new Error(message)
     }
 
