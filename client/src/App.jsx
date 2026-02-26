@@ -37,7 +37,6 @@ export default function App() {
   // const [isEditor, setIsEditor] = useState(false)
   
   //get role from local storage
-  const role_id = 1
 
   // health check and set the background
 // import { Routes, Route, NavLink } from "react-router-dom";
@@ -88,6 +87,7 @@ export default function App() {
       try {
         const articles = await getMainPageArticles();
         setMainPageArticles(articles);
+
         setStatus("loaded");
       } catch (error) {
         console.log(error);

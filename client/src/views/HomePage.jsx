@@ -14,13 +14,18 @@ export function HomePage({ articles }) {
     const [hover, setHover] = useState(false)
 
     useEffect(() => {
-        const breaking = articles.slice(0, 2)
+        // first order the articles by their date
+        if(articles){
+            const sortedArticles = articles.sort((article1, article2) => {
+                return new Date(article2.article_published_at) - new Date(article1.article_published_at)
+            })
 
-        //const breaking = articles.filter(article => article.isBreaking)
-        const nonBreaking = articles.slice(2, articles.length)
-
-        setBreakingArticles(breaking)
-        setNonBreakingArticles(nonBreaking)
+            const breaking = sortedArticles.slice(0, 2)
+            //const breaking = articles.filter(article => article.isBreaking)
+            const nonBreaking = sortedArticles.slice(2, sortedArticles.length)
+            setBreakingArticles(breaking)
+            setNonBreakingArticles(nonBreaking)
+        }
 
     }, [articles])
 

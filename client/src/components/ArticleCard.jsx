@@ -5,7 +5,6 @@ import { hoverColour } from "../colours"
 const imgBasePath = import.meta.env.VITE_ARTICLE_IMAGES_DOMAIN
 
 export function ArticleCard({ article }) {
-
     const navigate = useNavigate()
 
     return (
