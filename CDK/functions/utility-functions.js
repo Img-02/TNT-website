@@ -426,7 +426,7 @@ export const putUserHandler = async (event) => {
     const result = await runQuery(sql_putUserHandler_6, { userId, user_first_name, user_surname, user_username, user_password, user_email, user_profile_pic_path, user_role_id }) //matching userid to the query to obtain the rest of the rows
     const rows = normaliseRows(result) //turns sql database into a vector containing the objects (list of objects)
 
-    const user_id = rows[0]
+    const user_id = rows[0].user_id
     console.log(user_id)
 
     if (!user_id) {
@@ -511,6 +511,8 @@ export const putArticleHandler = async (event) => {
     const rows = normaliseRows(result)
 
     const article_id = rows[0].article_id
+
+    console.log(article_id)
 
     if (!article_id) {
       console.error("Article ID not found in database")

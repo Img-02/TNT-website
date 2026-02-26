@@ -504,18 +504,5 @@ export const sql13_seedArticles = `
   2,
   1
 );
-(
-  'A roman solider gets a mcflurry for the FIRST TIME!',
-  'The machine was not broken this is not a drill!.',
-  'With the romans coming to town they have had change to try a british delicacy the mcflurry',
-  '2026-02-01T08:30:00.000Z',
-  '',
-  '2050',
-  2,
-  5,
-  '/images/asteroid2040.jpg',
-  4,
-  2,
-  1
-);
+
 `;
