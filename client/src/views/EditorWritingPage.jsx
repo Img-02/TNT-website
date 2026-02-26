@@ -13,6 +13,10 @@ export function EditorWritingPage() {
     const navigate = useNavigate()
     const { id } = useParams()
 
+    const [editor, setEditor] = useState(null)
+
+    console.log(id)
+
     const [formData, setFormData] = useState({
         article_title: "",
         article_text: "",
@@ -52,14 +56,20 @@ export function EditorWritingPage() {
         }
 
         if (Number(id)) {
+            console.log("loading ARticle")
             loadArticle(id)
-            setNewArticle(false)
+        
         }
         else {
-            setNewArticle(true)
         }
 
     }, [id])
+
+    useEffect(() => {
+        const editorObject = JSON.parse(sessionStorage.getItem("tntUser"))
+        setEditor(editorObject)
+
+    }, [])
 
 
     const submitForm = (event) => {
@@ -96,25 +106,32 @@ export function EditorWritingPage() {
 
     const onSaveAndExit = async () => {
         const article_text = editorRef.current.getContent()
-        const article_editor_id = 0
+
+        let article_editor_id = 2
+
+        if(editor) {
+            article_editor_id = Number(editor.id)
+        }
 
         const article = {
             ...formData,
             article_text,
             article_editor_id,
-            aritcle_draft_number: article_draft_number += 1,
+            aritcle_draft_number: 0,
             article_status_id: 2,
         }
 
         try {
             const article_id = await updateArticle(article)
             alert(`Article ID ${article_id} succesfully updated`)
+            navigate(-1)
 
         }catch(error) {
-            console.log("error")
+            console.log(error)
             alert(`Failed to update article please try again later`)
         }
     }
+
     // below will be moved to useEffect that makes the api call when id changes and is not null
 
     return (
@@ -129,7 +146,7 @@ export function EditorWritingPage() {
             <p>
             </p>
             <div className="d-flex gap-2">
-                <Button className="orbitron" variant="secondary" onClick={onSaveAndExit}>SAVE and EXIT</Button>
+                <Button className="orbitron" variant="secondary" onClick={onSaveAndExit}>SAVE</Button>
             </div>
 
         </Container>

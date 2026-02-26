@@ -13,6 +13,9 @@ export function JournalistPage() {
     const navigate = useNavigate()
     const { id } = useParams()
     const [newArticle, setNewArticle] = useState(null)
+    const [journalist, setJournalist] = useState(null)
+
+
 
     const [formData, setFormData] = useState({
         article_title: "",
@@ -21,11 +24,19 @@ export function JournalistPage() {
         article_summary: "",
         article_submitted_at: "",
         article_historical_date: "",
+        article_published_at: "",
         article_status_id: 0,
         article_journalist_id: 0,
-        article_editor_id: 0,
+        article_editor_id: 2,
         aritcle_draft_number: 0,
     })
+
+    useEffect(() => {
+        const journalistObject = JSON.parse(sessionStorage.getItem("tntUser"))
+        setJournalist(journalistObject)
+
+    }, [])
+
 
     const formRef = useRef(null)
 
@@ -34,7 +45,6 @@ export function JournalistPage() {
             try {
             const article = await getArticle(id)
 
-            console.log("loaded article", article)
 
             if (editorRef.current) {
                 editorRef.current.setContent(article.article_text)
@@ -65,10 +75,6 @@ export function JournalistPage() {
     const submitForm = (event) => {
         event.preventDefault()
         //event.stopPropagation()
-
-        console.log(formData)
-
-        console.log("form submitted")
         const form = event.currentTarget
 
         if (form.checkValidity() === true) {
@@ -83,7 +89,6 @@ export function JournalistPage() {
 
 
     const onFormChange = (event) => {
-        console.log(event.target)
         const { name, value } = event.target;
 
         if(name == "article_image_path"){
@@ -102,76 +107,91 @@ export function JournalistPage() {
 
     };
 
-    const onSaveClicked = async () => {
-        const article_text = editorRef.current.getContent()
-        const journalistId = 0
-
-        const article = {
-            ...formData,
-            article_text,
-            article_journalist_id: journalistId,
-            article_status_id: 1,
-        }
-
-        // post request if the article is new
-        if(newArticle) {
-            try {
-                const res = await uploadArticle(article)
-                alert(`Article uploaded succesfully with id = ${res}`)
-            }catch(error) {
-                console.log("error")
-                alert(`Failed to upload new article`)
-            }
-        }
-        else {
-            try {
-                const res = await updateArticle(article)
-                alert(`Article updated succesfully with id = ${res}`)
-            }catch(error) {
-                console.log("error")
-                alert(`Failed to update article`)
-            }
-            // put request for already existing article,
-            // the article_id will already be in the formData, which is unpacked into article object
-        }
-    }
-
 
     const uploadNewArticle = async(article) => {
         try {
             const article_id = await uploadArticle(article)
             alert(`Article uploaded succesfully with ID ${article_id}`)
 
+            navigate("/journalisthomepage")
+
         }catch(error) {
             console.log(error)
-            alert(`Failed to update article please try again later`)
+            alert(`Failed to upload article please try again later`)
+        }
+    }
+
+
+    const onSaveAndExitClicked = async () => {
+        onSaveClicked()
+        navigate("/journalisthomepage")
+    }
+
+    const onSaveClicked = async () => {
+        const article_text = editorRef.current.getContent()
+
+        const timestamp = Date.now()
+        const currentDateAsString = new Date(timestamp).toISOString()
+
+        const article = {
+            ...formData,
+            article_text,
+            article_journalist_id: journalist.id,
+            article_submitted_at: currentDateAsString,
+            aritcle_draft_number: 1,
+            article_status_id: 1,
+        }
+
+        console.log(article)
+
+        // first need to upload image to s3 if the image is new
+        if(newArticle && article.article_image_path){
+            const reader = new FileReader()
+            console.log(article.article_image_path)
+
+            reader.onload = async () => {
+                console.log(reader.result)
+                const img_link = await imageUpload(reader.result)
+
+                article.article_image_path = img_link
+
+                uploadNewArticle(article)
+
+            }
+
+            reader.onerror = (event) => {
+                console.log(event)
+                return;
+            }
+
+            reader.readAsArrayBuffer(article.article_image_path)
+        }
+        else if(newArticle) {
+            uploadNewArticle(article)
+        }
+        else if(!newArticle) {
+            try {
+                const article_id = await updateArticle(article)
+                alert(`Article ID ${article_id} succesfully with ID `)
+
+            }catch(error) {
+                console.log(error)
+                alert(`Failed to update article please try again later`)
+            }
         }
     }
 
 
     const onSubmitClicked = async () => {
-        // form data state variable contains all the articles already
-        // use a ref to grab the tinymce content from child component
-
-        // REPLACE THIS WITH JOURNALIST ID FROM LOCAL STORAGE
-
-        //await editorRef.current.uploadImages()
-
         const article_text = editorRef.current.getContent()
-        const journalistId = 0
-
 
         const timestamp = Date.now()
         const currentDateAsString = new Date(timestamp).toISOString()
 
-
-        // TODO - UPLOAD IMAGES TO S3 AND GET THEIR FILENAME TO STORE AS IMAGE PATH
-
-
         const article = {
             ...formData,
             article_text,
-            article_journalist_id: journalistId,
+            article_journalist_id: journalist.id,
             article_submitted_at: currentDateAsString,
             aritcle_draft_number: 1,
             article_status_id: 2,
@@ -206,12 +226,15 @@ export function JournalistPage() {
             try {
                 const article_id = await updateArticle(article)
                 alert(`Article ID ${article_id} succesfully with ID `)
+                navigate(-1)
 
             }catch(error) {
                 console.log("error")
                 alert(`Failed to update article please try again later`)
             }
         }
+
+
     }
     // below will be moved to useEffect that makes the api call when id changes and is not null
 
@@ -229,12 +252,8 @@ export function JournalistPage() {
             </p>
 
             <div className="d-flex gap-2">
-
                 <Button className="orbitron" onClick={onSubmitClicked} variant="warning">SUBMIT</Button>
-
-                <Button className="orbitron" variant="primary">SAVE</Button>
-
-                <Button className="orbitron" variant="secondary">SAVE and EXIT</Button>
+                <Button className="orbitron" variant="secondary" onClick={onSaveAndExitClicked} >SAVE and EXIT</Button>
             </div>
 
         </Container>

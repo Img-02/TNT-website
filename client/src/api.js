@@ -23,7 +23,7 @@ async function loginUser(username, password) {
 }
 
 async function signUpUser(userData){
-    const response = await fetch(`api/user`, {
+    const response = await fetch(`apui/user`, {
         method: "POST",
         body: JSON.stringify({
             user_mail: userData.email,
@@ -31,6 +31,13 @@ async function signUpUser(userData){
             user_first_name: userData.first_name,
             user_surname: userData.user_username,
             user_username: userData.username
+
+    //             const user_email = body.user_mail?.trim()?.toLowerCase();
+    // const password = body.user_password;
+    // const user_first_name = body.user_first_name?.trim();
+    // const user_surname = body.user_surname?.trim();
+    // const user_username = body.user_username?.trim().toLowerCase();
+
         })
     })
 
@@ -47,14 +54,15 @@ async function signUpUser(userData){
 }
 
 export async function updateUser(userData){
-    const response = await fetch(`api/user`, {
+    const response = await fetch(`/api/user`, {
         method: "PUT",
         body: JSON.stringify({
-            user_email: userData.email,
-            user_password: userData.password,
-            user_first_name: userData.first_name,
-            user_surname: userData.user_username,
-            user_username: userData.username,
+            userId: userData.user_id,
+            user_mail: userData.user_email,
+            user_password: userData.user_password,
+            user_first_name: userData.user_first_name,
+            user_surname: userData.user_surname,
+            user_username: userData.user_username,
             user_role_id: userData.user_role_id
         })
     })
@@ -72,7 +80,6 @@ export async function updateUser(userData){
 
 export async function getUserProfile(userId){
     const response = await fetch(`/api/user?userId=${userId}`)
-
 
     if(!response.ok){
         const { message } = response.json()
@@ -108,7 +115,7 @@ export async function getArticle(articleId) {
     const response = await fetch(`/api/article?articleId=${articleId}`)
 
     if(!response.ok){
-        const { message } = response.json()
+        const { message } = await response.json()
         throw new Error(message)
     }
 
@@ -140,7 +147,7 @@ export async function uploadArticle(article) {
     })
 
     if(!response.ok){
-        const { message } = response.json()
+        const { message } = await response.json()
         throw new Error(message)
     }
 
@@ -149,10 +156,12 @@ export async function uploadArticle(article) {
     return data.article_id
 }
 
-export async function updateArticle(newArticle) {
+export async function updateArticle(article) {
+
     const response = await fetch(`/api/article`, {
-        method: "POST",
+        method: "PUT",
         body: JSON.stringify({
+            articleId: article.article_id,
             article_title: article.article_title,
             article_summary: article.article_summary,
             article_text: article.article_text,
@@ -169,7 +178,7 @@ export async function updateArticle(newArticle) {
     })
 
     if(!response.ok){
-        const { message } = response.json()
+        const { message } = await response.json()
         throw new Error(message)
     }
 

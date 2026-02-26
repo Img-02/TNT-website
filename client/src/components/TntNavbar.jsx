@@ -58,7 +58,7 @@ export function TntNavbar({ awsWorking }) {
       data-bs-theme="dark"
     >
       <Container className="orbitron">
-        {awsWorking && <div id="healthcheck" />}
+        {/* {awsWorking && <div id="healthcheck" />} */}
 
         <Navbar.Brand className="fw-bolc text-center" as={Link} to="/">
           <img
@@ -72,7 +72,7 @@ export function TntNavbar({ awsWorking }) {
           />
         </Navbar.Brand>
 
-        <Navbar.Brand>T.N.T</Navbar.Brand>
+        <Navbar.Brand>Tomorrow's News Today</Navbar.Brand>
 
         <Nav className="me-auto">
           <Nav.Link as={NavLink} to="/">

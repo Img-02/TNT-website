@@ -426,7 +426,7 @@ export const putUserHandler = async (event) => {
     const result = await runQuery(sql_putUserHandler_6, { userId, user_first_name, user_surname, user_username, user_password, user_email, user_profile_pic_path, user_role_id }) //matching userid to the query to obtain the rest of the rows
     const rows = normaliseRows(result) //turns sql database into a vector containing the objects (list of objects)
 
-    const user_id = rows[0]
+    const user_id = rows[0].user_id
     console.log(user_id)
 
     if (!user_id) {
@@ -510,7 +510,9 @@ export const putArticleHandler = async (event) => {
     const result = await runQuery(sql_putArticleHandler_9, { articleId, article_title, article_summary, article_text, article_submitted_at, article_published_at, article_historical_date, article_rating, article_image_path, article_status_id, article_editor_id, article_journalist_id, article_draft_number })
     const rows = normaliseRows(result)
 
-    const article_id = rows[0]
+    const article_id = rows[0].article_id
+
+    console.log(article_id)
 
     if (!article_id) {
       console.error("Article ID not found in database")
@@ -649,7 +651,7 @@ export const postArticleHandler = async (event) => {
     const result = await runQuery(sql_postArticleHandler_8, { article_title, article_summary, article_text, article_submitted_at, article_published_at, article_historical_date, article_status_id, article_rating, article_image_path, article_journalist_id, article_editor_id, article_draft_number }) //matching userid to the query to obtain the rest of the rows
     const rows = normaliseRows(result) //turns sql database into a vector containing the objects (list of objects)
 
-    const article_id = rows[0]
+    const article_id = rows[0].article_id
 
     if (!article_id) {
       console.error("article ID not found in database")
@@ -756,10 +758,11 @@ export const postLoginHandler = async (event) => {
 
     const usernameToReturn = userDetails.user_username;
     const user_role = userDetails.user_role_id;
+    const user_id = userDetails.user_id;
 
     return jsonResponse(200, {
       status: "logged_in",
-      user: { user_username: usernameToReturn, user_role }
+      user: { user_username: usernameToReturn, user_role, user_id }
     });
   } catch (err) {
     console.error("postLoginHandler error:", err);

@@ -49,9 +49,12 @@ export function LogInPage() {
       // TNT login response:
       // { status: "logged_in", user: { user_username, user_role } }
 
+      console.log(data)
+
       const userSession = {
         username: data.user?.user_username,
-        role: data.user?.user_role
+        role: data.user?.user_role,
+        id: data.user?.user_id
       };
 
       sessionStorage.setItem("tntUser", JSON.stringify(userSession));
