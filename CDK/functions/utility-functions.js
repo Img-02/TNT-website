@@ -404,48 +404,104 @@ export const getMainPageArticlesHandler = async (event, context) => {
 
 /////////////////////////////////////////////// PUT REQUESTS ////////////////////////////////////////////////////////////////////////////
 
-// This handler is used to add information to the users profile info from their profile page //6
+//TESTING 
+// // This handler is used to add information to the users profile info from their profile page //6
+// export const putUserHandler = async (event) => {
+//   console.log(event)
+
+//   try {
+//     const body = event.body ? JSON.parse(event.body) : {}
+//     const userId = Number(body.userId)
+
+//     if (!userId) {
+//       return jsonResponse(404, { status: "error", message: "Missing User ID" })
+//     }
+//     const user_first_name = body.user_first_name
+//     const user_surname = body.user_surname
+//     const user_username = body.user_username
+//     const user_password = body.user_password
+//     const user_email = body.user_email
+//     const user_profile_pic_path = body.user_profile_pic_path
+//     const user_role_id = Number(body.user_role_id)
+
+//     const result = await runQuery(sql_putUserHandler_6, { userId, user_first_name, user_surname, user_username, user_password, user_email, user_profile_pic_path, user_role_id }) //matching userid to the query to obtain the rest of the rows
+//     const rows = normaliseRows(result) //turns sql database into a vector containing the objects (list of objects)
+
+//     const user_id = rows[0]
+//     console.log(user_id)
+
+//     if (!user_id) {
+//       console.error("user ID not found in database")
+//       throw new Error;
+//     }
+
+//     return jsonResponse(200, {
+//       status: "success",
+//       user_id
+//     })
+//   }
+
+//   catch (error) {
+//     console.error(error)
+//     return jsonResponse(404, { status: "error ", message: "Failed to get user" })
+
+//   }
+// }
+// PUT USER HANDLER
 export const putUserHandler = async (event) => {
-  console.log(event)
+  console.log("putUserHandler invoked");
+  console.log(event);
 
   try {
-    const body = event.body ? JSON.parse(event.body) : {}
-    const userId = Number(body.userId)
+    const body = event.body ? JSON.parse(event.body) : {};
+    console.log("Parsed body:", body);
+
+    const userId = Number(body.userId);
 
     if (!userId) {
-      return jsonResponse(404, { status: "error", message: "Missing User ID" })
+      return jsonResponse(400, { 
+        status: "error", 
+        message: "Missing User ID" 
+      });
     }
-    const user_first_name = body.user_first_name
-    const user_surname = body.user_surname
-    const user_username = body.user_username
-    const user_password = body.user_password
-    const user_email = body.user_email
-    const user_profile_pic_path = body.user_profile_pic_path
-    const user_role_id = Number(body.user_role_id)
-
-    const result = await runQuery(sql_putUserHandler_6, { userId, user_first_name, user_surname, user_username, user_password, user_email, user_profile_pic_path, user_role_id }) //matching userid to the query to obtain the rest of the rows
-    const rows = normaliseRows(result) //turns sql database into a vector containing the objects (list of objects)
 
     const user_id = rows[0].user_id
     console.log(user_id)
 
-    if (!user_id) {
-      console.error("user ID not found in database")
-      throw new Error;
+    const result = await runQuery(sql_putUserHandler_6, {
+      userId,
+      user_first_name,
+      user_surname,
+      user_username,
+      user_password,
+      user_email,
+      user_profile_pic_path,
+      user_role_id
+    });
+
+    const rows = normaliseRows(result);
+    const updatedRow = rows?.[0];
+
+    console.log("Updated row:", updatedRow);
+
+    if (!updatedRow || !updatedRow.user_id) {
+      throw new Error("User not updated correctly");
     }
 
     return jsonResponse(200, {
       status: "success",
-      user_id
-    })
-  }
+      user_id: updatedRow.user_id
+    });
 
-  catch (error) {
-    console.error(error)
-    return jsonResponse(404, { status: "error ", message: "Failed to get user" })
+  } catch (error) {
+    console.error("putUserHandler error:", error);
 
+    return jsonResponse(500, {
+      status: "error",
+      message: "Failed to update user"
+    });
   }
-}
+};
 
 
 
