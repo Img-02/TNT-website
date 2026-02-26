@@ -233,7 +233,6 @@ export async function imageUpload(imageBlob) {
       }
     });
 
-
     if (uploadRes.ok) {
       console.log(" Image uploaded to S3.");
       console.log("Your file is located at:", finalImageUrl);
