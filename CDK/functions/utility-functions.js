@@ -680,88 +680,142 @@ export const postArticleHandler = async (event) => {
 
 
 //POST handler to allow user to login //3
+// POST handler to allow user to login //3
 export const postLoginHandler = async (event) => {
-  console.log(event.body)
+  console.log("postLoginHandler event body:", event.body);
+
   try {
-    const body = event.body ? JSON.parse(event.body) : {}
-    const username = body.username?.trim()
-    const password = body.password
+    const body = event.body ? JSON.parse(event.body) : {};
+    const username = body.username?.trim().toLowerCase();
+    const password = body.password;
 
     if (!username || !password) {
-      return jsonResponse(400, { status: "error", message: "Username and password are required" })
+      return jsonResponse(400, {
+        status: "error",
+        message: "Username and password are required"
+      });
     }
-    
-    console.log(username)
 
-    const result = await runQuery(sql_postLoginHandler_3, { username })
+    console.log("Logging in username:", username);
 
-    console.log(result)
+    const result = await runQuery(sql_postLoginHandler_3, { username });
+    const rows = normaliseRows(result) || [];
 
-    const rows = normaliseRows(result)
+    console.log("Login query rows:", rows);
 
-    console.log(rows)
+    const userDetails = rows[0];
 
-    const userDetails = rows[0]
+    // No such user
+    if (!userDetails) {
+      return jsonResponse(401, {
+        status: "error",
+        message: "Invalid username or password"
+      });
+    }
 
-    console.log(userDetails)
+    const storedPasswordRaw = userDetails.user_password;
+    let ok = false;
 
-    const dbPassword = JSON.parse(userDetails.user_password)
-    const ok = verifyPassword(password, dbPassword)
+    // Try to parse as JSON (new users created via postUsersHandler)
+    try {
+      const parsed = JSON.parse(storedPasswordRaw);
+      ok = verifyPassword(password, parsed);
+    } catch (parseErr) {
+      // If parse fails, treat it as a legacy plain text password (seed data)
+      console.warn("Password is not JSON, falling back to plain text compare");
+      ok = storedPasswordRaw === password;
+    }
 
     if (!ok) {
-      return jsonResponse(401, { status: "error", message: "Invalid email or password" })
+      return jsonResponse(401, {
+        status: "error",
+        message: "Invalid username or password"
+      });
     }
-    const usernameToReturn = userDetails.user_username
-    const user_role = userDetails.user_role_id
+
+    const usernameToReturn = userDetails.user_username;
+    const user_role = userDetails.user_role_id;
 
     return jsonResponse(200, {
       status: "logged_in",
       user: { user_username: usernameToReturn, user_role }
-    })
+    });
   } catch (err) {
-    console.error("loginHandler error:", err)
-    return jsonResponse(500, { status: "error", message: "Could not log in" })
+    console.error("postLoginHandler error:", err);
+    return jsonResponse(500, {
+      status: "error",
+      message: "Could not log in"
+    });
   }
-}
+};
 
 // This handler gets is used when a user signs up //5
+// This handler is used when a user signs up //5
 export const postUsersHandler = async (event) => {
   try {
-    // API Gateway gives us the request body as a string
-    const body = event.body ? JSON.parse(event.body) : {}
+    const body = event.body ? JSON.parse(event.body) : {};
 
     // Normalise email so log in is consistent
-    const user_email = body.user_mail?.trim()?.toLowerCase()
-    const password = body.user_password
-    const user_first_name = body.user_first_name
-    const user_surname = body.user_surname
-    const user_username = body.user_username
+    const user_email = body.user_mail?.trim()?.toLowerCase();
+    const password = body.user_password;
+    const user_first_name = body.user_first_name?.trim();
+    const user_surname = body.user_surname?.trim();
+    const user_username = body.user_username?.trim().toLowerCase();
 
-    const user_role_id = 1
+    const user_role_id = 1;
 
     // Basic validation
     if (!user_email || !password || !user_first_name || !user_surname || !user_username) {
-      return jsonResponse(400, { status: "error", message: "Email, password, first name, surname and user name are required" })
+      return jsonResponse(400, {
+        status: "error",
+        message: "Email, password, first name, surname and user name are required"
+      });
     }
 
+    const user_password = JSON.stringify(hashPassword(password));
 
-    const user_password = JSON.stringify(hashPassword(password))
+    // For debugging if needed
+    console.log("Creating user with:", {
+      user_username,
+      user_first_name,
+      user_surname,
+      user_email,
+      user_role_id
+    });
 
-    await runQuery(sql_postUserHandler_5, { user_username, user_first_name, user_surname, user_email, user_password, user_role_id })
-    // store the password in sql here
+    await runQuery(sql_postUserHandler_5, {
+      user_username,
+      user_first_name,
+      user_surname,
+      user_email,
+      user_password,
+      user_role_id
+    });
 
-    // Respond with safe data only (never return password fields)
     return jsonResponse(201, {
       status: "created",
-      user: { user_email }
-    })
+      user: { user_email, user_username }
+    });
   } catch (err) {
-    // If the conditional write failed, the user already exists
-    console.error("postUsersHandler error:", err)
-    return jsonResponse(500, { status: "error", message: "Could not create user" })
+    console.error("postUsersHandler error:", err);
 
+    // If Aurora complains about unique constraint (duplicate email or username)
+    const message = String(err?.message || "");
+    const sqlState = err?.sqlState || err?.originalError?.sqlState;
+
+    if (sqlState === "23505" || message.includes("duplicate key value")) {
+      return jsonResponse(409, {
+        status: "error",
+        message: "A user with that email or username already exists"
+      });
+    }
+
+    return jsonResponse(500, {
+      status: "error",
+      message: "Could not create user"
+    });
   }
-}
+};
 
 ////////////////////////////////////////////////////// ⋆. 𐙚˚࿔ WILL 𝜗𝜚˚⋆  /////////////////////////////////////////////////////////////////////////////////////////////////////
 
