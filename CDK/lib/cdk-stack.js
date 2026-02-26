@@ -555,7 +555,7 @@ export class CdkStack extends Stack {
     // ----------------------------------
     writeFileSync(
       join(__dirname, '../../client/.env.production'), // THIS PATH WILL NEED TO CHANGE TO BE IN YOUR CLIENT DIRECTORY
-      `VITE_ARTICLE_IMAGES_DOMAIN=https://${staticImagesInS3Domain}\n`
+      `VITE_ARTICLE_IMAGES_DOMAIN=https://${staticImagesInS3Domain}\nVITE_BASE_API_URL=https://${fullDomain}/api`
     )
 
     // --------------------------------------------------

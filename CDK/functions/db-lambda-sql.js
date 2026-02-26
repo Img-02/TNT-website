@@ -9,7 +9,7 @@ LIMIT 20;
 `
 
 export const sql_getJournalistArticleHandler_2 = `
-SELECT article_id, article_title, article_submitted_at, article_status_id 
+SELECT article_id, article_title, article_submitted_at, article_status_id, article_historical_date 
 FROM articles
 WHERE article_journalist_id = :article_journalist_id
 ORDER BY article_status_id;

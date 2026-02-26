@@ -3,6 +3,7 @@ import { useNavigate } from "react-router"
 import { useState } from "react"
 import { hoverColour, breakingColour } from "../colours.js"
 
+const imgBasePath = import.meta.env.VITE_ARTICLE_IMAGES_DOMAIN
 
 export function BreakingNewsCard({article}) {
 
@@ -24,7 +25,7 @@ export function BreakingNewsCard({article}) {
         >
             <h1></h1>
             <Card.Body className="anta">
-                <Card.Img alt="..." className="img-thumbnail" style={{ width: "100%", height: "350px", objectFit: "cover", fontFamily: "anta"}} variant="top" src={article.article_image_path} />
+                <Card.Img src={`${imgBasePath}/${article.article_image_path}`} alt="..." className="img-thumbnail" style={{ width: "100%", height: "350px", objectFit: "cover", fontFamily: "anta"}} variant="top"  />
                 <Card.Title className="fw-bold" style={{ color: breakingColour, fontFamily: "orbitron" }}>{article.article_title}</Card.Title>
                 <Card.Text className="text-secondary small">{article.article_summary}</Card.Text>
                 {/* <Card.Text className="text-muted">{article.publishedAt}</Card.Text> */}

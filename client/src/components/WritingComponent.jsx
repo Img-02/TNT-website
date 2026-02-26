@@ -2,67 +2,132 @@
 
 import { Editor } from '@tinymce/tinymce-react';
 import { Container } from 'react-bootstrap';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { breakingColour } from '../colours';
 import { ArticleContentEditor } from "../components/ArticleContentEditor.jsx"
 import { useParams } from "react-router-dom";
 
-import { articles } from "../mock-data/articles.js"
+import { getArticle } from '../api.js';
 
+import { imageUpload } from '../api.js';
 
+const imgBasePath = "https://static-images-tnt-news.cta-training.academy"
 
-export function WritingComponent({ formData, setFormData, onFormChange, onSubmit }) {
-    const editorRef = useRef(null)
-    const navigate = useNavigate()
+export function WritingComponent({ formData, setFormData, onFormChange, onSubmit, formRef, editorRef }) {
     const initialValue = "This is where we will import saved progress "
-
-    const [article, setArticle] = useState(null)
-
-    const { id } = useParams()
+    console.log(imgBasePath)
     
     // below will be moved to useEffect that makes the api call when id changes and is not null
 
     useEffect(() => {
-        if(id) {
-
-            console.log(id)
-            const article = articles.find(article => article.id === id)
-
-            // change this so it set form state similar to sign up page
-            // then we can use the form state to fill out the forms
-            if(article) {
-                setArticle(article)
-            }
-
-            // tiny mce editor not stored in state, we modify it using the ref directly
-            if(editorRef.current) {
-                editorRef.current.setContent(article.text)
-            }
+        if(formData.article_text && editorRef.current){
+            editorRef.current.setContent(formData.article_text)
         }
 
-    }, [id])
+    }, [formData])
 
+
+    const images_upload_handler = (blobInfo, progress) => { 
+        return new Promise((resolve, reject) => {
+            imageUpload(blobInfo)
+                .then((url) => {
+                    resolve(url); 
+                })
+                .catch((err) => {
+                    console.error("image upload error:", err);
+                    reject({ message: 'upload failed', remove: true });
+                });
+        });
+    }
+
+    const file_picker_callback = useCallback((callback, value, meta) => {
+        if (meta.filetype === 'image') {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'jpeg');
+
+            input.onchange = function () {
+                const file = this.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function () {
+                    const id = 'blobid' + (new Date()).getTime();
+                    const blobCache = editorRef.current.editorUpload.blobCache;
+                    const base64 = reader.result.split(',')[1];
+                    const blobInfo = blobCache.create(id, file, base64);
+                    blobCache.add(blobInfo);
+
+                    console.log(blobInfo)
+
+                    callback(blobInfo.blobUri(), { title: file.name });
+                };
+
+                reader.readAsDataURL(file);
+            };
+
+            input.click();
+        }
+    }, []);
+        // const xhr = new XMLHttpRequest();
+
+        // xhr.withCredentials = false;
+
+        // xhr.open('POST', 'postAcceptor.php');
+
+        // xhr.upload.onprogress = (e) => {
+        //     progress(e.loaded / e.total * 100);
+        // };
+
+        // xhr.onload = () => {
+        //     if (xhr.status === 403) {
+        //     reject({ message: 'HTTP Error: ' + xhr.status, remove: true });
+        //     return;
+        //     }
+
+        //     if (xhr.status < 200 || xhr.status >= 300) {
+        //     reject('HTTP Error: ' + xhr.status);
+        //     return;
+        //     }
+
+        //     const json = JSON.parse(xhr.responseText);
+
+        //     if (!json || typeof json.location != 'string') {
+        //     reject('Invalid JSON: ' + xhr.responseText);
+        //     return;
+        //     }
+
+        //     resolve(json.location);
+        // };
+
+        // xhr.onerror = () => {
+        //     reject('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
+        // };
+
+        // const formData = new FormData();
+        // formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+        // xhr.send(formData);
 
     return (
         <div>
-            <Form onSubmit={onSubmit}>
+            <Form onSubmit={onSubmit} ref={formRef}>
                 <Form.Group>
                     <Form.Label style={{ fontFamily: "orbitron" }}>Title</Form.Label>
-                    <Form.Control type="text-muted" placeholder="Enter Title" name="title" value={formData.title} onChange={onFormChange} style={{ fontFamily: "anta" }}/>
+                    <Form.Control type="text-muted" placeholder="Enter Title" name="article_title" value={formData.article_title || ""} onChange={onFormChange} style={{ fontFamily: "anta" }}/>
                 </Form.Group>
                 <p></p>
 
                 <Form.Group>
                     <Form.Label style={{ fontFamily: "orbitron" }}>Thumbnail</Form.Label>
-                    <Form.Control type="file" placeholder="Upload your Thumbnail" name="image" onChange={onFormChange} style={{ fontFamily: "anta" }} />
+                    <Form.Control type="file" placeholder="Upload your Thumbnail" name="article_image_path" onChange={onFormChange} accept="image/jpeg" style={{ fontFamily: "anta" }} />
                 </Form.Group>
                 <p></p>
 
                 <Form.Group>
                     <Form.Label style={{ fontFamily: "orbitron" }}>Summary</Form.Label>
-                    <textarea className="form-control" type="text-muted" name="summary" value={formData.summary} onChange={onFormChange} placeholder="Enter Title" rows={4} style={{ fontFamily: "anta" }} />
+                    <textarea className="form-control" type="text-muted" name="article_summary" value={formData.article_summary} onChange={onFormChange} placeholder="Enter Title" rows={4} style={{ fontFamily: "anta" }} />
                 </Form.Group>
                 <p></p>
 
@@ -81,7 +146,14 @@ export function WritingComponent({ formData, setFormData, onFormChange, onSubmit
                             ],
                             toolbar: 'undo redo | blocks | alignleft aligncenter alignright alignjustify' +
                                 'bold italic  | bullist numlist | image | help',
-                            content_style: 'body { fontFamily: orbitron; font-size:14px }'
+                            content_style: 'body { fontFamily: orbitron; font-size:14px }',
+                            images_files_types: "jpg,jpeg",
+                            images_upload_handler,  
+                            file_picker_types: 'image',
+                            paste_data_images: true,
+                            images_upload_base_path: `${imgBasePath}/`,
+                            automatic_uploads: true,
+                            file_picker_callback
                         }}
                     />
                 </Form.Group>
