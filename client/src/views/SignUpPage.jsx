@@ -95,7 +95,8 @@ export function SignUpPage() {
 
       const userSession = {
         email: data.user?.user_email || normalisedEmail,
-        username: normalisedUsername
+        username: normalisedUsername,
+        id: data.user?.user_id
       };
 
       sessionStorage.setItem("tntUser", JSON.stringify(userSession));

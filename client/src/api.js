@@ -53,45 +53,67 @@ async function signUpUser(userData){
     return data.user
 }
 
-export async function updateUser(userData){
+// export async function updateUser(userData){
+//     const response = await fetch(`/api/user`, {
+//         method: "PUT",
+//         body: JSON.stringify({
+//             user_mail: userData.user_email,
+//             user_password: userData.user_password,
+//             user_first_name: userData.user_first_name,
+//             user_surname: userData.user_surname,
+//             user_username: userData.user_username,
+//             user_role_id: userData.user_role_id
+//         })
+//     })
+
+//     if(!response.ok){
+//         const { message } = response.json()
+//         throw new Error(message)
+//     }
+
+//     const data = await response.json()
+
+//     // returns the user id
+//     return data.user_id
+// }
+export async function getUserProfile(userId) {
+    const response = await fetch(`/api/user?userId=${userId}`);
+  
+    const data = await response.json();
+  
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to fetch user");
+    }
+  
+    return data.user;
+}
+
+export async function updateUser(userData) {
     const response = await fetch(`/api/user`, {
-        method: "PUT",
-        body: JSON.stringify({
-            user_mail: userData.user_email,
-            user_password: userData.user_password,
-            user_first_name: userData.user_first_name,
-            user_surname: userData.user_surname,
-            user_username: userData.user_username,
-            user_role_id: userData.user_role_id
-        })
-    })
-
-    if(!response.ok){
-        const { message } = response.json()
-        throw new Error(message)
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        userId: userData.user_id, // IMPORTANT
+        user_first_name: userData.user_first_name,
+        user_surname: userData.user_surname,
+        user_username: userData.user_username,
+        user_password: userData.user_password ?? "",
+        user_email: userData.user_email,
+        user_profile_pic_path: userData.user_profile_pic_path ?? "",
+        user_role_id: userData.user_role_id
+      })
+    });
+  
+    const data = await response.json();
+  
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to update user");
     }
-
-    const data = await response.json()
-
-    // returns the user id
-    return data.user_id
-}
-
-export async function getUserProfile(userId){
-    const response = await fetch(`/api/user?userId=${userId}`)
-
-
-    if(!response.ok){
-        const { message } = response.json()
-        throw new Error(message)
-    }
-
-    const data = await response.json()
-
-    // returns an object containing all the user details
-    return data.user
-}
-
+  
+    return data.user_id;
+  }
 // article api requests
 
 export async function getMainPageArticles() {
