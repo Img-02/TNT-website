@@ -13,6 +13,9 @@ export function JournalistPage() {
     const navigate = useNavigate()
     const { id } = useParams()
     const [newArticle, setNewArticle] = useState(null)
+    const [journalist, setJournalist] = useState(null)
+
+
 
     const [formData, setFormData] = useState({
         article_title: "",
@@ -21,11 +24,19 @@ export function JournalistPage() {
         article_summary: "",
         article_submitted_at: "",
         article_historical_date: "",
+        article_published_at: "",
         article_status_id: 0,
         article_journalist_id: 0,
-        article_editor_id: 0,
+        article_editor_id: 2,
         aritcle_draft_number: 0,
     })
+
+    useEffect(() => {
+        const journalistObject = JSON.parse(sessionStorage.getItem("tntUser"))
+        setJournalist(journalistObject)
+
+    }, [])
+
 
     const formRef = useRef(null)
 
@@ -34,7 +45,6 @@ export function JournalistPage() {
             try {
             const article = await getArticle(id)
 
-            console.log("loaded article", article)
 
             if (editorRef.current) {
                 editorRef.current.setContent(article.article_text)
@@ -65,10 +75,6 @@ export function JournalistPage() {
     const submitForm = (event) => {
         event.preventDefault()
         //event.stopPropagation()
-
-        console.log(formData)
-
-        console.log("form submitted")
         const form = event.currentTarget
 
         if (form.checkValidity() === true) {
@@ -83,7 +89,6 @@ export function JournalistPage() {
 
 
     const onFormChange = (event) => {
-        console.log(event.target)
         const { name, value } = event.target;
 
         if(name == "article_image_path"){
@@ -104,12 +109,11 @@ export function JournalistPage() {
 
     const onSaveClicked = async () => {
         const article_text = editorRef.current.getContent()
-        const journalistId = 0
 
         const article = {
             ...formData,
             article_text,
-            article_journalist_id: journalistId,
+            article_journalist_id: journalist.id,
             article_status_id: 1,
         }
 
@@ -158,7 +162,6 @@ export function JournalistPage() {
         //await editorRef.current.uploadImages()
 
         const article_text = editorRef.current.getContent()
-        const journalistId = 0
 
 
         const timestamp = Date.now()
@@ -171,7 +174,7 @@ export function JournalistPage() {
         const article = {
             ...formData,
             article_text,
-            article_journalist_id: journalistId,
+            article_journalist_id: journalist.id,
             article_submitted_at: currentDateAsString,
             aritcle_draft_number: 1,
             article_status_id: 2,

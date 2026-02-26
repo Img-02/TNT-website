@@ -59,12 +59,11 @@ export function ProfilePage() {
             <Col className="d-flex justify-content-center">
             <Card style={{ width: '18rem' }}>
                 <Card.Body>
-                    <Card.Title>{user.user_first_name} {user.user_surname}</Card.Title>
-                    <Card.Text>{user.user_username}</Card.Text>
-                    <Card.Text>{user.user_email}</Card.Text>
+                    <Card.Title>Firstname: {user.user_first_name} Surname: {user.user_surname}</Card.Title>
+                    <Card.Text>Username: {user.user_username}</Card.Text>
+                    <Card.Text>Email Address: {user.user_email}</Card.Text>
                 </Card.Body>
                 <Button key={user.user_id} onClick={() => navigate(`/profileEdit/${id}`)} style={{cursor:"pointer"}} variant="primary">Edit Profile</Button>
-                <Button key={user.user_id} onClick={() => navigate(`/profileEditPassword/${id}`)} style={{cursor:"pointer"}} variant="primary">Change Password</Button>
             </Card>
             </Col>
             </Row>

@@ -23,7 +23,7 @@ async function loginUser(username, password) {
 }
 
 async function signUpUser(userData){
-    const response = await fetch(`api/user`, {
+    const response = await fetch(`apui/user`, {
         method: "POST",
         body: JSON.stringify({
             user_mail: userData.email,
@@ -31,6 +31,13 @@ async function signUpUser(userData){
             user_first_name: userData.first_name,
             user_surname: userData.user_username,
             user_username: userData.username
+
+    //             const user_email = body.user_mail?.trim()?.toLowerCase();
+    // const password = body.user_password;
+    // const user_first_name = body.user_first_name?.trim();
+    // const user_surname = body.user_surname?.trim();
+    // const user_username = body.user_username?.trim().toLowerCase();
+
         })
     })
 
@@ -47,14 +54,14 @@ async function signUpUser(userData){
 }
 
 export async function updateUser(userData){
-    const response = await fetch(`api/user`, {
+    const response = await fetch(`/api/user`, {
         method: "PUT",
         body: JSON.stringify({
-            user_email: userData.email,
-            user_password: userData.password,
-            user_first_name: userData.first_name,
-            user_surname: userData.user_username,
-            user_username: userData.username,
+            user_mail: userData.user_email,
+            user_password: userData.user_password,
+            user_first_name: userData.user_first_name,
+            user_surname: userData.user_surname,
+            user_username: userData.user_username,
             user_role_id: userData.user_role_id
         })
     })

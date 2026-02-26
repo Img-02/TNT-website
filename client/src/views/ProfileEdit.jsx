@@ -10,14 +10,23 @@ import { getUserProfile , updateUser } from "../api.js"
 
 
 export function ProfileEdit(){
-    const [ updateUser, setUpdateUser] = useState([])
+    const [ updateUserInState, setUpdateUser ] = useState([])
     const { id }  = useParams()
     const navigate = useNavigate()
+    const [currentUser, setCurrentUser] = useState()
+    
     const [ formData, setFormData ] = useState({
             user_username: "",
             user_surname: "",
             user_first_name: "",
             user_email: "",
+
+            // user_mail: userData.user_email,
+            // user_password: userData.user_password,
+            // user_first_name: userData.user_first_name,
+            // user_surname: userData.user_surname,
+            // user_username: userData.user_username,
+            // user_role_id: userData.user_role_id
         })
         
     const formRef = useRef(null)
@@ -34,6 +43,7 @@ export function ProfileEdit(){
                 setFormData({
                     ...user
                 })
+                setCurrentUser(user)
 
             }
 
@@ -153,14 +163,20 @@ export function ProfileEdit(){
 
         // TODO - UPLOAD IMAGES TO S3 AND GET THEIR FILENAME TO STORE AS IMAGE PATH
 
-
+        console.log(`current user TEST ${currentUser.user_username}`)
         const user = {
-            
             ...formData,
-            user_username,
-            user_first_name,
-            user_surname,
-            user_email,
+            user_username: currentUser.user_username,
+            first_name: currentUser.first_name,
+            user_surname: currentUser.user_surname,
+            user_email: currentUser.user_email,
+
+        //     // user_mail: userData.user_email,
+        //     // user_password: userData.user_password,
+        //     // user_first_name: userData.user_first_name,
+        //     // user_surname: userData.user_surname,
+        //     // user_username: userData.user_username,
+        //     // user_role_id: userData.user_role_id
             
         }
 

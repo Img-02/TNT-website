@@ -17,13 +17,14 @@ import { JournalistPage } from "./views/JournalistPage.jsx"
 import { EditorPage } from "./views/EditorPage.jsx"
 import { EditorHomePage } from "./views/EditorHomePage.jsx"
 import { JournalistHomePage } from "./views/JournalistHomePage.jsx"
-// import { EditorWritingPage } from "./views/EditorWritingPage.jsx"
+import { EditorWritingPage } from "./views/EditorWritingPage.jsx"
 import { ProfileEdit } from  "./views/ProfileEdit.jsx"
 import { backgroundColour } from "./colours.js"
-import  {ProfileEditPassword } from "./views/ProfileEditPassword.jsx"
+// import  {ProfileEditPassword } from "./views/ProfileEditPassword.jsx"
 import { useEffect, useState } from "react"
 
 import { getMainPageArticles } from "./api.js"
+import { TntNavbar } from "./components/TntNavbar.jsx"
 
 export default function App() {
   const [awsWorking, setAwsWorking] = useState(false)
@@ -39,33 +40,33 @@ export default function App() {
   const role_id = 1
 
   // health check and set the background
-import { Routes, Route, NavLink } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
+// import { Routes, Route, NavLink } from "react-router-dom";
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import "./App.css";
 
-import { Container, Navbar, Nav } from "react-bootstrap";
+// import { Container, Navbar, Nav } from "react-bootstrap";
 
-import { HomePage } from "./views/HomePage.jsx";
-import { ArticlePage } from "./views/ArticlePage.jsx";
-import { SignUpPage } from "./views/SignUpPage.jsx";
-import { ProfilePage } from "./views/ProfilePage.jsx";
-import { LogInPage } from "./views/LogInPage.jsx";
-import { JournalistPage } from "./views/JournalistPage.jsx";
-import { EditorPage } from "./views/EditorPage.jsx";
-import { EditorHomePage } from "./views/EditorHomePage.jsx";
-import { JournalistHomePage } from "./views/JournalistHomePage.jsx";
+// import { HomePage } from "./views/HomePage.jsx";
+// import { ArticlePage } from "./views/ArticlePage.jsx";
+// import { SignUpPage } from "./views/SignUpPage.jsx";
+// import { ProfilePage } from "./views/ProfilePage.jsx";
+// import { LogInPage } from "./views/LogInPage.jsx";
+// import { JournalistPage } from "./views/JournalistPage.jsx";
+// import { EditorPage } from "./views/EditorPage.jsx";
+// import { EditorHomePage } from "./views/EditorHomePage.jsx";
+// import { JournalistHomePage } from "./views/JournalistHomePage.jsx";
 
-import { backgroundColour } from "./colours.js";
-import { getMainPageArticles } from "./api.js";
+// import { backgroundColour } from "./colours.js";
+// import { getMainPageArticles } from "./api.js";
 
-import { TntNavbar } from "./components/TntNavbar.jsx";
+// import { TntNavbar } from "./components/TntNavbar.jsx";
 
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 
-export default function App() {
-  const [awsWorking, setAwsWorking] = useState(false);
-  const [mainPageArticles, setMainPageArticles] = useState([]);
-  const [status, setStatus] = useState("loading");
+// export default function App() {
+//   const [awsWorking, setAwsWorking] = useState(false);
+//   const [mainPageArticles, setMainPageArticles] = useState([]);
+//   const [status, setStatus] = useState("loading");
 
   useEffect(() => {
     const healthCheck = async () => {
@@ -97,9 +98,16 @@ export default function App() {
     healthCheck()
     mainPageFunction()
 
+    const body = document.querySelector("body"); 
 
+    if (body) {
+      body.style.backgroundColor = backgroundColour;
+    }
 
-     }, []) 
+    healthCheck();
+    mainPageFunction();
+  }, []);
+
 
     //const users = await mockDatabase.getAllUsers()
 
@@ -145,19 +153,11 @@ export default function App() {
   //   console.error("Failed to update article")
     
   // }
-    const body = document.querySelector("body");
-    if (body) {
-      body.style.backgroundColor = backgroundColour;
-    }
-
-    healthCheck();
-    mainPageFunction();
-  }, []);
 
   return (
     <div className="App flex-column d-flex min-vh-100">
 
-      {/* Header Navbar */}
+      Header Navbar
       <TntNavbar awsWorking={awsWorking} />
 
       {/* Main Content */}
@@ -175,8 +175,8 @@ export default function App() {
           <Route path="/editorhomepage" element={<EditorHomePage/>}/>
           <Route path="/profile" element={<ProfilePage/>}/>
           <Route path="/profileEdit/:id" element={<ProfileEdit/>}/>
-          <Route path="/editor-writing" element={<EditorWritingPage/>}/>
-          <Route path="/editor-writing" element={<ProfileEditPassword/>}/>
+          <Route path="/editor-writing/:id" element={<EditorWritingPage/>}/>
+          {/* <Route path="/editor-writing" element={<ProfileEditPassword/>}/> */}
           <Route path="/" element={<HomePage articles={mainPageArticles} />} />
           <Route path="/article/:id" element={<ArticlePage />} />
           <Route path="/editorpage/:id" element={<EditorPage />} />

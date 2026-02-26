@@ -13,6 +13,8 @@ export function EditorWritingPage() {
     const navigate = useNavigate()
     const { id } = useParams()
 
+    console.log(id)
+
     const [formData, setFormData] = useState({
         article_title: "",
         article_text: "",
@@ -52,11 +54,11 @@ export function EditorWritingPage() {
         }
 
         if (Number(id)) {
+            console.log("loading ARticle")
             loadArticle(id)
-            setNewArticle(false)
+        
         }
         else {
-            setNewArticle(true)
         }
 
     }, [id])
@@ -115,6 +117,7 @@ export function EditorWritingPage() {
             alert(`Failed to update article please try again later`)
         }
     }
+
     // below will be moved to useEffect that makes the api call when id changes and is not null
 
     return (

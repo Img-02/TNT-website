@@ -30,21 +30,6 @@ export function JournalistHomePage() {
                     const articles = await getJournalistArticles(id)
                     console.log("loaded articles", articles)
                     setJournalistArticles(articles)
-                    // console.log(id)
-
-                    // const response = await fetch(`/api/journalist-articles?article_journalist_id=${id}`)
-                    
-                    // console.log(response)
-                        
-                    // if (!response.ok){
-                    // throw new Error("API error")
-                    // }
-                    
-                    // const data = await response.json()
-
-                    // console.log("from api response", data)
-                    
-                    // setJournalistArticles(data.articles)
 
                 } catch (error) {
                     console.log("AGAHHAHHAHAHA error in journalist page")
@@ -53,6 +38,8 @@ export function JournalistHomePage() {
         }
           
         journalistArticlesFunction()
+
+
 
         },[])
 

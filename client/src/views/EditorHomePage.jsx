@@ -49,6 +49,20 @@ export function EditorHomePage() {
     navigate(`/editorpage/${id}`); 
     }
 
+    function getStatus(statID) {
+        if (statID === 1){
+            return "Writing"
+        }else if(statID=== 2){
+            return "Submitted for review"
+        }else if(statID===3){
+            return "Rejected"
+        }else if(statID===4){
+            return "Published"
+        }else {
+            return "No status found"
+        }
+    }
+
     return (
         <div>
         <Table>
@@ -57,25 +71,22 @@ export function EditorHomePage() {
                     <th>Article ID</th>
                     <th>Status</th>
                     <th>Article Title</th>
+                    <th>Submitted at</th>
+                    <th>Published at Title</th>
                 </tr>
             </thead> 
             <tbody>
                 {editorArticles.map(article => (
-                    <tr key={article.article_id} onClick={() => handleRowClick(article.id)} style={{cursor:"pointer"}}>
+                    <tr key={article.article_id} onClick={() => handleRowClick(article.article_id)} style={{cursor:"pointer"}}>
                         <td>{article.article_id}</td>
                         {/* TODO: make sure to retunr the actual status and not the status id */}
-                        <td>{article.article_status}</td>
+                        <td>{getStatus(article.article_status_id)}</td>
                         <td>{article.article_title}</td>
                         <td>{article.article_submitted_at}</td>
                         <td>{article.article_published_at}</td>
                     </tr>
                 ))}
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+
             </tbody>
         </Table>
         </div>

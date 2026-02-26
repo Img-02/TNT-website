@@ -41,13 +41,68 @@ export function EditorPage() {
 
     }, [id])
 
+    const publishToSite = async () => {
+        if(article) {
+            try {
+                const newArticle = {
+                    ...article,
+                    article_status_id: 4,
+                    article_published_at: new Date(Date.now()).toISOString()
+                }
+
+                const article_id = updateArticle(newArticle)
+                alert(`Published article ${article_id} to site`)
+
+
+            }catch(error) {
+                console.error(String(error))
+            }
+        }
+    }
+
+    const rejectArticle = async () => {
+        if(article) {
+            try {
+                const newArticle = {
+                    ...article,
+                    article_status_id: 3,
+                }
+
+                const article_id = updateArticle(newArticle)
+                alert(`Rejected article ${article_id} `)
+
+
+            }catch(error) {
+                console.error(String(error))
+            }
+        }
+    }
+
+    const rewriteArticle = async () => {
+        if(article) {
+            try {
+                const newArticle = {
+                    ...article,
+                    article_status_id: 1,
+                }
+
+                const article_id = updateArticle(newArticle)
+                alert(`Rejected article ${article_id} `)
+
+
+            }catch(error) {
+                console.error(String(error))
+            }
+        }
+    }
+
     return (
         // Source - https://stackoverflow.com/a/66395583
 // Posted by codemonkey
 // Retrieved 2026-02-17, License - CC BY-SA 4.0
 
     <div className="orbitron">
-    <h1> Welcome, INSERT NAME to editor page</h1>
+    <h1> Welcome, to the editor page</h1>
         <p></p>
         
         {
@@ -67,20 +122,21 @@ export function EditorPage() {
 
                     <p></p>
 
-                    <Form>
+                    {/* <Form>
                         <Form.Group>
                             <Form.Label style={{ fontFamily: "orbitron" }}>Comments:</Form.Label>
                             <textarea className="form-control" type="text-muted" placeholder="Enter feedback to journalist" rows={4} style={{ fontFamily: "anta" }} />
                         </Form.Group>
-                    </Form>
+                    </Form> */}
 
                     <p></p>
+
                     
                     <div className="d-flex gap-2">
-                        <Button className="orbitron" variant="secondary" onClick={() => navigate(`/editor-writing?id=${article.article_id}`)}>MANUALLY EDIT</Button>
-                        <Button className="orbitron" variant="primary">SUBMIT FOR RE-WRITE</Button>
+                        <Button className="orbitron" variant="secondary" onClick={() => navigate(`/editor-writing/${article.article_id}`)}>MANUALLY EDIT</Button>
+                        <Button className="orbitron" variant="primary" onClick={rewriteArticle}>SUBMIT FOR RE-WRITE</Button>
                         <Button className="orbitron" variant="danger">REJECT</Button>
-                        <Button className="orbitron" variant="warning">PUBLISH TO SITE</Button>
+                        <Button className="orbitron" variant="warning" onClick={publishToSite}>PUBLISH TO SITE</Button>
                     </div>
 
                 </>
